@@ -14,7 +14,10 @@
             m_VolumeOfCargo = i_VolumeOfCargo;
         }
 
-
+        public override string ToString()
+        {
+            return string.Format("{0}\n, has hazardoes cargo: {1},\n volume of cargo: {2}\n", base.ToString(), m_HasHazardasCargo, m_VolumeOfCargo);
+        }
     }
 
 }

@@ -22,7 +22,7 @@ namespace Ex03.GarageLogic
 
         public override string ToString()
         {
-            return string.Format("{0}", base.ToString());
+            return string.Format("{0}\n, colour of car: {1},\n number of doors in car: {2}\n", base.ToString(), m_Colour, m_numOfDoors);
         }
     }
 }

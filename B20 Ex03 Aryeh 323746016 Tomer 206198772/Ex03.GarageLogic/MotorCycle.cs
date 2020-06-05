@@ -19,5 +19,10 @@ namespace Ex03.GarageLogic
             m_TypeOfLicense = i_TypeOfLicense;
             m_cc = i_Cc;
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}\n, type of license: {1},\n volume of engine: {2}\n", base.ToString(), m_TypeOfLicense, m_cc);
+        }
     }
 }
