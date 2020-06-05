@@ -15,9 +15,6 @@ namespace Ex03.GarageLogic
             MotorCycle
         }
 
-
-
-
         public void RegisterCar(
             eVehicleType i_VehicleType,
             string i_Model,
@@ -28,7 +25,10 @@ namespace Ex03.GarageLogic
             eStatus i_StatusOfCar,
             params Object[] i_OptionalParams)
         {
-
+            switch(i_VehicleType)
+            {
+                
+            }
         }
 
     }
