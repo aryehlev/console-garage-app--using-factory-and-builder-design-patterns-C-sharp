@@ -16,8 +16,13 @@ namespace Ex03.GarageLogic
         string m_PhoneNumOfOwner;
         private eStatus m_StatusOfCar;
 
-        public abstract void FillTires(bool i_fillAll, float i_AirToFill);
-        fillEnergy(float i_ Energy, eEnergyType)
+        public abstract void FillTires(bool i_fillAll, float i_AirToFill)
+
+
+        void FillEnergy(float i_Energy, eEnergyType i_EnergyType)
+        {
+           
+        }
         +getEnergyPercentage()
             +ToString()
             \\+HashCode()
