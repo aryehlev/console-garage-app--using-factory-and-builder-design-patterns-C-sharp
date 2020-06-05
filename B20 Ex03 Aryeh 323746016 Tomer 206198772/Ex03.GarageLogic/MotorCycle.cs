@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    class MotorCycle
+    internal class MotorCycle
     {
-        private const float c_MaxAirPressure = 30;
-        private const float c_NumOfWheels = 2;
+        private const float k_MaxAirPressure = 30;
+        private const float k_NumOfWheels = 2;
         private eLicenseType m_TypeOfLicense;
         private int m_cc;
+
+        public MotorCycle(eLicenseType i_TypeOfLicense, int i_Cc)
+        {
+            m_TypeOfLicense = i_TypeOfLicense;
+            m_cc = i_Cc;
+        }
     }
 }
