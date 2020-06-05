@@ -49,7 +49,18 @@ namespace Ex03.GarageLogic
         {
             return m_Energy.GetEnergyPercentage();
         }
-            //+ToString()
+
+        public override string ToString()
+        {
+            return string.Format("Licence Number: {0}, Model {1}, name of owner: {2}, status of vehicle {3}, ")
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        //+ToString()
         //+HashCode()
     }
 
