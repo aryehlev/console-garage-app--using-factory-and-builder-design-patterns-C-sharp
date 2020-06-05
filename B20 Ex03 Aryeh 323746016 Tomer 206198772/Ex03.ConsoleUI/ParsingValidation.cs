@@ -42,11 +42,10 @@ namespace Ex03.ConsoleUI
             return vehicleStatus;
         }
 
-        internal static eStatus checkVehicleStatus(out bool o_SortVehicleStatus)
+        internal static eStatus checkVehicleStatusWithNone()
         {
             eStatus vehicleStatus = eStatus.Paid;
             string input = Console.ReadLine();
-            o_SortVehicleStatus = true;
             switch (input)
             {
                 case "1":
@@ -59,7 +58,7 @@ namespace Ex03.ConsoleUI
                     vehicleStatus = eStatus.InRepair;
                     break;
                 case "4":
-                    o_SortVehicleStatus = false;
+                    vehicleStatus = eStatus.None;
                     break;
                 default:
                     throw new FormatException(input);
@@ -102,6 +101,17 @@ namespace Ex03.ConsoleUI
             }
 
             return energyType;
+        }
+
+        internal static float checkEnergyAmount()
+        {
+            string input = Console.ReadLine();
+            if (!float.TryParse(input, out float energyAmount) || energyAmount <= 0)
+            {
+                throw new FormatException(input);
+            }
+
+            return energyAmount;
         }
 
 
