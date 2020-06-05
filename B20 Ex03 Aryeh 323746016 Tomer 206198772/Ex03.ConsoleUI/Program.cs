@@ -11,8 +11,8 @@ namespace Ex03.ConsoleUI
         public static void Main()
         {
             UserInterface.WelcomeScreen();
-            
-            switch(UserInterface.ModePicker())
+
+            switch (UserInterface.ModePicker())
             {
                 case 1:
                     break;
