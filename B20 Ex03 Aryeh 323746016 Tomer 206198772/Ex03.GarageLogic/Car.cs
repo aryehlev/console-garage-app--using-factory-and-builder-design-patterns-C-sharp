@@ -18,7 +18,7 @@ namespace Ex03.GarageLogic
         {
             m_Colour = i_Colour;
             m_numOfDoors = i_NumOfDoors;
-
+            base.m_Energy = new Energy(0, );
         }
 
         public override string ToString()

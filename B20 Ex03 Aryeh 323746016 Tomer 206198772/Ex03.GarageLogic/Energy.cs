@@ -4,11 +4,13 @@ namespace Ex03.GarageLogic
 {
     internal class Energy
     {
+        private const float Octan95Max = 7;
+        private const float Octan96Max = 
         private float m_CurrentFilled;
         private float m_MaxCapacity;
         eEnergyType m_EnergyType;
 
-        internal Energy(float i_CurrentFilled, float i_MaxCapacity, eEnergyType i_EnergyType)
+        internal Energy(float i_CurrentFilled, eEnergyType i_EnergyType)
         {
             m_CurrentFilled = i_CurrentFilled;
             m_EnergyType = i_EnergyType;

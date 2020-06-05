@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
     public abstract class Vehicle
     {
-        string m_Model;
-        string m_LicenseNumber;
-        List<Wheel> m_Wheels;
-        Energy m_Energy;
+        private string m_Model;
+        private string m_LicenseNumber;
+        protected List<Wheel> m_Wheels;
+        protected Energy m_Energy;
         private eEnergyType m_EnergyType;
-        string m_NameOfOwner;
-        string m_PhoneNumOfOwner;
+        private string m_NameOfOwner;
+        private string m_PhoneNumOfOwner;
         private eStatus m_StatusOfVehicle;
 
         internal Vehicle(
@@ -33,6 +30,7 @@ namespace Ex03.GarageLogic
             m_StatusOfVehicle = i_StatusOfvehicle;
         }
 
+       
         internal void FillTires(bool i_fillAll, float i_AirToFill = 0)
         {
             foreach (Wheel wheel in m_Wheels)
