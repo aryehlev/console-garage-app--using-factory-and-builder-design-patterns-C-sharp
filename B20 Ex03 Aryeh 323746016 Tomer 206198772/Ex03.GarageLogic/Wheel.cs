@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ex03.GarageLogic
+﻿namespace Ex03.GarageLogic
 {
-    class Wheel
+    internal class Wheel
     {
         private string m_Manufactor;
         private float m_MaxPressure;
         private float m_CurrentPressure;
 
-        void FillTire(bool i_fillAll, float i_AirToFill = 0)
+        internal Wheel(string i_Manufactor,  float i_MaxPressure, float i_CurrentPressure)
+        {
+            m_Manufactor = i_Manufactor;
+            m_MaxPressure = i_MaxPressure;
+            m_CurrentPressure = i_CurrentPressure;
+        }
+        internal void FillTire(bool i_fillAll, float i_AirToFill = 0)
         {
             if(!i_fillAll)
             {

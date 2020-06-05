@@ -2,13 +2,20 @@
 
 namespace Ex03.GarageLogic
 {
-    public class Energy
+    internal class Energy
     {
         private float m_CurrentFilled;
         private float m_MaxCapacity;
         eEnergyType m_EnergyType;
+
+        internal Energy(float i_CurrentFilled, float i_MaxCapacity, eEnergyType i_EnergyType)
+        {
+            m_CurrentFilled = i_CurrentFilled;
+            m_EnergyType = i_EnergyType;
+            m_MaxCapacity = i_MaxCapacity;
+        } 
         
-        protected void FillEnergy(float i_AmounOfEnergyToFill, eEnergyType energyType)
+        internal void FillEnergy(float i_AmounOfEnergyToFill, eEnergyType energyType)
         {
             float newAmount = i_AmounOfEnergyToFill + m_CurrentFilled;
             if (newAmount > m_MaxCapacity)
@@ -24,7 +31,7 @@ namespace Ex03.GarageLogic
             m_CurrentFilled = newAmount;
         }
 
-        float GetEnergyPercentage()
+        internal float GetEnergyPercentage()
         {
             return (m_CurrentFilled / m_MaxCapacity) * 100;
         }
