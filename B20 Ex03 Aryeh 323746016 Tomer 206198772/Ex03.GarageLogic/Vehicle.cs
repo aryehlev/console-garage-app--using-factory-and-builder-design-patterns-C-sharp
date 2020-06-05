@@ -12,6 +12,7 @@ namespace Ex03.GarageLogic
         string m_LicenseNumber;
         List<Wheel> m_Wheels;
         Energy m_Energy;
+        private eEnergyType m_EnergyType;
         string m_NameOfOwner;
         string m_PhoneNumOfOwner;
         private eStatus m_StatusOfVehicle;
@@ -19,12 +20,12 @@ namespace Ex03.GarageLogic
         internal Vehicle(
             string i_Model,
             string i_LicenseNumber,
-            Energy i_Energy,
+            eEnergyType i_EnergyType,
             string i_NameOfOwner,
             string i_PhoneNumOfOwner,
             eStatus i_StatusOfvehicle = eStatus.InRepair)
         {
-            m_Energy = i_Energy;
+            m_EnergyType = i_EnergyType;
             m_LicenseNumber = i_LicenseNumber;
             m_Model = i_Model;
             m_NameOfOwner = i_NameOfOwner;
@@ -59,7 +60,7 @@ namespace Ex03.GarageLogic
             }   // get method
             set
             {
-                m_StatusOfVehicle = value;
+                StatusOfVehicle = value;
             }  
         }
 

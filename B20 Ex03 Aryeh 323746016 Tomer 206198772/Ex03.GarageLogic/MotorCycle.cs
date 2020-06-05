@@ -13,8 +13,8 @@ namespace Ex03.GarageLogic
         private readonly eLicenseType m_TypeOfLicense;
         private readonly int m_cc;
 
-        internal MotorCycle(eLicenseType i_TypeOfLicense, int i_Cc, string i_Model, string i_LicenseNumber, Energy i_Energy, string i_NameOfOwner, string i_PhoneNumOfOwner, eStatus i_StatusOfvehicle = eStatus.InRepair)
-            : base(i_Model, i_LicenseNumber, i_Energy, i_NameOfOwner, i_PhoneNumOfOwner, i_StatusOfvehicle)
+        public MotorCycle(eLicenseType i_TypeOfLicense, int i_Cc, string i_Model, string i_LicenseNumber, eEnergyType i_EnergyType, string i_NameOfOwner, string i_PhoneNumOfOwner, eStatus i_StatusOfvehicle = eStatus.InRepair)
+            : base(i_Model, i_LicenseNumber, i_EnergyType, i_NameOfOwner, i_PhoneNumOfOwner, i_StatusOfvehicle)
         {
             m_TypeOfLicense = i_TypeOfLicense;
             m_cc = i_Cc;

@@ -7,8 +7,8 @@
         private readonly bool m_HasHazardasCargo;
         private readonly float m_VolumeOfCargo;
 
-        internal Truck(bool i_HasHazardasCargo, float i_VolumeOfCargo, string i_Model, string i_LicenseNumber, Energy i_Energy, string i_NameOfOwner, string i_PhoneNumOfOwner, eStatus i_StatusOfvehicle = eStatus.InRepair)
-            : base(i_Model, i_LicenseNumber, i_Energy, i_NameOfOwner, i_PhoneNumOfOwner, i_StatusOfvehicle)
+        public Truck(bool i_HasHazardasCargo, float i_VolumeOfCargo, string i_Model, string i_LicenseNumber, eEnergyType i_EnergyType, string i_NameOfOwner, string i_PhoneNumOfOwner, eStatus i_StatusOfvehicle = eStatus.InRepair)
+            : base(i_Model, i_LicenseNumber, i_EnergyType, i_NameOfOwner, i_PhoneNumOfOwner, i_StatusOfvehicle)
         {
             m_HasHazardasCargo = i_HasHazardasCargo;
             m_VolumeOfCargo = i_VolumeOfCargo;
