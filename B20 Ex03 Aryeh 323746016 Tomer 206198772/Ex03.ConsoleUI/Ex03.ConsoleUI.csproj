@@ -36,11 +36,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ParsingValidation.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="UserInterface.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Ex03.GarageLogic\Ex03.GarageLogic.csproj">
       <Project>{a120d37b-e361-4b95-8dfe-949c4915fc0a}</Project>
       <Name>Ex03.GarageLogic</Name>
