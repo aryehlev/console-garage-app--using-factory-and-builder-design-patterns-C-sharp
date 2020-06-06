@@ -1,6 +1,6 @@
 ﻿namespace Ex03.GarageLogic
 {
-    internal class Wheel
+    public class Wheel
     {
         private string m_Manufactor;
         private float m_MaxPressure;
