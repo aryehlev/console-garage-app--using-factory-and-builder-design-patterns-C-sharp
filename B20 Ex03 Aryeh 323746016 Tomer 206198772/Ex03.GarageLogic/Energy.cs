@@ -31,7 +31,7 @@ namespace Ex03.GarageLogic
             m_CurrentFilled = newAmount;
         }
 
-        internal eEnergyType eEnergyType
+        internal eEnergyType EnergyType
         {
             get
             {

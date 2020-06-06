@@ -5,13 +5,12 @@ namespace Ex03.GarageLogic
 {
     public abstract class Vehicle
     {
-        private string m_Model;
-        private string m_LicenseNumber;
+        private readonly string m_Model;
+        private readonly string m_LicenseNumber;
+        private readonly string m_NameOfOwner;
+        private readonly string m_PhoneNumOfOwner;
         protected List<Wheel> m_Wheels;
         protected Energy m_Energy;
-        private eEnergyType m_EnergyType;
-        private string m_NameOfOwner;
-        private string m_PhoneNumOfOwner;
         private eStatus m_StatusOfVehicle;
 
         internal Vehicle(
@@ -20,9 +19,11 @@ namespace Ex03.GarageLogic
             eEnergyType i_EnergyType,
             string i_NameOfOwner,
             string i_PhoneNumOfOwner,
-            eStatus i_StatusOfvehicle = eStatus.InRepair)
+            string i_WheelManufactor,
+            float i_CurrentAirPresure,
+            float i_CurrentEnergyLevel,
+        eStatus i_StatusOfvehicle = eStatus.InRepair)
         {
-            m_EnergyType = i_EnergyType;
             m_LicenseNumber = i_LicenseNumber;
             m_Model = i_Model;
             m_NameOfOwner = i_NameOfOwner;
