@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
@@ -9,6 +10,22 @@ namespace Ex03.GarageLogic
         public Garage()
         {
             m_VehiclesDatabase = new Dictionary<string, Vehicle>();
+        }
+
+        public void AddVehicle(
+            eVehicleType i_VehicleType,
+            string i_Model,
+            string i_LicenseNumber,
+            eEnergyType i_Energy,
+            string i_NameOfOwner,
+            string i_PhoneNumOfOwner,
+            string i_WheelManufactor,
+            float i_CurrentAirPresure,
+            float i_CurrentEnergyLevel,
+            params Object[] i_OptionalParams)
+        {
+            m_VehiclesDatabase.Add(i_LicenseNumber, CarRegistary.RegisterCar(i_VehicleType, i_Model, i_LicenseNumber, i_Energy, i_NameOfOwner,
+                i_PhoneNumOfOwner, i_WheelManufactor, i_CurrentAirPresure, i_CurrentEnergyLevel, i_OptionalParams));
         }
 
         public bool IsVehicleRegistered(string i_LicenseNumber)
@@ -22,8 +39,6 @@ namespace Ex03.GarageLogic
             m_VehiclesDatabase.TryGetValue(i_LicenseNumber, out vehicleToChangeStatus);
             vehicleToChangeStatus.StatusOfVehicle = i_NewStatus;
         }
-
-        //public AddVehice();
 
         public List<string> GetAllLicenseNumbers(eStatus i_WantedStatus = eStatus.None)
         {
