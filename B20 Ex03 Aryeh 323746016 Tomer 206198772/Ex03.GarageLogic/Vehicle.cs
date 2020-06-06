@@ -5,13 +5,13 @@ namespace Ex03.GarageLogic
 {
     public abstract class Vehicle
     {
-        private readonly string m_Model;
-        private readonly string m_LicenseNumber;
-        private readonly string m_NameOfOwner;
-        private readonly string m_PhoneNumOfOwner;
+        private readonly string r_Model;
+        private readonly string r_LicenseNumber;
+        private readonly string r_NameOfOwner;
+        private readonly string r_PhoneNumOfOwner;
+        private readonly eStatus r_StatusOfVehicle;
         protected List<Wheel> m_Wheels;
         protected Energy m_Energy;
-        private eStatus m_StatusOfVehicle;
 
         internal Vehicle(
             string i_Model,
@@ -24,19 +24,18 @@ namespace Ex03.GarageLogic
             float i_CurrentEnergyLevel,
         eStatus i_StatusOfvehicle = eStatus.InRepair)
         {
-            m_LicenseNumber = i_LicenseNumber;
-            m_Model = i_Model;
-            m_NameOfOwner = i_NameOfOwner;
-            m_PhoneNumOfOwner = i_PhoneNumOfOwner;
-            m_StatusOfVehicle = i_StatusOfvehicle;
+            r_LicenseNumber = i_LicenseNumber;
+            r_Model = i_Model;
+            r_NameOfOwner = i_NameOfOwner;
+            r_PhoneNumOfOwner = i_PhoneNumOfOwner;
+            r_StatusOfVehicle = i_StatusOfvehicle;
         }
 
-       
-        internal void FillTires(bool i_fillAll, float i_AirToFill = 0)
+        internal void FillTires(bool i_FillAll, float i_AirToFill = 0)
         {
             foreach (Wheel wheel in m_Wheels)
             { 
-                wheel.FillTire(i_fillAll, i_AirToFill);
+                wheel.FillTire(i_FillAll, i_AirToFill);
             }
         } 
         
@@ -54,9 +53,9 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                return m_StatusOfVehicle; 
+                return r_StatusOfVehicle; 
 
-            }   // get method
+            }   
             set
             {
                 StatusOfVehicle = value;
@@ -69,24 +68,25 @@ namespace Ex03.GarageLogic
             int i = 0;
             foreach (Wheel wheel in m_Wheels)
             {
-                sbForWheels.Append(string.Format("wheel number {0}: {1}", i ,wheel.ToString()));
+                sbForWheels.Append(string.Format("wheel number {0}: {1}", i, wheel));
                 i++;
             }
+
             return string.Format(
-                "Licence Number: {0}\n, Model {1}\n, name of owner: {2}\n, status of vehicle {3}\n, type Of energy car takes: {4}\n, percentage left in car {5}:\n wheel info \n {6}",
-                m_LicenseNumber,
-                m_Model,
-                m_NameOfOwner,
-                m_StatusOfVehicle,
+                "Licence Number: {0}\n, Model {1}\n, name of owner: {2}\n, status of vehicle {3}\n, type Of energy car takes: {4}\n, percentage left in car {5}:\n wheel info \n {6}, owner phone number {7}",
+                r_LicenseNumber,
+                r_Model,
+                r_NameOfOwner,
+                r_StatusOfVehicle,
                 m_Energy.EnergyType,
-                m_Energy.GetEnergyPercentage(), sbForWheels);
+                m_Energy.GetEnergyPercentage(), 
+                sbForWheels,
+                r_PhoneNumOfOwner);
         }
 
         public override int GetHashCode()
         {
-            return int.Parse(m_LicenseNumber);
+            return int.Parse(r_LicenseNumber);
         }
-
     }
-
 }

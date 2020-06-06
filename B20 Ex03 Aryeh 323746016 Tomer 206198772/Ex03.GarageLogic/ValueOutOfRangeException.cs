@@ -4,14 +4,21 @@ namespace Ex03.GarageLogic
 {
     public class ValueOutOfRangeException : Exception
     {
-        private float m_MaxValue;
-        private float m_MinValue;
+        private readonly float r_MaxValue;
+        private readonly float r_MinValue;
+
+        public ValueOutOfRangeException(float i_MinValue, float i_MaxValue)
+            : base("value out of range")
+        {
+            r_MaxValue = i_MaxValue;
+            r_MinValue = i_MinValue;
+        }
 
         public float MaxValue
         {
             get
             {
-                return m_MaxValue;
+                return r_MaxValue;
             }
         }
 
@@ -19,19 +26,8 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                return m_MinValue;
+                return r_MinValue;
             }
         }
-
-        public ValueOutOfRangeException( float i_MinValue, float i_MaxValue)
-            : base("aaahhhhhhhh bagigiiiiiiiii")
-        {
-            m_MaxValue = i_MaxValue;
-            m_MinValue = i_MinValue;
-        }
-        
-
-
-
     }
 }

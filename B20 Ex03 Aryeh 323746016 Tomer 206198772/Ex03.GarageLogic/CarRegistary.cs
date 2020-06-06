@@ -1,10 +1,7 @@
-﻿using System;
-
-namespace Ex03.GarageLogic
+﻿namespace Ex03.GarageLogic
 {
-     internal class CarRegistary
-    {
-
+    internal class CarRegistary
+    { 
         internal static Vehicle RegisterCar(
             eVehicleType i_VehicleType,
             string i_Model,
@@ -15,7 +12,7 @@ namespace Ex03.GarageLogic
             string i_WheelManufactor,
             float i_CurrentAirPresure,
             float i_CurrentEnergyLevel, 
-            params Object[] i_OptionalParams)
+            params object[] i_OptionalParams)
         {
             Vehicle vehicleWanted = null;
             switch(i_VehicleType)
@@ -33,6 +30,5 @@ namespace Ex03.GarageLogic
 
             return vehicleWanted;
         }
-
-}
+    }
 }

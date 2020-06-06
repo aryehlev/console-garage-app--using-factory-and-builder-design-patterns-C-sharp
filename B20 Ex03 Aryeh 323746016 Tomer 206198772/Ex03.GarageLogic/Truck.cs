@@ -7,18 +7,28 @@
         private const byte k_NumOfWheels = 16;
         private readonly bool r_HasHazardasCargo;
         private readonly float r_VolumeOfCargo;
-       
-
-        public Truck(bool i_HasHazardasCargo, float i_VolumeOfCargo, string i_Model, string i_LicenseNumber, eEnergyType i_EnergyType, string i_NameOfOwner, string i_PhoneNumOfOwner,
-                     string i_WheelManufactor, float i_CurrentAirPresure, float i_CurrentEnergyLevel, eStatus i_StatusOfvehicle = eStatus.InRepair)
+        
+        public Truck(
+            bool i_HasHazardasCargo, 
+            float i_VolumeOfCargo, 
+            string i_Model, 
+            string i_LicenseNumber, 
+            eEnergyType i_EnergyType, 
+            string i_NameOfOwner, 
+            string i_PhoneNumOfOwner,
+            string i_WheelManufactor, 
+            float i_CurrentAirPresure, 
+            float i_CurrentEnergyLevel, 
+            eStatus i_StatusOfvehicle = eStatus.InRepair)
             : base(i_Model, i_LicenseNumber, i_EnergyType, i_NameOfOwner, i_PhoneNumOfOwner, i_WheelManufactor, i_CurrentAirPresure, i_CurrentEnergyLevel, i_StatusOfvehicle)
         {
             r_HasHazardasCargo = i_HasHazardasCargo;
             r_VolumeOfCargo = i_VolumeOfCargo;
-            base.m_Energy = new Energy(i_CurrentEnergyLevel, k_MaxEnergyCapacity, i_EnergyType);
+            m_Energy = new Energy(i_CurrentEnergyLevel, k_MaxEnergyCapacity, i_EnergyType);
+            
             for (int i = 0; i < k_NumOfWheels; i++)
             {
-                base.m_Wheels.Add(new Wheel(i_WheelManufactor, k_MaxAirPressure, i_CurrentAirPresure));
+                m_Wheels.Add(new Wheel(i_WheelManufactor, k_MaxAirPressure, i_CurrentAirPresure));
             }
         }
 
@@ -27,5 +37,4 @@
             return string.Format("{0}\n, has hazardoes cargo: {1},\n volume of cargo: {2}\n", base.ToString(), r_HasHazardasCargo, r_VolumeOfCargo);
         }
     }
-
 }
