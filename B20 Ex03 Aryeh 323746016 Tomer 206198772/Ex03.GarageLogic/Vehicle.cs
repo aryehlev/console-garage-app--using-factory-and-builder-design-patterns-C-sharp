@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Ex03.GarageLogic
@@ -30,7 +31,8 @@ namespace Ex03.GarageLogic
             r_PhoneNumOfOwner = i_PhoneNumOfOwner;
             r_StatusOfVehicle = i_StatusOfvehicle;
         }
-
+        internal abstract string[] GetSpecificFeatureDescription();
+        internal abstract void ParseAndSetSpecificFeatures(string[] i_SpecificFeatures);
         internal void FillTires(bool i_FillAll, float i_AirToFill = 0)
         {
             foreach (Wheel wheel in m_Wheels)

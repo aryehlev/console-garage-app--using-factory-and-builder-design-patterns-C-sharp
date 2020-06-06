@@ -20,7 +20,7 @@
                 float airToFill = i_AirToFill + m_CurrentPressure;
                 if(airToFill > r_MaxPressure)
                 {
-                    throw new ValueOutOfRangeException(0, r_MaxPressure - m_CurrentPressure);
+                    throw new ValueOutOfRangeException(0, r_MaxPressure - m_CurrentPressure, "air to fill");
                 }
 
                 m_CurrentPressure = airToFill;

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Ex03.GarageLogic
 {
@@ -20,10 +22,29 @@ namespace Ex03.GarageLogic
             string i_PhoneNumOfOwner,
             string i_WheelManufactor,
             float i_CurrentAirPresure,
-            float i_CurrentEnergyLevel,
-            params object[] i_OptionalParams)
+            float i_CurrentEnergyLevel
+            )
         {
-            r_VehiclesDatabase.Add(i_LicenseNumber, CarRegistary.RegisterCar(i_VehicleType, i_Model, i_LicenseNumber, i_Energy, i_NameOfOwner, i_PhoneNumOfOwner, i_WheelManufactor, i_CurrentAirPresure, i_CurrentEnergyLevel, i_OptionalParams));
+            r_VehiclesDatabase.Add(i_LicenseNumber, CarRegistary.RegisterCar(i_VehicleType, i_Model, i_LicenseNumber, i_Energy, i_NameOfOwner, i_PhoneNumOfOwner, i_WheelManufactor, i_CurrentAirPresure, i_CurrentEnergyLevel));
+            getVehicle(i_LicenseNumber).GetSpecificFeatureDescription();
+        }
+
+        private Vehicle getVehicle(string i_LicenseNumber)
+        {
+            Vehicle vehicleToReturn;
+            r_VehiclesDatabase.TryGetValue(i_LicenseNumber, out vehicleToReturn);
+            return vehicleToReturn;
+        }
+
+        public string[] GetSpecificFeatureDescription(string i_LicenseNumber)
+        {
+            string[] arrayOfFeatureDescriptions = getVehicle(i_LicenseNumber).GetSpecificFeatureDescription();
+            return arrayOfFeatureDescriptions;
+        }
+
+        public void ParseAndSetSpecialFeatures(string i_LicenseNumber, string[] i_SpecificFeatures)
+        {
+            getVehicle(i_LicenseNumber).ParseAndSetSpecificFeatures(i_SpecificFeatures);
         }
 
         public bool IsVehicleRegistered(string i_LicenseNumber)
@@ -33,9 +54,8 @@ namespace Ex03.GarageLogic
 
         public void ChangeStatusOfVehicle(string i_LicenseNumber, eStatus i_NewStatus)
         {
-            Vehicle vehicleToChangeStatus;
-            r_VehiclesDatabase.TryGetValue(i_LicenseNumber, out vehicleToChangeStatus);
-            vehicleToChangeStatus.StatusOfVehicle = i_NewStatus;
+
+            getVehicle(i_LicenseNumber).StatusOfVehicle = i_NewStatus;
         }
 
         public List<string> GetAllLicenseNumbers(eStatus i_WantedStatus = eStatus.None)
@@ -66,16 +86,14 @@ namespace Ex03.GarageLogic
 
         public void FllEnergy(string i_LicenseNumber, float i_Energy, eEnergyType i_EnergyType)
         {
-            Vehicle vehicleToFIll;
-            r_VehiclesDatabase.TryGetValue(i_LicenseNumber, out vehicleToFIll);
-            vehicleToFIll.FillEnergy(i_Energy, i_EnergyType);
+            getVehicle(i_LicenseNumber).FillEnergy(i_Energy, i_EnergyType);
         }
 
         public string GetVehicleData(string i_LicenseNumber)
         {
-            Vehicle vehicleToReturnData;
-            r_VehiclesDatabase.TryGetValue(i_LicenseNumber, out vehicleToReturnData);
-            return vehicleToReturnData.ToString();
+            return getVehicle(i_LicenseNumber).ToString();
         }
+
+        
     }
 }

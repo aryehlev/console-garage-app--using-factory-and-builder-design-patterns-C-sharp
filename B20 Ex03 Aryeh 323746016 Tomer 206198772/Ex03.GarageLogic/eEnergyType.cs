@@ -6,6 +6,6 @@
         Octan95,
         Octan96,
         Octan98,
-        Electric
+        Electric,
     }
 }
