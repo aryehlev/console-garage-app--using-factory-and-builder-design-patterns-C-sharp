@@ -3,14 +3,8 @@
 
 namespace Ex03.GarageLogic
 {
-     public class CarRegistary
+     internal class CarRegistary
     {
-        public enum eVehicleType
-        {
-            Car, 
-            Truck, 
-            MotorCycle
-        }
 
         public static void RegisterCar(
             eVehicleType i_VehicleType,
@@ -31,11 +25,11 @@ namespace Ex03.GarageLogic
                     vehicleWanted = new Car((eColour)i_OptionalParams[0], (byte)i_OptionalParams[1], i_Model, i_LicenseNumber, i_Energy, i_NameOfOwner, i_PhoneNumOfOwner, i_WheelManufactor, i_CurrentAirPresure, i_CurrentEnergyLevel);
                     break;
                 case eVehicleType.Truck:
-                    vehicleWanted = new Truck(eColour)i_OptionalParams[0], (byte)i_OptionalParams[1], i_Model, i_LicenseNumber, i_Energy, i_NameOfOwner, i_PhoneNumOfOwner, i_WheelManufactor, i_CurrentAirPresure, i_CurrentEnergyLevel);
+                    vehicleWanted = new Truck((bool)i_OptionalParams[0], (float)i_OptionalParams[1], i_Model, i_LicenseNumber, i_Energy, i_NameOfOwner, i_PhoneNumOfOwner, i_WheelManufactor, i_CurrentAirPresure, i_CurrentEnergyLevel);
                     break;
-                    break;
+                case eVehicleType.MotorCycle:
                 default:
-                    Console.WriteLine("Default case");
+                    
                     break;
             }
         }
