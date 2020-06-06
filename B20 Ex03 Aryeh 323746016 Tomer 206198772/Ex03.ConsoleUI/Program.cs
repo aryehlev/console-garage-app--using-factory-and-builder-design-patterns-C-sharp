@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using System;
 
 namespace Ex03.ConsoleUI
 {
@@ -10,7 +7,7 @@ namespace Ex03.ConsoleUI
     {
         public static void Main()
         {
-            UserInterface.WelcomeScreen();
+            UserInterface.WelcomeMsg();
 
             while (true)
             {
@@ -19,18 +16,26 @@ namespace Ex03.ConsoleUI
                     case 1:
                         break;
                     case 2:
+                        UserInterface.GetAllLicenseNumbers();
                         break;
                     case 3:
+                        UserInterface.ChangeStatusOfVehicle();
                         break;
                     case 4:
+                        UserInterface.FillTiresToMax();
                         break;
                     case 5:
+                        UserInterface.FillEnergy(false);
                         break;
                     case 6:
+                        UserInterface.FillEnergy(true);
                         break;
                     case 7:
+                        UserInterface.GetVehicleData();
                         break;
                     case 0:
+                        UserInterface.GoodbyeMsg();
+                        Environment.Exit(0);
                         break;
                 }
                 UserInterface.BackToModePickerMsg();

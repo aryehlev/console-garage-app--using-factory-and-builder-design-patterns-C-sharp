@@ -1,14 +1,10 @@
 ﻿using Ex03.GarageLogic;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ex03.ConsoleUI
 {
     class ParsingValidation
-    {
+    {  
         internal static int checkModePicker()
         {
             string input = Console.ReadLine();
@@ -20,29 +16,7 @@ namespace Ex03.ConsoleUI
             return int.Parse(input);
         }
 
-        internal static eStatus checkVehicleStatus()
-        {
-            eStatus vehicleStatus = eStatus.Paid;
-            string input = Console.ReadLine();
-            switch (input)
-            {
-                case "1":
-                    vehicleStatus = eStatus.Paid;
-                    break;
-                case "2":
-                    vehicleStatus = eStatus.Fixed;
-                    break;
-                case "3":
-                    vehicleStatus = eStatus.InRepair;
-                    break;
-                default:
-                    throw new FormatException(input);
-            }
-
-            return vehicleStatus;
-        }
-
-        internal static eStatus checkVehicleStatusWithNone()
+        internal static eStatus checkVehicleStatus(bool i_allowNone)
         {
             eStatus vehicleStatus = eStatus.Paid;
             string input = Console.ReadLine();
@@ -58,8 +32,15 @@ namespace Ex03.ConsoleUI
                     vehicleStatus = eStatus.InRepair;
                     break;
                 case "4":
-                    vehicleStatus = eStatus.None;
-                    break;
+                    if (i_allowNone)
+                    {
+                        vehicleStatus = eStatus.None;
+                        break;
+                    }
+                    else
+                    {
+                        throw new FormatException(input);
+                    }
                 default:
                     throw new FormatException(input);
             }
@@ -76,6 +57,28 @@ namespace Ex03.ConsoleUI
             }
 
             return input;
+        }
+
+        internal static eVehicleType checkVehicleType()
+        {
+            eVehicleType vehicleType = eVehicleType.Car;
+            string input = Console.ReadLine();
+            switch (input)
+            {
+                case "1":
+                    vehicleType = eVehicleType.Car;
+                    break;
+                case "2":
+                    vehicleType = eVehicleType.MotorCycle;
+                    break;
+                case "3":
+                    vehicleType = eVehicleType.Truck;
+                    break;
+                default:
+                    throw new FormatException(input);
+            }
+
+            return vehicleType;
         }
 
         internal static eEnergyType checkEnergyType()
@@ -113,15 +116,5 @@ namespace Ex03.ConsoleUI
 
             return energyAmount;
         }
-
-
-        //internal static float checkLicsenseNumber()
-        //{
-
-        //}
-
-
-
-
     }
 }
