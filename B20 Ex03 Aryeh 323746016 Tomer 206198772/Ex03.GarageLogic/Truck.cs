@@ -24,7 +24,18 @@
         {
             r_HasHazardasCargo = i_HasHazardasCargo;
             r_VolumeOfCargo = i_VolumeOfCargo;
+            
+            if (i_CurrentEnergyLevel > k_MaxEnergyCapacity)
+            {
+                throw new ValueOutOfRangeException(0, k_MaxEnergyCapacity);
+            }
+           
             m_Energy = new Energy(i_CurrentEnergyLevel, k_MaxEnergyCapacity, i_EnergyType);
+            
+            if (i_CurrentAirPresure > k_MaxAirPressure)
+            {
+                throw new ValueOutOfRangeException(0, k_MaxAirPressure);
+            }
             
             for (int i = 0; i < k_NumOfWheels; i++)
             {

@@ -24,8 +24,16 @@
             r_Colour = i_Colour;
             r_NumOfDoors = i_NumOfDoors;
             float maxEnergyCapacity = i_EnergyType == eEnergyType.Electric ? 2.1f : 60;
+            if(i_CurrentEnergyLevel > maxEnergyCapacity)
+            {
+                throw new ValueOutOfRangeException(0, maxEnergyCapacity);
+            }
             m_Energy = new Energy(i_CurrentEnergyLevel, maxEnergyCapacity, i_EnergyType);
-            for(int i = 0; i < k_NumOfWheels; i++)
+            if (i_CurrentAirPresure > k_MaxAirPressure)
+            {
+                throw new ValueOutOfRangeException(0, k_MaxAirPressure);
+            }
+            for (int i = 0; i < k_NumOfWheels; i++)
             {
                m_Wheels.Add(new Wheel(i_WheelManufactor, k_MaxAirPressure, i_CurrentAirPresure));
             }

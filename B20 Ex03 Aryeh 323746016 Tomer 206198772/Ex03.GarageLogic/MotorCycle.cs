@@ -24,7 +24,19 @@
             r_TypeOfLicense = i_TypeOfLicense;
             r_Cc = i_Cc;
             float maxEnergyCapacity = i_EnergyType == eEnergyType.Electric ? 1.2f : 7;
+            
+            if (i_CurrentEnergyLevel > maxEnergyCapacity)
+            {
+                throw new ValueOutOfRangeException(0, maxEnergyCapacity);
+            }
+            
             m_Energy = new Energy(i_CurrentEnergyLevel, maxEnergyCapacity, i_EnergyType);
+            
+            if (i_CurrentAirPresure > k_MaxAirPressure)
+            {
+                throw new ValueOutOfRangeException(0, k_MaxAirPressure);
+            }
+           
             for (int i = 0; i < k_NumOfWheels; i++)
             {
                 m_Wheels.Add(new Wheel(i_WheelManufactor, k_MaxAirPressure, i_CurrentAirPresure));
