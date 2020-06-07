@@ -6,65 +6,63 @@ namespace Ex03.GarageLogic
     {
         private const float k_MaxAirPressure = 32;
         private const byte k_NumOfWheels = 4;
+        private const float k_MaxElectric = 2.1f;
+        private const float k_MaxSolar = 60;
+        private const int k_NumOfFeatures = 2;
         private eColour m_Colour;
         private byte m_NumOfDoors;
 
         public Car(
-            eColour i_Colour, 
-            byte i_NumOfDoors,
             string i_Model,
             string i_LicenseNumber,
-            eEnergyType i_EnergyType,
             string i_NameOfOwner,
             string i_PhoneNumOfOwner,
-            string i_WheelManufactor,
-            float i_CurrentAirPresure,
-            float i_CurrentEnergyLevel,
             eStatus i_StatusOfvehicle = eStatus.InRepair)
-            : base(
-                i_Model,
-                i_LicenseNumber,
-                i_EnergyType,
-                i_NameOfOwner,
-                i_PhoneNumOfOwner,
-                i_WheelManufactor,
-                i_CurrentAirPresure,
-                i_CurrentEnergyLevel,
-                i_StatusOfvehicle)
+            : base(i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner)
         {
-            float maxEnergyCapacity = i_EnergyType == eEnergyType.Electric ? 2.1f : 60;
 
-            if(i_CurrentEnergyLevel > maxEnergyCapacity)
+        }
+        
+        public override void SetParamaters(eEnergyType i_EnergyType, string i_WheelManufactor, float i_CurrentAirPressure, float i_CurrentEnergyLevel, object[] i_SpecificFeatures = null)
+        {
+
+            float maxEnergyCapacity = i_EnergyType == eEnergyType.Electric ? k_MaxElectric : k_MaxSolar;
+
+            if (i_CurrentEnergyLevel > maxEnergyCapacity)
             {
                 throw new ValueOutOfRangeException(0, maxEnergyCapacity);
             }
 
             m_Energy = new Energy(i_CurrentEnergyLevel, maxEnergyCapacity, i_EnergyType);
 
-            if(i_CurrentAirPresure > k_MaxAirPressure)
+            if (i_CurrentAirPressure > k_MaxAirPressure)
             {
                 throw new ValueOutOfRangeException(0, k_MaxAirPressure);
             }
 
-            for(int i = 0; i < k_NumOfWheels; i++)
+            for (int i = 0; i < k_NumOfWheels; i++)
             {
-                m_Wheels.Add(new Wheel(i_WheelManufactor, k_MaxAirPressure, i_CurrentAirPresure));
+                m_Wheels.Add(new Wheel(i_WheelManufactor, k_MaxAirPressure, i_CurrentAirPressure));
             }
+
+            m_Colour = (eColour)i_SpecificFeatures[0];
+            m_NumOfDoors = (byte)i_SpecificFeatures[1];
         }
 
-        internal override string[] GetSpecificFeatureDescription()
+        public override string[] GetSpecificFeatureDescription()
         {
-            return new[] {"Colour",  "number of doors"};
+            return new[] { "Colour", "number of doors" };
         }
-        
-        internal override void ParseAndSetSpecificFeatures(string[] i_SpecificFeatures)
+
+        public override object[] ParseSpecificFeatures(string[] i_SpecificFeatures)
         {
             string firstFeature = i_SpecificFeatures[0];
             string secondFeature = i_SpecificFeatures[1];
+            object[] specificFeatures = new object[k_NumOfFeatures];
             eColour colour;
-            if(Enum.TryParse(firstFeature, true, out colour))
+            if (Enum.TryParse(firstFeature, true, out colour))
             {
-                m_Colour = colour;
+                specificFeatures[0] = colour;
             }
             else
             {
@@ -72,15 +70,17 @@ namespace Ex03.GarageLogic
             }
 
             byte numOfDoors;
-            if(byte.TryParse(secondFeature, out numOfDoors) && (numOfDoors == 2 || numOfDoors == 3 || numOfDoors == 4 || numOfDoors ==  5))
+            if (byte.TryParse(secondFeature, out numOfDoors) && (numOfDoors == 2 || numOfDoors == 3 || numOfDoors == 4 || numOfDoors == 5))
             {
 
-                m_NumOfDoors = numOfDoors;
+                specificFeatures[1] = numOfDoors;
             }
             else
             {
                 throw new FormatException("needs a door 2,3,4 or 5");
             }
+
+            return specificFeatures;
         }
 
         public override string ToString()

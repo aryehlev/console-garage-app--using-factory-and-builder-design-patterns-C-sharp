@@ -1,4 +1,5 @@
 ﻿using System;
+using Ex03.GarageLogic;
 
 namespace Ex03.ConsoleUI
 {
@@ -6,10 +7,10 @@ namespace Ex03.ConsoleUI
     {
         public static void Main()
         {
-            UserInterface.WelcomeMsg();
-
+            UserInterface.s_Garage.AddVehicle(eVehicleType.Car, "FORD", "123", "TOMER", "050");
             while (true)
             {
+                UserInterface.WelcomeMsg();
                 switch (UserInterface.ModePicker())
                 {
                     case 1:

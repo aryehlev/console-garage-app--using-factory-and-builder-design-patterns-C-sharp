@@ -70,20 +70,18 @@ please pick an action from the folowing:
                     Console.WriteLine($"Your input was '{e.Message}' but mode must be a digit between 0 - 7. Try again");
                 }
             }
-            return 0;
+            return modePicked;
         }
 
         static string buildMenuFromEnum(Type i_enumType, Enum i_valueToIgnore=null)
         {
             StringBuilder sb = new StringBuilder();
-            int modesCounter = 1;
             foreach (string enumValue in Enum.GetNames(i_enumType))
             {
                 if (i_valueToIgnore == null || !enumValue.Equals(i_valueToIgnore.ToString()))
                 {
-                    sb.Append($"{modesCounter} - {enumValue}");
+                    sb.Append($"{enumValue}");
                     sb.Append(Environment.NewLine);
-                    modesCounter++;
                 }
             }
 
@@ -117,11 +115,11 @@ In order to change the status of a vehicle, please enter its license number:";
                 string getVehicleTypeMsg = @"
 Please pick a status mode to sort the license plate numbers by:
 {0}";
-                string.Format(getVehicleTypeMsg, buildMenuFromEnum(typeof(eVehicleType)));
+                getVehicleTypeMsg = string.Format(getVehicleTypeMsg, buildMenuFromEnum(typeof(eVehicleType)));
                 string getEnergyTypeMsg = @"
 Please pick the fuel type of your vehicle:
 {0}";
-                string.Format(getEnergyTypeMsg, buildMenuFromEnum(typeof(eEnergyType)));
+                getEnergyTypeMsg = string.Format(getEnergyTypeMsg, buildMenuFromEnum(typeof(eEnergyType)));
                 string getCurrentEnergyLevelMsg = @"
 Please enter the current amount of {0}:";
                 string getCurrentAirPresureMsg = @"
@@ -142,11 +140,11 @@ Please enter the vehicle's model:";
                 energyType = getEnergyTypeInput(true);
                 if (energyType == eEnergyType.Electric)
                 {
-                    string.Format(getCurrentEnergyLevelMsg, "battery");
+                    getCurrentEnergyLevelMsg = string.Format(getCurrentEnergyLevelMsg, "battery");
                 }
                 else
                 {
-                    string.Format(getCurrentEnergyLevelMsg, "gas");
+                    getCurrentEnergyLevelMsg = string.Format(getCurrentEnergyLevelMsg, "gas");
                 }
                 Console.WriteLine(getCurrentEnergyLevelMsg);
                 currentEnergyLevel = getFloat(0);
@@ -206,8 +204,8 @@ Please enter the current air presure:";
                 {
                     try
                     {
-                        s_Garage.AddVehicle(vehicleType, model, licenseNumber, energyType, nameOfOwner, phoneNumOfOwner,
-                            wheelManufactor, currentAirPreasure, currentEnergyLevel, optionalParams);
+                        //s_Garage.AddVehicle(vehicleType, model, licenseNumber, energyType, nameOfOwner, phoneNumOfOwner,
+                        //    wheelManufactor, currentAirPreasure, currentEnergyLevel, optionalParams);
                     }
                     catch (ValueOutOfRangeException e)
                     {
@@ -225,9 +223,9 @@ Please enter the current air presure:";
             string getLicensePlatesMsg = @"
 please pick a status mode to sort the license plate numbers by:
 {0}";
-            string.Format(getLicensePlatesMsg, buildMenuFromEnum(typeof(eStatus)));
+            getLicensePlatesMsg = string.Format(getLicensePlatesMsg, buildMenuFromEnum(typeof(eStatus)));
             Console.WriteLine(getLicensePlatesMsg);
-            sortBy = getVehicleStatusInput(true);
+            sortBy = getAndCheckVehicleStatusInput(false);
             List<string> licenseNumbersList = s_Garage.GetAllLicenseNumbers(sortBy);
             foreach (string licenseNumber in licenseNumbersList)
             {
@@ -248,9 +246,9 @@ please pick a status mode to set for license number {0}:
 {1}";
             Console.WriteLine(getLicenseNumberMsg);
             licenseNumber = getLicenseNumberInput(false, out _);
-            string.Format(getStatusMsg, licenseNumber, buildMenuFromEnum(typeof(eStatus), eStatus.None));
+            getStatusMsg = string.Format(getStatusMsg, licenseNumber, buildMenuFromEnum(typeof(eStatus), eStatus.None));
             Console.WriteLine(getStatusMsg);
-            eStatus statusToSet = getVehicleStatusInput(false);
+            eStatus statusToSet = getAndCheckVehicleStatusInput(false);
             s_Garage.ChangeStatusOfVehicle(licenseNumber, statusToSet);
         }
 
@@ -276,19 +274,19 @@ In order to {0} the vehicle, please enter its license number:";
             string getFuelTypeMsg = @"
 please pick a fuel type to refuel the vehicle:
 {0}";
-            string.Format(getFuelTypeMsg, buildMenuFromEnum(typeof(eEnergyType), eEnergyType.Electric));
+            getFuelTypeMsg = string.Format(getFuelTypeMsg, buildMenuFromEnum(typeof(eEnergyType), eEnergyType.Electric));
             string getEnergyAmountMsg = @"
 Please enter the desired amount to fill ({0}):";
 
             if (i_IsElectric)
             {
-                string.Format(getLicenseNumberMsg, "charge");
-                string.Format(getEnergyAmountMsg, "minutes for charging");
+                getLicenseNumberMsg = string.Format(getLicenseNumberMsg, "charge");
+                getEnergyAmountMsg = string.Format(getEnergyAmountMsg, "minutes for charging");
             }
             else
             {
-                string.Format(getLicenseNumberMsg, "refuel");
-                string.Format(getEnergyAmountMsg, "litres of gas");
+                getLicenseNumberMsg = string.Format(getLicenseNumberMsg, "refuel");
+                getEnergyAmountMsg = string.Format(getEnergyAmountMsg, "litres of gas");
             }
 
             Console.WriteLine(getLicenseNumberMsg);
@@ -351,23 +349,14 @@ In order to get the vehicle's data, please enter its license number:";
             return licenseNumber;
         }
 
-        private static eStatus getVehicleStatusInput(bool i_AllowNone)
+        private static eStatus getAndCheckVehicleStatusInput(bool i_IgnoreNone)
         {
-            eStatus vehicleStatus = eStatus.None;
-            bool tryAgain = true;
-            while (tryAgain)
+            string input = Console.ReadLine();
+            eStatus vehicleStatus;
+            while (!Enum.TryParse(input, true, out vehicleStatus) || (i_IgnoreNone && vehicleStatus == eStatus.None))
             {
-                try
-                {
-                    vehicleStatus = (eStatus)ParsingValidation.checkEnum(i_AllowNone, typeof(eStatus));
-                    tryAgain = false;
-                }
-                catch (FormatException e)
-                {
-                    int enum_length = Enum.GetNames(typeof(eStatus)).Length;
-                    int maxDigit = i_AllowNone ? enum_length : enum_length - 1;
-                    Console.WriteLine($"Your input was '{e.Message}' but the status must be a digit between 1 - {maxDigit}. Try again");
-                }
+                Console.WriteLine($"Please enter only one of the values from above");
+                input = Console.ReadLine();
             }
 
             return vehicleStatus;
@@ -375,45 +364,25 @@ In order to get the vehicle's data, please enter its license number:";
 
         private static eVehicleType getVehicleType()
         {
-            eVehicleType vehicleType = eVehicleType.Car;
-            bool tryAgain = true;
-            while (tryAgain)
+            string input = Console.ReadLine();
+            eVehicleType vehicleType;
+            while (!Enum.TryParse(input, true, out vehicleType))
             {
-                try
-                {
-                    vehicleType = (eVehicleType)ParsingValidation.checkEnum(true, typeof(eVehicleType));
-                    tryAgain = false;
-                }
-                catch (FormatException e)
-                {
-                    int enum_length = Enum.GetNames(typeof(eVehicleType)).Length;
-                    Console.WriteLine($"Your input was '{e.Message}' but the vehicle type must be a digit between 1 - {enum_length}. Try again");
-                }
+                Console.WriteLine($"Please enter only one of the values from above");
+                input = Console.ReadLine();
             }
 
             return vehicleType;
         }
 
-        private static eEnergyType getEnergyTypeInput(bool i_AllowElectric)
+        private static eEnergyType getEnergyTypeInput(bool i_IgnoreElectric)
         {
-            eEnergyType energyType = eEnergyType.Soler;
-            bool tryAgain = true;
-            while (tryAgain)
+            string input = Console.ReadLine();
+            eEnergyType energyType;
+            while (!Enum.TryParse(input, true, out energyType) || i_IgnoreElectric && energyType == eEnergyType.Electric)
             {
-                try
-                {
-                    energyType = (eEnergyType)ParsingValidation.checkEnum(i_AllowElectric, typeof(eEnergyType));
-                    tryAgain = false;
-                }
-                catch (FormatException e)
-                {
-                    int enum_length = Enum.GetNames(typeof(eEnergyType)).Length;
-                    if (!i_AllowElectric)
-                    {
-                        enum_length--;
-                    }
-                    Console.WriteLine($"Your input was '{e.Message}' but the fuel type must be a digit between 1 - {enum_length}. Try again");
-                }
+                Console.WriteLine($"Please enter only one of the values from above");
+                input = Console.ReadLine();
             }
 
             return energyType;

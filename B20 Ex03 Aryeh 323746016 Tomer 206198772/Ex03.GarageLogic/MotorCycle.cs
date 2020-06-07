@@ -6,20 +6,20 @@ namespace Ex03.GarageLogic
     {
         private const float k_MaxAirPressure = 30;
         private const float k_NumOfWheels = 2;
+        private const int k_NumOfFeatures = 2;
         private eLicenseType m_TypeOfLicense;
         private byte m_Cc;
-        
+
         public MotorCycle(
-            string i_Model, 
-            string i_LicenseNumber, 
-            eEnergyType i_EnergyType, 
-            string i_NameOfOwner, 
-            string i_PhoneNumOfOwner,
-            string i_WheelManufactor, 
-            float i_CurrentAirPresure, 
-            float i_CurrentEnergyLevel, 
-            eStatus i_StatusOfvehicle = eStatus.InRepair)
-            : base(i_Model, i_LicenseNumber, i_EnergyType, i_NameOfOwner, i_PhoneNumOfOwner, i_WheelManufactor, i_CurrentAirPresure, i_CurrentEnergyLevel, i_StatusOfvehicle)
+            string i_Model,
+            string i_LicenseNumber,
+            string i_NameOfOwner,
+            string i_PhoneNumOfOwner)
+            : base(i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner)
+        {
+        }
+
+        public override void SetParamaters(eEnergyType i_EnergyType, string i_WheelManufactor, float i_CurrentAirPressure, float i_CurrentEnergyLevel, object[] i_SpecificFeatures = null)
         {
             float maxEnergyCapacity = i_EnergyType == eEnergyType.Electric ? 1.2f : 7;
             
@@ -30,30 +30,34 @@ namespace Ex03.GarageLogic
             
             m_Energy = new Energy(i_CurrentEnergyLevel, maxEnergyCapacity, i_EnergyType);
             
-            if (i_CurrentAirPresure > k_MaxAirPressure)
+            if (i_CurrentAirPressure > k_MaxAirPressure)
             {
                 throw new ValueOutOfRangeException(0, k_MaxAirPressure);
             }
            
             for (int i = 0; i < k_NumOfWheels; i++)
             {
-                m_Wheels.Add(new Wheel(i_WheelManufactor, k_MaxAirPressure, i_CurrentAirPresure));
+                m_Wheels.Add(new Wheel(i_WheelManufactor, k_MaxAirPressure, i_CurrentAirPressure));
             }
+
+            m_TypeOfLicense = (eLicenseType)i_SpecificFeatures[0];
+            m_Cc = (byte)i_SpecificFeatures[1];
         }
 
-        internal override string[] GetSpecificFeatureDescription()
+        public override string[] GetSpecificFeatureDescription()
         {
             return new[] { "license type", "volume of engine(cc)" };
         }
 
-        internal override void ParseAndSetSpecificFeatures(string[] i_SpecificFeatures)
+        public override object[] ParseSpecificFeatures(string[] i_SpecificFeatures)
         {
             string firstFeature = i_SpecificFeatures[0];
             string secondFeature = i_SpecificFeatures[1];
+            object[] specificFeatures = new object[k_NumOfFeatures];
             eLicenseType licenseType;
             if (Enum.TryParse(firstFeature, true, out licenseType))
             {
-                m_TypeOfLicense = licenseType;
+                specificFeatures[0] = licenseType;
             }
             else
             {
@@ -63,12 +67,14 @@ namespace Ex03.GarageLogic
             byte cc;
             if (byte.TryParse(secondFeature, out cc))
             {
-                m_Cc = cc;
+                specificFeatures[1] = cc;
             }
             else
             {
                 throw new FormatException("needs a volume(cc)");
             }
+
+            return specificFeatures;
         }
         
         public override string ToString()

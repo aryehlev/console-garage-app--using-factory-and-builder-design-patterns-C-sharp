@@ -17,36 +17,19 @@ namespace Ex03.GarageLogic
             eVehicleType i_VehicleType,
             string i_Model,
             string i_LicenseNumber,
-            eEnergyType i_Energy,
             string i_NameOfOwner,
-            string i_PhoneNumOfOwner,
-            string i_WheelManufactor,
-            float i_CurrentAirPresure,
-            float i_CurrentEnergyLevel
-            )
+            string i_PhoneNumOfOwner)
         {
-            r_VehiclesDatabase.Add(i_LicenseNumber, CarRegistary.RegisterCar(i_VehicleType, i_Model, i_LicenseNumber, i_Energy, i_NameOfOwner, i_PhoneNumOfOwner, i_WheelManufactor, i_CurrentAirPresure, i_CurrentEnergyLevel));
+            r_VehiclesDatabase.Add(i_LicenseNumber, CarRegistary.RegisterCar(i_VehicleType, i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner));
             getVehicle(i_LicenseNumber).GetSpecificFeatureDescription();
         }
 
         private Vehicle getVehicle(string i_LicenseNumber)
         {
-            Vehicle vehicleToReturn;
-            r_VehiclesDatabase.TryGetValue(i_LicenseNumber, out vehicleToReturn);
+            r_VehiclesDatabase.TryGetValue(i_LicenseNumber, out Vehicle vehicleToReturn);
             return vehicleToReturn;
         }
-
-        public string[] GetSpecificFeatureDescription(string i_LicenseNumber)
-        {
-            string[] arrayOfFeatureDescriptions = getVehicle(i_LicenseNumber).GetSpecificFeatureDescription();
-            return arrayOfFeatureDescriptions;
-        }
-
-        public void ParseAndSetSpecialFeatures(string i_LicenseNumber, string[] i_SpecificFeatures)
-        {
-            getVehicle(i_LicenseNumber).ParseAndSetSpecificFeatures(i_SpecificFeatures);
-        }
-
+        
         public bool IsVehicleRegistered(string i_LicenseNumber)
         {
             return r_VehiclesDatabase.ContainsKey(i_LicenseNumber);
@@ -54,7 +37,6 @@ namespace Ex03.GarageLogic
 
         public void ChangeStatusOfVehicle(string i_LicenseNumber, eStatus i_NewStatus)
         {
-
             getVehicle(i_LicenseNumber).StatusOfVehicle = i_NewStatus;
         }
 

@@ -10,29 +10,37 @@ namespace Ex03.GarageLogic
         private readonly string r_LicenseNumber;
         private readonly string r_NameOfOwner;
         private readonly string r_PhoneNumOfOwner;
-        private readonly eStatus r_StatusOfVehicle;
+        private eStatus m_StatusOfVehicle;
         protected List<Wheel> m_Wheels;
         protected Energy m_Energy;
 
         internal Vehicle(
             string i_Model,
             string i_LicenseNumber,
-            eEnergyType i_EnergyType,
             string i_NameOfOwner,
-            string i_PhoneNumOfOwner,
-            string i_WheelManufactor,
-            float i_CurrentAirPresure,
-            float i_CurrentEnergyLevel,
-        eStatus i_StatusOfvehicle = eStatus.InRepair)
+            string i_PhoneNumOfOwner
+            )
         {
             r_LicenseNumber = i_LicenseNumber;
             r_Model = i_Model;
             r_NameOfOwner = i_NameOfOwner;
             r_PhoneNumOfOwner = i_PhoneNumOfOwner;
-            r_StatusOfVehicle = i_StatusOfvehicle;
+            m_StatusOfVehicle = eStatus.InRepair;
+            m_Wheels = new List<Wheel>();
+            m_Energy = null;
         }
-        internal abstract string[] GetSpecificFeatureDescription();
-        internal abstract void ParseAndSetSpecificFeatures(string[] i_SpecificFeatures);
+        
+        public abstract string[] GetSpecificFeatureDescription();
+        
+        public abstract object[] ParseSpecificFeatures(string[] i_SpecificFeatures);
+        
+        public abstract void SetParamaters(
+            eEnergyType i_EnergyType,
+            string i_WheelManufactor,
+            float i_CurrentAirPressure,
+            float i_CurrentEnergyLevel,
+            object[] i_SpecificFeatures = null);
+        
         internal void FillTires(bool i_FillAll, float i_AirToFill = 0)
         {
             foreach (Wheel wheel in m_Wheels)
@@ -55,12 +63,11 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                return r_StatusOfVehicle; 
-
+                return m_StatusOfVehicle;
             }   
             set
             {
-                StatusOfVehicle = value;
+                m_StatusOfVehicle = value;
             }  
         }
 
@@ -79,7 +86,7 @@ namespace Ex03.GarageLogic
                 r_LicenseNumber,
                 r_Model,
                 r_NameOfOwner,
-                r_StatusOfVehicle,
+                m_StatusOfVehicle,
                 m_Energy.EnergyType,
                 m_Energy.GetEnergyPercentage(), 
                 sbForWheels,

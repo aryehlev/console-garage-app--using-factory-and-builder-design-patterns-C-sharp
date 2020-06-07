@@ -22,15 +22,15 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        public Enum GetEnumFromNum(int i_OptionNumber)
-        {
-            if (i_OptionNumber <= 0 || i_OptionNumber > this.m_MenuOptions.Count)
-            {
-                throw new FormatException(i_OptionNumber.ToString());
-            }
+        //public Enum GetEnumFromNum(int i_OptionNumber)
+        //{
+        //    if (i_OptionNumber <= 0 || i_OptionNumber > this.m_MenuOptions.Count)
+        //    {
+        //        throw new FormatException(i_OptionNumber.ToString());
+        //    }
 
-            StatusEnum MyStatus = (StatusEnum)Enum.Parse(typeof(StatusEnum), "Active", true);
-        }
+        //    StatusEnum MyStatus = (StatusEnum)Enum.Parse(typeof(StatusEnum), "Active", true);
+        //}
 
         public override string ToString()
         {

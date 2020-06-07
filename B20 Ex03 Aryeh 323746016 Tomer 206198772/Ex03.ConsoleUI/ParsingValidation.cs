@@ -17,18 +17,18 @@ namespace Ex03.ConsoleUI
             return int.Parse(input);
         }
 
-        internal static Enum checkEnum(bool i_AllowFirstValueOfEnum, Type i_enumType)
-        {
-            Enum[] enumValues = (Enum[])Enum.GetValues(i_enumType);
-            string input = Console.ReadLine();
-            int numOfOptions = i_AllowFirstValueOfEnum ? enumValues.Length : enumValues.Length - 1;
-            if (!int.TryParse(input, out int result) || result <= 0 || result > numOfOptions)
-            {
-                throw new FormatException(input);
-            }
+        //internal static Enum checkEnum(bool i_AllowFirstValueOfEnum, Type i_enumType)
+        //{
+        //    Enum[] enumValues = (Enum[])Enum.GetValues(i_enumType);
+        //    string input = Console.ReadLine();
+        //    int numOfOptions = i_AllowFirstValueOfEnum ? enumValues.Length : enumValues.Length - 1;
+        //    if (!int.TryParse(input, out int result) || result <= 0 || result > numOfOptions)
+        //    {
+        //        throw new FormatException(input);
+        //    }
 
-            return enumValues[result - 1];
-        }
+        //    return enumValues[result - 1];
+        //}
 
         //internal static eStatus checkVehicleStatus(bool i_allowNone)
         //{
