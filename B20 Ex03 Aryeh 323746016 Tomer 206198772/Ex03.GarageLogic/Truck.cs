@@ -43,7 +43,7 @@ namespace Ex03.GarageLogic
 
         internal override string[] GetSpecificFeatureDescription()
         {
-            return new[] {"does it have hazardoes cargo", "volume of cargo"};
+            return new[] {"has hazardoes cargo?", "volume of cargo"};
         }
 
         internal override void ParseAndSetSpecificFeatures(string[] i_SpecificFeatures)

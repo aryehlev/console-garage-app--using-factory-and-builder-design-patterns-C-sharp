@@ -11,7 +11,22 @@ namespace Ex03.ConsoleUI
         internal static Garage s_Garage = new Garage();  // PROBLEMATIC???
         public static void WelcomeMsg()
         {
-            Console.WriteLine("Hello and Welcome to LLG garage!");
+            string welcomeLogo = @"
+
+░██╗░░░░░░░██╗███████╗██╗░░░░░░█████╗░░█████╗░███╗░░░███╗███████╗  ████████╗░█████╗░  ██╗░░░░░██╗░░░░░░██████╗░
+░██║░░██╗░░██║██╔════╝██║░░░░░██╔══██╗██╔══██╗████╗░████║██╔════╝  ╚══██╔══╝██╔══██╗  ██║░░░░░██║░░░░░██╔════╝░
+░╚██╗████╗██╔╝█████╗░░██║░░░░░██║░░╚═╝██║░░██║██╔████╔██║█████╗░░  ░░░██║░░░██║░░██║  ██║░░░░░██║░░░░░██║░░██╗░
+░░████╔═████║░██╔══╝░░██║░░░░░██║░░██╗██║░░██║██║╚██╔╝██║██╔══╝░░  ░░░██║░░░██║░░██║  ██║░░░░░██║░░░░░██║░░╚██╗
+░░╚██╔╝░╚██╔╝░███████╗███████╗╚█████╔╝╚█████╔╝██║░╚═╝░██║███████╗  ░░░██║░░░╚█████╔╝  ███████╗███████╗╚██████╔╝
+░░░╚═╝░░░╚═╝░░╚══════╝╚══════╝░╚════╝░░╚════╝░╚═╝░░░░░╚═╝╚══════╝  ░░░╚═╝░░░░╚════╝░  ╚══════╝╚══════╝░╚═════╝░
+
+░██████╗░░█████╗░██████╗░░█████╗░░██████╗░███████╗██╗
+██╔════╝░██╔══██╗██╔══██╗██╔══██╗██╔════╝░██╔════╝██║
+██║░░██╗░███████║██████╔╝███████║██║░░██╗░█████╗░░██║
+██║░░╚██╗██╔══██║██╔══██╗██╔══██║██║░░╚██╗██╔══╝░░╚═╝
+╚██████╔╝██║░░██║██║░░██║██║░░██║╚██████╔╝███████╗██╗
+░╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░╚═════╝░╚══════╝╚═╝";
+            Console.WriteLine(welcomeLogo);
         }
 
         public static void GoodbyeMsg()
@@ -58,6 +73,22 @@ please pick an action from the folowing:
             return 0;
         }
 
+        static string buildMenuFromEnum(Type i_enumType, Enum i_valueToIgnore=null)
+        {
+            StringBuilder sb = new StringBuilder();
+            int modesCounter = 1;
+            foreach (string enumValue in Enum.GetNames(i_enumType))
+            {
+                if (i_valueToIgnore == null || !enumValue.Equals(i_valueToIgnore.ToString()))
+                {
+                    sb.Append($"{modesCounter} - {enumValue}");
+                    sb.Append(Environment.NewLine);
+                    modesCounter++;
+                }
+            }
+
+            return sb.ToString();
+        }
 
         // mode 1
         public static void AddVehicle()
@@ -76,49 +107,113 @@ In order to change the status of a vehicle, please enter its license number:";
                 eVehicleType vehicleType = eVehicleType.Car;
                 eEnergyType energyType = eEnergyType.Electric;
                 float currentEnergyLevel = 0.0f;
+                float currentAirPreasure = 0.0f;
                 string nameOfOwner = "";
                 string phoneNumOfOwner = "";
                 string wheelManufactor = "";
-                float currentAirPresure = 0.0f;
                 string model = "";
+                Object[] optionalParams;
 
                 string getVehicleTypeMsg = @"
-please pick a status mode to sort the license plate numbers by:
-1 - Car
-2 - MotorCycle,
-3 - Truck";
+Please pick a status mode to sort the license plate numbers by:
+{0}";
+                string.Format(getVehicleTypeMsg, buildMenuFromEnum(typeof(eVehicleType)));
                 string getEnergyTypeMsg = @"
-please pick the fuel type of your vehicle:
-1 - Soler
-2 - Octan95,
-3 - Octan96
-4 - Octan98";
-                string isCarElectricMsg = @"
-is your car has an electric?
-1 - Soler
-2 - Octan95,
-3 - Octan96
-4 - Octan98"
-                string getCurrentAirPresure = @"
-Please enter the current air presure:";
-                string getNameOfOwnerMsg = @"
-Please enter the vehicle's owner name:";
-                string getPhoneNumOfOwnerMsg = @"
-Please enter the owner's phone number:";
-                string getWheelManufactorMsg = @"
-Please enter the wheels manufactor:";
+Please pick the fuel type of your vehicle:
+{0}";
+                string.Format(getEnergyTypeMsg, buildMenuFromEnum(typeof(eEnergyType)));
                 string getCurrentEnergyLevelMsg = @"
 Please enter the current amount of {0}:";
+                string getCurrentAirPresureMsg = @"
+Please enter the current air presure:";
+                string getNameOfOwnerMsg = @"
+Please enter the vehicle's owner name (letters only):";
+                string getPhoneNumOfOwnerMsg = @"
+Please enter the owner's phone number (digits only):";
+                string getWheelManufactorMsg = @"
+Please enter the wheels manufactor:";
                 string getModel = @"
 Please enter the vehicle's model:";
+
 
                 Console.WriteLine(getVehicleTypeMsg);
                 vehicleType = getVehicleType();
                 Console.WriteLine(getEnergyTypeMsg);
-                energyType = getEnergyTypeInput();
+                energyType = getEnergyTypeInput(true);
+                if (energyType == eEnergyType.Electric)
+                {
+                    string.Format(getCurrentEnergyLevelMsg, "battery");
+                }
+                else
+                {
+                    string.Format(getCurrentEnergyLevelMsg, "gas");
+                }
+                Console.WriteLine(getCurrentEnergyLevelMsg);
+                currentEnergyLevel = getFloat(0);
+                Console.WriteLine(getCurrentAirPresureMsg);
+                currentAirPreasure = getFloat(0);
+                Console.WriteLine(getNameOfOwnerMsg);
+                nameOfOwner = getValidString(false, true);
+                Console.WriteLine(getPhoneNumOfOwnerMsg);
+                phoneNumOfOwner = getValidString(true, false);
+                Console.WriteLine(getWheelManufactorMsg);
+                wheelManufactor = getValidString(false, false);
+                Console.WriteLine(getModel);
+                model = getValidString(false, false);
 
+                if (vehicleType == eVehicleType.Car)
+                {
+                    optionalParams = new object[2];
+                    string getColourMsg = @"
+Please enter the current amount of {0}:";
+                    string getNumOfDoorsMsg = @"
+Please enter the current air presure:";
 
+                    Console.WriteLine(getColourMsg);
+                    optionalParams[0] = "";
+                    Console.WriteLine(getNumOfDoorsMsg);
+                    optionalParams[1] = "";
+                }
+                else if (vehicleType == eVehicleType.MotorCycle)
+                {
+                    optionalParams = new object[2];
+                    string getTypeOfLicenseMsg = @"
+Please enter the current amount of {0}:";
+                    string getCcMsg = @"
+Please enter the motorcycle engine cc:";
 
+                    Console.WriteLine(getTypeOfLicenseMsg);
+                    optionalParams[0] = "";
+                    Console.WriteLine(getCcMsg);
+                    optionalParams[1] = getFloat(1);
+                }
+                else
+                {
+                    optionalParams = new object[2];
+                    string getHasHazardasCargoMsg = @"
+Please enter the current amount of {0}:";
+                    string getVolumeOfCargoMsg = @"
+Please enter the current air presure:";
+
+                    Console.WriteLine(getHasHazardasCargoMsg);
+                    optionalParams[0] = "";
+                    Console.WriteLine(getVolumeOfCargoMsg);
+                    optionalParams[1] = "";
+                }
+
+                bool tryAgain = true;
+                while (tryAgain)
+                {
+                    try
+                    {
+                        s_Garage.AddVehicle(vehicleType, model, licenseNumber, energyType, nameOfOwner, phoneNumOfOwner,
+                            wheelManufactor, currentAirPreasure, currentEnergyLevel, optionalParams);
+                    }
+                    catch (ValueOutOfRangeException e)
+                    {
+
+                    }
+                }
             }
         }
 
@@ -129,11 +224,8 @@ Please enter the vehicle's model:";
             StringBuilder licenseNumbersStr = new StringBuilder();
             string getLicensePlatesMsg = @"
 please pick a status mode to sort the license plate numbers by:
-1 - Paid
-2 - Fixed,
-3 - In repair
-4 - No sorting";
-
+{0}";
+            string.Format(getLicensePlatesMsg, buildMenuFromEnum(typeof(eStatus)));
             Console.WriteLine(getLicensePlatesMsg);
             sortBy = getVehicleStatusInput(true);
             List<string> licenseNumbersList = s_Garage.GetAllLicenseNumbers(sortBy);
@@ -153,13 +245,10 @@ please pick a status mode to sort the license plate numbers by:
 In order to change the status of a vehicle, please enter its license number:";
             string getStatusMsg = @"
 please pick a status mode to set for license number {0}:
-1 - Paid
-2 - Fixed,
-3 - In repair";
-
+{1}";
             Console.WriteLine(getLicenseNumberMsg);
             licenseNumber = getLicenseNumberInput(false, out _);
-            string.Format(getStatusMsg, licenseNumber);
+            string.Format(getStatusMsg, licenseNumber, buildMenuFromEnum(typeof(eStatus), eStatus.None));
             Console.WriteLine(getStatusMsg);
             eStatus statusToSet = getVehicleStatusInput(false);
             s_Garage.ChangeStatusOfVehicle(licenseNumber, statusToSet);
@@ -186,10 +275,8 @@ In order to fill the vehicle's tires to max, please enter its license number:";
 In order to {0} the vehicle, please enter its license number:";
             string getFuelTypeMsg = @"
 please pick a fuel type to refuel the vehicle:
-1 - Soler
-2 - Octan95,
-3 - Octan96
-4 - Octan98";
+{0}";
+            string.Format(getFuelTypeMsg, buildMenuFromEnum(typeof(eEnergyType), eEnergyType.Electric));
             string getEnergyAmountMsg = @"
 Please enter the desired amount to fill ({0}):";
 
@@ -209,7 +296,7 @@ Please enter the desired amount to fill ({0}):";
             if (!i_IsElectric)
             {
                 Console.WriteLine(getFuelTypeMsg);
-                energyType = getEnergyTypeInput();
+                energyType = getEnergyTypeInput(false);
             }
 
             Console.WriteLine(getEnergyAmountMsg);
@@ -237,7 +324,7 @@ In order to get the vehicle's data, please enter its license number:";
             {
                 try
                 {
-                    licenseNumber = ParsingValidation.checkLicenseNumber();
+                    licenseNumber = ParsingValidation.checkValidString(false, false);
                     if (s_Garage.IsVehicleRegistered(licenseNumber))
                     {
                         o_IslicenseNumberRegistered = true;
@@ -255,9 +342,9 @@ In order to get the vehicle's data, please enter its license number:";
                         }
                     }
                 }
-                catch (FormatException)
+                catch (FormatException e)
                 {
-                    Console.WriteLine($"Your input was empty. Try again");
+                    Console.WriteLine($"Your input is {e.Message}. Try again");
                 }
             }
 
@@ -272,7 +359,7 @@ In order to get the vehicle's data, please enter its license number:";
             {
                 try
                 {
-                    vehicleStatus = ParsingValidation.checkVehicleStatus(i_AllowNone);
+                    vehicleStatus = (eStatus)ParsingValidation.checkEnum(i_AllowNone, typeof(eStatus));
                     tryAgain = false;
                 }
                 catch (FormatException e)
@@ -294,7 +381,7 @@ In order to get the vehicle's data, please enter its license number:";
             {
                 try
                 {
-                    vehicleType = ParsingValidation.checkVehicleType();
+                    vehicleType = (eVehicleType)ParsingValidation.checkEnum(true, typeof(eVehicleType));
                     tryAgain = false;
                 }
                 catch (FormatException e)
@@ -307,7 +394,7 @@ In order to get the vehicle's data, please enter its license number:";
             return vehicleType;
         }
 
-        private static eEnergyType getEnergyTypeInput()
+        private static eEnergyType getEnergyTypeInput(bool i_AllowElectric)
         {
             eEnergyType energyType = eEnergyType.Soler;
             bool tryAgain = true;
@@ -315,12 +402,16 @@ In order to get the vehicle's data, please enter its license number:";
             {
                 try
                 {
-                    energyType = ParsingValidation.checkEnergyType();
+                    energyType = (eEnergyType)ParsingValidation.checkEnum(i_AllowElectric, typeof(eEnergyType));
                     tryAgain = false;
                 }
                 catch (FormatException e)
                 {
                     int enum_length = Enum.GetNames(typeof(eEnergyType)).Length;
+                    if (!i_AllowElectric)
+                    {
+                        enum_length--;
+                    }
                     Console.WriteLine($"Your input was '{e.Message}' but the fuel type must be a digit between 1 - {enum_length}. Try again");
                 }
             }
@@ -336,13 +427,13 @@ In order to get the vehicle's data, please enter its license number:";
             {
                 try
                 {
-                    energyAmount = ParsingValidation.checkEnergyAmount();
+                    energyAmount = ParsingValidation.checkFloat(1.0f);
                     s_Garage.FllEnergy(i_licenseNumber, energyAmount, i_energyType);
                     tryAgain = false;
                 }
                 catch (FormatException e)
                 {
-                    Console.WriteLine($"Your input was '{e.Message}' but the amount must be a positive integer. Try again");
+                    Console.WriteLine($"Your input was '{e.Message}' but the amount must be a positive float. Try again");
                 }
                 catch (ValueOutOfRangeException e)
                 {
@@ -353,6 +444,46 @@ In order to get the vehicle's data, please enter its license number:";
                     Console.WriteLine($"{e.Message}. Try again");
                 }
             }
+        }
+
+        private static string getValidString(bool i_DigitsOnly, bool i_LettersOnly)
+        {
+            string validString = "";
+            bool tryAgain = true;
+            while (tryAgain)
+            {
+                try
+                {
+                    validString = ParsingValidation.checkValidString(i_DigitsOnly, i_LettersOnly);
+                    tryAgain = false;
+                }
+                catch (FormatException e)
+                {
+                    Console.WriteLine($"Your input is {e.Message}. Try again");
+                }
+            }
+
+            return validString;
+        }
+
+        private static float getFloat(float i_MinValue)
+        {
+            float validFloat = 0.0f;
+            bool tryAgain = true;
+            while (tryAgain)
+            {
+                try
+                {
+                    validFloat = ParsingValidation.checkFloat(i_MinValue);
+                    tryAgain = false;
+                }
+                catch (FormatException e)
+                {
+                    Console.WriteLine($"Your input was '{e.Message}' but the amount must be a positive float. Try again");
+                }
+            }
+
+            return validFloat;
         }
     }
 }

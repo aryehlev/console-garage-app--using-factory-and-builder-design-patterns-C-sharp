@@ -1,5 +1,6 @@
 ﻿using Ex03.GarageLogic;
 using System;
+using System.Text.RegularExpressions;
 
 namespace Ex03.ConsoleUI
 {
@@ -16,105 +17,117 @@ namespace Ex03.ConsoleUI
             return int.Parse(input);
         }
 
-        internal static eStatus checkVehicleStatus(bool i_allowNone)
+        internal static Enum checkEnum(bool i_AllowFirstValueOfEnum, Type i_enumType)
         {
-            eStatus vehicleStatus = eStatus.Paid;
+            Enum[] enumValues = (Enum[])Enum.GetValues(i_enumType);
             string input = Console.ReadLine();
-            switch (input)
+            int numOfOptions = i_AllowFirstValueOfEnum ? enumValues.Length : enumValues.Length - 1;
+            if (!int.TryParse(input, out int result) || result <= 0 || result > numOfOptions)
             {
-                case "1":
-                    vehicleStatus = eStatus.Paid;
-                    break;
-                case "2":
-                    vehicleStatus = eStatus.Fixed;
-                    break;
-                case "3":
-                    vehicleStatus = eStatus.InRepair;
-                    break;
-                case "4":
-                    if (i_allowNone)
-                    {
-                        vehicleStatus = eStatus.None;
-                        break;
-                    }
-                    else
-                    {
-                        throw new FormatException(input);
-                    }
-                default:
-                    throw new FormatException(input);
+                throw new FormatException(input);
             }
 
-            return vehicleStatus;
+            return enumValues[result - 1];
         }
 
-        internal static string checkLicenseNumber()
+        //internal static eStatus checkVehicleStatus(bool i_allowNone)
+        //{
+        //    eStatus[] vehicleStatuses = (eStatus[])Enum.GetValues(typeof(eStatus));
+        //    string input = Console.ReadLine();
+        //    int numOfOptions = i_allowNone ? vehicleStatuses.Length : vehicleStatuses.Length - 1;
+        //    if (!int.TryParse(input, out int result) || result <= 0 || result > numOfOptions)
+        //    {
+        //        throw new FormatException(input);
+        //    }
+
+        //    return vehicleStatuses[result - 1];
+        //}
+
+        internal static string checkValidString(bool i_DigitsOnly, bool i_LettersOnly)
         {
             string input = Console.ReadLine();
             if (string.IsNullOrEmpty(input))
             {
-                throw new FormatException();
+                throw new FormatException("empty");
+            }
+            if (i_DigitsOnly && !Regex.IsMatch(input, @"^[0-9]+$"))
+            {
+                throw new FormatException("not digits only");
+            }
+            if (i_LettersOnly && !Regex.IsMatch(input, @"^[a-zA-Z]+$"))
+            {
+                throw new FormatException("not letters only");
             }
 
             return input;
         }
 
-        internal static eVehicleType checkVehicleType()
+        //internal static eVehicleType checkVehicleType()
+        //{
+        //    eVehicleType vehicleType = eVehicleType.Car;
+        //    string input = Console.ReadLine();
+        //    switch (input)
+        //    {
+        //        case "1":
+        //            vehicleType = eVehicleType.Car;
+        //            break;
+        //        case "2":
+        //            vehicleType = eVehicleType.MotorCycle;
+        //            break;
+        //        case "3":
+        //            vehicleType = eVehicleType.Truck;
+        //            break;
+        //        default:
+        //            throw new FormatException(input);
+        //    }
+
+        //    return vehicleType;
+        //}
+
+        //internal static eEnergyType checkEnergyType(bool i_allowElectric)
+        //{
+        //    eEnergyType energyType = eEnergyType.Octan95;
+        //    string input = Console.ReadLine();
+        //    switch (input)
+        //    {
+        //        case "1":
+        //            energyType = eEnergyType.Soler;
+        //            break;
+        //        case "2":
+        //            energyType = eEnergyType.Octan95;
+        //            break;
+        //        case "3":
+        //            energyType = eEnergyType.Octan96;
+        //            break;
+        //        case "4":
+        //            energyType = eEnergyType.Octan98;
+        //            break;
+        //        case "5":
+        //            if (i_allowElectric)
+        //            {
+        //                energyType = eEnergyType.Electric;
+        //                break;
+        //            }
+        //            else
+        //            {
+        //                throw new FormatException(input);
+        //            }
+        //        default:
+        //            throw new FormatException(input);
+        //    }
+
+        //    return energyType;
+        //}
+
+        internal static float checkFloat(float i_MinValue)
         {
-            eVehicleType vehicleType = eVehicleType.Car;
             string input = Console.ReadLine();
-            switch (input)
-            {
-                case "1":
-                    vehicleType = eVehicleType.Car;
-                    break;
-                case "2":
-                    vehicleType = eVehicleType.MotorCycle;
-                    break;
-                case "3":
-                    vehicleType = eVehicleType.Truck;
-                    break;
-                default:
-                    throw new FormatException(input);
-            }
-
-            return vehicleType;
-        }
-
-        internal static eEnergyType checkEnergyType()
-        {
-            eEnergyType energyType = eEnergyType.Octan95;
-            string input = Console.ReadLine();
-            switch (input)
-            {
-                case "1":
-                    energyType = eEnergyType.Soler;
-                    break;
-                case "2":
-                    energyType = eEnergyType.Octan95;
-                    break;
-                case "3":
-                    energyType = eEnergyType.Octan96;
-                    break;
-                case "4":
-                    energyType = eEnergyType.Octan98;
-                    break;
-                default:
-                    throw new FormatException(input);
-            }
-
-            return energyType;
-        }
-
-        internal static float checkEnergyAmount()
-        {
-            string input = Console.ReadLine();
-            if (!float.TryParse(input, out float energyAmount) || energyAmount <= 0)
+            if (!float.TryParse(input, out float parsed) || parsed < i_MinValue)
             {
                 throw new FormatException(input);
             }
 
-            return energyAmount;
+            return parsed;
         }
     }
 }
