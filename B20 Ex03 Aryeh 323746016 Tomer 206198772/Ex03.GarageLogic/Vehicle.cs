@@ -27,7 +27,6 @@ namespace Ex03.GarageLogic
             r_PhoneNumOfOwner = i_PhoneNumOfOwner;
             m_StatusOfVehicle = eStatus.InRepair;
             m_Wheels = new List<Wheel>();
-            m_Energy = null;
         }
         
         public abstract string[] GetSpecificFeatureDescription();

@@ -20,6 +20,7 @@ namespace Ex03.GarageLogic
             eStatus i_StatusOfvehicle = eStatus.InRepair)
             : base(i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner)
         {
+            m_Energy = null;
 
         }
         
