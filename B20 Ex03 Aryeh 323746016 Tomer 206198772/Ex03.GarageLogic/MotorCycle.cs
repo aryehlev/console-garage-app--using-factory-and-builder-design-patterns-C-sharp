@@ -9,7 +9,8 @@ namespace Ex03.GarageLogic
         private const byte k_NumOfWheels = 2;
         private const float k_MaxElectric = 1.2f;
         private const float k_MaxSolar = 7;
-        private const int k_NumOfFeatures = 2;
+        private const int k_NumberOfUniqueFeatures = 2;
+        private const bool k_CanBeElectric = true;
         private eLicenseType m_TypeOfLicense;
         private byte m_Cc;
 
@@ -20,6 +21,11 @@ namespace Ex03.GarageLogic
             string i_PhoneNumOfOwner)
             : base(i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner)
         {
+        }
+        
+        public override bool CanBeElectric()
+        {
+            return k_CanBeElectric;
         }
 
         public override void SetParamaters(
@@ -38,42 +44,78 @@ namespace Ex03.GarageLogic
             m_Cc = (byte)i_SpecificFeatures[1];
         }
 
-        public override Dictionary<string, string[]> GetSpecificFeatureDescription()
+        public override Tuple<string, string[]>[] GetSpecificFeatureDescription()
         {
-            Dictionary<string, string[]> definitionAndValues = new Dictionary<string, string[]>();
-            definitionAndValues.Add("license type", Enum.GetNames(typeof(eLicenseType)));
-            definitionAndValues.Add("volume of engine(cc)", new[] { "float" });
+            Tuple<string, string[]>[] definitionAndValues = new Tuple<string, string[]>[k_NumberOfUniqueFeatures];
+            definitionAndValues[0] = new Tuple<string, string[]>("License type", Enum.GetNames(typeof(eLicenseType)));
+            definitionAndValues[1] = new Tuple<string, string[]>("Volume of engine(cc)", new[] { "float" });
             return definitionAndValues;
         }
 
-        public override object[] ParseSpecificFeatures(string[] i_SpecificFeatures)
+        //public override object[] ParseSpecificFeatures(string[] i_SpecificFeatures)
+        //{
+        //    string firstFeature = i_SpecificFeatures[0];
+        //    string secondFeature = i_SpecificFeatures[1];
+        //    object[] specificFeatures = new object[k_NumOfFeatures];
+        //    eLicenseType licenseType;
+        //    if (Enum.TryParse(firstFeature, true, out licenseType))
+        //    {
+        //        specificFeatures[0] = licenseType;
+        //    }
+        //    else
+        //    {
+        //        throw new FormatException("needs a license type of A, A1, AA or B");
+        //    }
+
+        //    byte cc;
+        //    if (byte.TryParse(secondFeature, out cc))
+        //    {
+        //        specificFeatures[1] = cc;
+        //    }
+        //    else
+        //    {
+        //        throw new FormatException("needs a volume(cc)");
+        //    }
+
+        //    return specificFeatures;
+        //}
+
+        public override object ParseSpecificFeature(string i_SpecificFeature, string i_FeatureKey)
         {
-            string firstFeature = i_SpecificFeatures[0];
-            string secondFeature = i_SpecificFeatures[1];
-            object[] specificFeatures = new object[k_NumOfFeatures];
-            eLicenseType licenseType;
-            if (Enum.TryParse(firstFeature, true, out licenseType))
+            object parsedSpecificFeature = null;
+            switch(i_FeatureKey)
             {
-                specificFeatures[0] = licenseType;
-            }
-            else
-            {
-                throw new FormatException("needs a license type of A, A1, AA or B");
+                case "License type":
+                    if(!int.TryParse(i_SpecificFeature, out _) && Enum.TryParse(
+                           i_SpecificFeature,
+                           true,
+                           out eLicenseType licenseType))
+                    {
+                        parsedSpecificFeature = licenseType;
+                        break;
+                    }
+                    else
+                    {
+                        throw new FormatException("needs a license type of A, A1, AA or B");
+                    }
+                case "Volume of engine(cc)":
+                    if(byte.TryParse(i_SpecificFeature, out byte cc))
+                    {
+                        parsedSpecificFeature = cc;
+                        break;
+                    }
+                    else
+                    {
+                        throw new FormatException("needs a volume(cc)");
+                    }
+                default:
+                    throw new ArgumentException("The Feature Index is out of bounds");
             }
 
-            byte cc;
-            if (byte.TryParse(secondFeature, out cc))
-            {
-                specificFeatures[1] = cc;
-            }
-            else
-            {
-                throw new FormatException("needs a volume(cc)");
-            }
-
-            return specificFeatures;
+            return parsedSpecificFeature;
         }
-        
+
+
         public override string AdvancesToStringAfterFeaturesWhereSet()
         {
             return string.Format("{0}\n, type of license: {1},\n volume of engine: {2}\n", base.AdvancesToStringAfterFeaturesWhereSet(), m_TypeOfLicense, m_Cc);

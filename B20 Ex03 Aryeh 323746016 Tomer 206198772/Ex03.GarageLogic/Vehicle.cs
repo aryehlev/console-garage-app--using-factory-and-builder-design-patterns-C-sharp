@@ -1,6 +1,6 @@
-﻿using System;
+﻿using System.Text;
 using System.Collections.Generic;
-using System.Text;
+using System;
 
 namespace Ex03.GarageLogic
 {
@@ -30,9 +30,11 @@ namespace Ex03.GarageLogic
             m_Energy = null;
         }
         
-        public abstract Dictionary<string, string[]> GetSpecificFeatureDescription();
+        public abstract Tuple<string, string[]>[] GetSpecificFeatureDescription();
         
-        public abstract object[] ParseSpecificFeatures(string[] i_SpecificFeatures);
+        //public abstract object[] ParseSpecificFeatures(string[] i_SpecificFeatures);
+
+        public abstract object ParseSpecificFeature(string i_SpecificFeature, string i_FeatureKey);
 
         public abstract void SetParamaters(
             bool i_IsElectric,
@@ -45,25 +47,31 @@ namespace Ex03.GarageLogic
 
         protected virtual void InitWheels(byte i_NumOfWheels, string i_WheelManufactor, float i_CurrentAirPressure, float i_MaxAirPressure)
         {
-            if (i_CurrentAirPressure > i_MaxAirPressure)
+            if (m_Wheels.Count == 0)
             {
-                throw new ValueOutOfRangeException(0, i_MaxAirPressure);
-            }
+                if (i_CurrentAirPressure > i_MaxAirPressure)
+                {
+                    throw new ValueOutOfRangeException(0, i_MaxAirPressure, "airPressure");
+                }
 
-            for (int i = 0; i < i_NumOfWheels; i++)
-            {
-                m_Wheels.Add(new Wheel(i_WheelManufactor, i_MaxAirPressure, i_CurrentAirPressure));
+                for(int i = 0; i < i_NumOfWheels; i++)
+                {
+                    m_Wheels.Add(new Wheel(i_WheelManufactor, i_MaxAirPressure, i_CurrentAirPressure));
+                }
             }
         }
 
         protected virtual void InitEnergy(float i_CurrentEnergyLevel, float i_MaxEnergyCapacity, eEnergyType i_EnergyType)
         {
-            if (i_CurrentEnergyLevel > i_MaxEnergyCapacity)
+            if (m_Energy == null)
             {
-                throw new ValueOutOfRangeException(0, i_MaxEnergyCapacity);
-            }
+                if (i_CurrentEnergyLevel > i_MaxEnergyCapacity)
+                { 
+                    throw new ValueOutOfRangeException(0, i_MaxEnergyCapacity, "energy");
+                }
 
-            m_Energy = new Energy(i_CurrentEnergyLevel, i_MaxEnergyCapacity, i_EnergyType);
+                m_Energy = new Energy(i_CurrentEnergyLevel, i_MaxEnergyCapacity, i_EnergyType);
+            }
         }
 
         internal void FillTires(bool i_FillAll, float i_AirToFill = 0)
@@ -95,6 +103,8 @@ namespace Ex03.GarageLogic
         {
             return m_Energy.EnergyType;
         }
+
+
 
         public virtual string AdvancesToStringAfterFeaturesWhereSet()
         {

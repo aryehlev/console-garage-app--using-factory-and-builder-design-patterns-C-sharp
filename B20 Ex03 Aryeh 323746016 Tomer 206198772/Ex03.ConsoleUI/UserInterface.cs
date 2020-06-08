@@ -114,7 +114,7 @@ In order to add a new vehicle to the system, please enter its license number:";
                 float currentEnergyLevel = 0.0f;
                 float currentAirPreasure = 0.0f;
                 string wheelManufactor = "";
-                Object[] optionalParams = null;
+                object[] specificFeatures = null;
 
                 string getVehicleTypeMsg = @"
 Please pick a vehicle type:
@@ -138,8 +138,9 @@ Please enter the current air presure:";
                 
                 string getWheelManufactorMsg = @"
 Please enter the wheels manufactor:";
-
-
+                string specialFeatureMsg = @"
+Please enter {0}, possible values are:
+{1}";
 
                 Console.WriteLine(getVehicleTypeMsg);
                 vehicleType = getAndCheckVehicleType();
@@ -153,29 +154,26 @@ Please enter the wheels manufactor:";
                 Vehicle newVehicle = s_Garage.AddVehicle(vehicleType, model, licenseNumber, nameOfOwner, phoneNumOfOwner);
                 if (newVehicle.CanBeElectric())
                 {
-                    Console.WriteLine(getEnergyTypeMsg);
-                    energyType = getAndCheckEnergyTypeInput(true);
-                    if (energyType == eEnergyType.Electric)
-                    {
-                        getCurrentEnergyLevelMsg = string.Format(getCurrentEnergyLevelMsg, "battery");
-                    }
-                    else
-                    {
-                        getCurrentEnergyLevelMsg = string.Format(getCurrentEnergyLevelMsg, "gas");
-                    }
+                    Console.WriteLine(getIsElectricMsg);
+                    isElectric = getAndCheckIsElectric();
                 }
+
+                getCurrentEnergyLevelMsg = string.Format(getCurrentEnergyLevelMsg, isElectric ? "battery" : "gas");
                 Console.WriteLine(getCurrentEnergyLevelMsg);
-                currentEnergyLevel = getFloat(0.0f);
+                currentEnergyLevel = getPositiveFloat(0.0f);
                 Console.WriteLine(getCurrentAirPresureMsg);
-                currentAirPreasure = getFloat(0.0f);               
+                currentAirPreasure = getPositiveFloat(0.0f);               
                 Console.WriteLine(getWheelManufactorMsg);
                 wheelManufactor = getValidString(false, false);
+                specificFeatures = getSpecialFeatures(specialFeatureMsg, newVehicle);
 
-                optionalParams = new object[] { eColour.Black, 4 };
-                //newVehicle.GetSpecificFeatureDescription();
-                //optionalParams = newVehicle.ParseSpecificFeatures();
-
-                newVehicle.SetParamaters(energyType, wheelManufactor, currentAirPreasure, currentEnergyLevel, optionalParams);
+                setParametersUI(
+                    newVehicle,
+                    isElectric,
+                    wheelManufactor,
+                    currentAirPreasure,
+                    currentEnergyLevel,
+                    specificFeatures);
             }
         }
 
@@ -325,6 +323,18 @@ In order to get the vehicle's data, please enter its license number:";
             return licenseNumber;
         }
 
+        private static string possibleFeaturesToString(string[] i_PossibleFeatures)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach(string possibleFeature in i_PossibleFeatures)
+            {
+                sb.Append(possibleFeature);
+                sb.Append(Environment.NewLine);
+            }
+
+            return sb.ToString();
+        }
+
         private static eStatus getAndCheckVehicleStatusInput(bool i_IgnoreNone)
         {
             string input = Console.ReadLine();
@@ -351,18 +361,31 @@ In order to get the vehicle's data, please enter its license number:";
             return vehicleType;
         }
 
-        private static eEnergyType getAndCheckEnergyTypeInput(bool i_IgnoreElectric)
+        private static bool getAndCheckIsElectric()
         {
             string input = Console.ReadLine();
-            eEnergyType energyType;
-            while (int.TryParse(input, out _) || !Enum.TryParse(input, true, out energyType) || i_IgnoreElectric && energyType == eEnergyType.Electric)
+            bool isElectric;
+            while (!bool.TryParse(input, out isElectric))
             {
-                Console.WriteLine($"Please enter only one of the values from above");
+                Console.WriteLine($"Please enter only True or False");
                 input = Console.ReadLine();
             }
 
-            return energyType;
+            return isElectric;
         }
+
+        //private static eEnergyType getAndCheckEnergyTypeInput(bool i_IgnoreElectric)
+        //{
+        //    string input = Console.ReadLine();
+        //    eEnergyType energyType;
+        //    while (int.TryParse(input, out _) || !Enum.TryParse(input, true, out energyType) || i_IgnoreElectric && energyType == eEnergyType.Electric)
+        //    {
+        //        Console.WriteLine($"Please enter only one of the values from above");
+        //        input = Console.ReadLine();
+        //    }
+
+        //    return energyType;
+        //}
 
         private static void getEnergyAmountInputAndFill(string i_licenseNumber, eEnergyType i_energyType)
         {
@@ -409,7 +432,52 @@ In order to get the vehicle's data, please enter its license number:";
             return validString;
         }
 
-        private static float getFloat(float i_MinValue)
+        private static object[] getSpecialFeatures(string i_SpecialFeatureMsg, Vehicle i_Vehicle)
+        {
+            Object[] SpecificFeatures = null;
+            Tuple<string, string[]>[] specificFeatureDescriptions = i_Vehicle.GetSpecificFeatureDescription();
+            if (specificFeatureDescriptions != null)
+            {
+                SpecificFeatures = new object[specificFeatureDescriptions.Length];
+                int objectIndex = 0;
+                foreach (Tuple<string, string[]> specificFeatureDescription in specificFeatureDescriptions)
+                {
+                    string descriptionOfValues = possibleFeaturesToString(specificFeatureDescription.Item2);
+                    Console.Out.WriteLine(specificFeatureDescription.Item1);
+                    string currentSpecialFeatureMsg = string.Format(
+                        i_SpecialFeatureMsg,
+                        specificFeatureDescription.Item1,
+                        descriptionOfValues);
+                    Console.WriteLine(currentSpecialFeatureMsg);
+                    SpecificFeatures[objectIndex] = getSpecialFeature(specificFeatureDescription.Item1, i_Vehicle);
+                    objectIndex++;
+                }
+            }
+
+            return SpecificFeatures;
+        }
+        private static object getSpecialFeature(string i_FeatureKey, Vehicle i_Vehicle)
+        {
+            object specialFeature = null;
+            bool tryAgain = true;
+            while (tryAgain)
+            {
+                try
+                {
+                    string input = Console.ReadLine();
+                    specialFeature = i_Vehicle.ParseSpecificFeature(input, i_FeatureKey);
+                    tryAgain = false;
+                }
+                catch (FormatException e)
+                {
+                    Console.WriteLine($"{e.Message}. Try again");
+                }
+            }
+
+            return specialFeature;
+        }
+
+        private static float getPositiveFloat(float i_MinValue)
         {
             float validFloat = 0.0f;
             bool tryAgain = true;
@@ -428,6 +496,41 @@ In order to get the vehicle's data, please enter its license number:";
             }
 
             return validFloat;
+        }
+
+        private static void setParametersUI(Vehicle i_Vehicle, bool i_IsElectric, string i_WheelManufactor, float i_CurrentAirPreasure, float i_CurrentEnergyLevel, object[] i_SpecificFeatures)
+        {
+            bool tryAgain = true;
+            while (tryAgain)
+            {
+                try
+                {
+                    i_Vehicle.SetParamaters(i_IsElectric, i_WheelManufactor, i_CurrentAirPreasure, i_CurrentEnergyLevel, i_SpecificFeatures);
+                    tryAgain = false;
+                }
+                catch (ValueOutOfRangeException e)
+                {
+                    if(e.Message == "value energy out of range")
+                    {
+                        Console.Out.WriteLine($"The amount of energy (fuel/battery) is out of the allowed range ({e.MinValue} - {e.MaxValue})");
+                        i_CurrentEnergyLevel = getPositiveFloat(0.0f);
+                    }
+                    else if(e.Message == "value airPressure out of range")
+                    {
+                        Console.Out.WriteLine($"The air pressure is out of the allowed range ({e.MinValue} - {e.MaxValue})");
+                        i_CurrentAirPreasure = getPositiveFloat(0.0f);
+                    }
+                    else
+                    {
+                        Console.Out.WriteLine($"The amount of energy (fuel/battery) is out of the allowed range ({e.MinValue} - {e.MaxValue})");
+                        i_CurrentEnergyLevel = getPositiveFloat(0.0f);
+                        Console.Out.WriteLine($"The air pressure is out of the allowed range ({e.MinValue} - {e.MaxValue})");
+                        i_CurrentAirPreasure = getPositiveFloat(0.0f);
+
+                    }
+                }
+                
+            }
         }
 
         // CHECKERS

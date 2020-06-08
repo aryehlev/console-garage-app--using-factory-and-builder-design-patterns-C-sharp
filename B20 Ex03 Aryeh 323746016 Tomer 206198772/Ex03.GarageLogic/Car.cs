@@ -9,10 +9,10 @@ namespace Ex03.GarageLogic
         private const byte k_NumOfWheels = 4;
         private const float k_MaxElectric = 2.1f;
         private const float k_MaxGas = 60;
-        private const int k_NumOfFeatures = 2;
-        private const bool k_CanBeElecric = true;
+        private const bool k_CanBeElectric = true;
+        private const int k_NumberOfUniquefeatures = 2;
         private eColour m_Colour;
-        private int m_NumOfDoors;
+        private byte m_NumOfDoors;
 
         public Car(
             string i_Model,
@@ -25,6 +25,11 @@ namespace Ex03.GarageLogic
             
         }
         
+        public override bool CanBeElectric()
+        {
+            return k_CanBeElectric;
+        }
+
         public override void SetParamaters(
             bool i_IsElectric,
             string i_WheelManufactor,
@@ -38,44 +43,76 @@ namespace Ex03.GarageLogic
             InitEnergy(i_CurrentEnergyLevel, maxEnergyCapacity, energyType);
             
             m_Colour = (eColour)i_SpecificFeatures[0];
-            m_NumOfDoors = (int)i_SpecificFeatures[1];
+            m_NumOfDoors = (byte)i_SpecificFeatures[1];
         }
 
-        public override Dictionary<string, string[]> GetSpecificFeatureDescription()
+        public override Tuple<string, string[]>[] GetSpecificFeatureDescription()
         {
-            Dictionary<string, string[]> definitionAndValues = new Dictionary<string, string[]>();
-            definitionAndValues.Add("Colour", Enum.GetNames(typeof(eColour)));
-            definitionAndValues.Add("number of doors", new[] { "byte" });
+            Tuple<string, string[]>[] definitionAndValues = new Tuple<string, string[]>[k_NumberOfUniquefeatures];
+            definitionAndValues[0] = new Tuple<string, string[]>("Colour", Enum.GetNames(typeof(eColour)));
+            definitionAndValues[1] = new Tuple<string, string[]>("Number of doors", new[] { "2", "3", "4", "5" });
             return definitionAndValues;
         }
 
-        public override object[] ParseSpecificFeatures(string[] i_SpecificFeatures)
+        //public override object[] ParseSpecificFeatures(string[] i_SpecificFeatures)
+        //{
+        //    string firstFeature = i_SpecificFeatures[0];
+        //    string secondFeature = i_SpecificFeatures[1];
+        //    object[] specificFeatures = new object[k_NumOfFeatures];
+        //    eColour colour;
+        //    if (Enum.TryParse(firstFeature, true, out colour))
+        //    {
+        //        specificFeatures[0] = colour;
+        //    }
+        //    else
+        //    {
+        //        throw new FormatException("needs a colour of White, Black, Silver or Red");
+        //    }
+
+        //    byte numOfDoors;
+        //    if (byte.TryParse(secondFeature, out numOfDoors) && (numOfDoors == 2 || numOfDoors == 3 || numOfDoors == 4 || numOfDoors == 5))
+        //    {
+
+        //        specificFeatures[1] = numOfDoors;
+        //    }
+        //    else
+        //    {
+        //        throw new FormatException("needs a door 2,3,4 or 5");
+        //    }
+
+        //    return specificFeatures;
+        //}
+
+        public override object ParseSpecificFeature(string i_SpecificFeature, string i_FeatureKey)
         {
-            string firstFeature = i_SpecificFeatures[0];
-            string secondFeature = i_SpecificFeatures[1];
-            object[] specificFeatures = new object[k_NumOfFeatures];
-            eColour colour;
-            if (Enum.TryParse(firstFeature, true, out colour))
+            object parsedSpecificFeature = null;
+            switch(i_FeatureKey)
             {
-                specificFeatures[0] = colour;
-            }
-            else
-            {
-                throw new FormatException("needs a colour of White, Black, Silver or Red");
+                case "Colour":
+                    if (Enum.TryParse(i_SpecificFeature, true, out eColour colour))
+                    {
+                        parsedSpecificFeature = colour;
+                        break;
+                    }
+                    else
+                    {
+                        throw new FormatException("needs a colour of White, Black, Silver or Red");
+                    }
+                case "Number of doors":
+                    if (byte.TryParse(i_SpecificFeature, out byte numOfDoors) && (numOfDoors >= 2 && numOfDoors <= 5))
+                    {
+                        parsedSpecificFeature = numOfDoors;
+                        break;
+                    }
+                    else
+                    {
+                        throw new FormatException("needs a door 2,3,4 or 5");
+                    }
+                default:
+                    throw new ArgumentException("The Feature Index is out of bounds");
             }
 
-            byte numOfDoors;
-            if (byte.TryParse(secondFeature, out numOfDoors) && (numOfDoors == 2 || numOfDoors == 3 || numOfDoors == 4 || numOfDoors == 5))
-            {
-
-                specificFeatures[1] = numOfDoors;
-            }
-            else
-            {
-                throw new FormatException("needs a door 2,3,4 or 5");
-            }
-
-            return specificFeatures;
+            return parsedSpecificFeature;
         }
 
         public override string AdvancesToStringAfterFeaturesWhereSet()

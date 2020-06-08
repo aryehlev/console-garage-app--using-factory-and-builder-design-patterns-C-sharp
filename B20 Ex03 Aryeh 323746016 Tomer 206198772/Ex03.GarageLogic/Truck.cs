@@ -8,7 +8,8 @@ namespace Ex03.GarageLogic
         private const float k_MaxEnergyCapacity = 120;
         private const float k_MaxAirPressure = 28;
         private const byte k_NumOfWheels = 16;
-        private const int k_NumOfFeatures = 2;
+        private const int k_NumberOfUniquefeatures = 2;
+        private const bool k_CanBeElectric = false;
         private bool m_HasHazardasCargo;
         private float m_VolumeOfCargo;
 
@@ -20,6 +21,11 @@ namespace Ex03.GarageLogic
             eStatus i_StatusOfvehicle = eStatus.InRepair)
             : base(i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner)
         {
+        }
+
+        public override bool CanBeElectric()
+        {
+            return k_CanBeElectric;
         }
 
         public override void SetParamaters(
@@ -40,41 +46,73 @@ namespace Ex03.GarageLogic
             m_VolumeOfCargo = (float)i_SpecificFeatures[1];
         }
 
-        public override Dictionary<string, string[]> GetSpecificFeatureDescription()
+        public override Tuple<string, string[]>[] GetSpecificFeatureDescription()
         {
-            Dictionary<string, string[]> definitionAndValues = new Dictionary<string, string[]>();
-            definitionAndValues.Add("has hazardoes cargo?", new[] { "true", "false" });
-            definitionAndValues.Add("volume of cargo", new[] { "byte" });
+            Tuple<string, string[]>[] definitionAndValues = new Tuple<string, string[]>[k_NumberOfUniquefeatures];
+            definitionAndValues[0] = new Tuple<string, string[]>("Has hazardas cargo", new[] { "true", "false" });
+            definitionAndValues[1] = new Tuple<string, string[]>("Volume of cargo", new[] { "byte" });
             return definitionAndValues;
         }
 
-        public override object[] ParseSpecificFeatures(string[] i_SpecificFeatures)
+        //public override object[] ParseSpecificFeatures(string[] i_SpecificFeatures)
+        //{
+        //    string firstFeature = i_SpecificFeatures[0];
+        //    string secondFeature = i_SpecificFeatures[1];
+        //    object[] specificFeatures = new object[k_NumOfFeatures];
+        //    bool hasHazardousCargo;
+
+        //    if (bool.TryParse(firstFeature, out hasHazardousCargo))
+        //    {
+        //        specificFeatures[0] = hasHazardousCargo;
+        //    }
+        //    else
+        //    {
+        //        throw new FormatException("needs a colour of White, Black, Silver or Red");
+        //    }
+
+        //    float volumeOfCargo;
+        //    if (float.TryParse(secondFeature, out volumeOfCargo))
+        //    {
+        //        specificFeatures[1] = volumeOfCargo;
+        //    }
+        //    else
+        //    {
+        //        throw new FormatException("needs a normal volume in number");
+        //    }
+
+        //    return specificFeatures;
+        //}
+
+        public override object ParseSpecificFeature(string i_SpecificFeature, string i_FeatureKey)
         {
-            string firstFeature = i_SpecificFeatures[0];
-            string secondFeature = i_SpecificFeatures[1];
-            object[] specificFeatures = new object[k_NumOfFeatures];
-            bool hasHazardousCargo;
+            object parsedSpecificFeature = null;
+            switch(i_FeatureKey)
+            {
+                case "Has hazardas cargo":
+                    if(bool.TryParse(i_SpecificFeature, out bool hasHazardoesCargo))
+                    {
+                        parsedSpecificFeature = hasHazardoesCargo;
+                        break;
+                    }
+                    else
+                    {
+                        throw new FormatException("needs a true or false value");
+                    }
+                case "Volume of cargo":
+                    if (float.TryParse(i_SpecificFeature, out float volumeOfCargo) || volumeOfCargo >= 0)
+                    {
+                        parsedSpecificFeature = volumeOfCargo;
+                        break;
+                    }
+                    else
+                    {
+                        throw new FormatException("needs a non-negative amount of cargo");
+                    }
+                default:
+                    throw new ArgumentException("The Feature Index is out of bounds");
+            }
 
-            if (bool.TryParse(firstFeature, out hasHazardousCargo))
-            {
-                specificFeatures[0] = hasHazardousCargo;
-            }
-            else
-            {
-                throw new FormatException("needs a colour of White, Black, Silver or Red");
-            }
-
-            float volumeOfCargo;
-            if (float.TryParse(secondFeature, out volumeOfCargo))
-            {
-                specificFeatures[1] = volumeOfCargo;
-            }
-            else
-            {
-                throw new FormatException("needs a normal volume in number");
-            }
-
-            return specificFeatures;
+            return parsedSpecificFeature;
         }
 
         public override string AdvancesToStringAfterFeaturesWhereSet()
