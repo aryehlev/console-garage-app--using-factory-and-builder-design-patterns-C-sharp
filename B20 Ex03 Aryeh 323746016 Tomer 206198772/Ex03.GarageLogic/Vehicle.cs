@@ -27,26 +27,24 @@ namespace Ex03.GarageLogic
             r_PhoneNumOfOwner = i_PhoneNumOfOwner;
             m_StatusOfVehicle = eStatus.InRepair;
             m_Wheels = new List<Wheel>();
+            m_Energy = null;
         }
         
         public abstract Dictionary<string, string[]> GetSpecificFeatureDescription();
         
         public abstract object[] ParseSpecificFeatures(string[] i_SpecificFeatures);
-        
-        public virtual void SetParamaters(
-            eEnergyType i_EnergyType,
+
+        public abstract void SetParamaters(
+            bool i_IsElectric,
             string i_WheelManufactor,
             float i_CurrentAirPressure,
-            float i_CurrentEnergyLevel, float i_MaxAirPressure, float i_NumOfWheels, float i_MaxEnergyCapacity,
-            object[] i_SpecificFeatures = null)
+            float i_CurrentEnergyLevel,
+            params object[] i_SpecificFeatures);
+
+        public abstract bool CanBeElectric();
+
+        protected virtual void InitWheels(byte i_NumOfWheels, string i_WheelManufactor, float i_CurrentAirPressure, float i_MaxAirPressure)
         {
-            if (i_CurrentEnergyLevel > i_MaxEnergyCapacity)
-            {
-                throw new ValueOutOfRangeException(0, i_MaxEnergyCapacity);
-            }
-
-            m_Energy = new Energy(i_CurrentEnergyLevel, i_MaxEnergyCapacity, i_EnergyType);
-
             if (i_CurrentAirPressure > i_MaxAirPressure)
             {
                 throw new ValueOutOfRangeException(0, i_MaxAirPressure);
@@ -56,6 +54,16 @@ namespace Ex03.GarageLogic
             {
                 m_Wheels.Add(new Wheel(i_WheelManufactor, i_MaxAirPressure, i_CurrentAirPressure));
             }
+        }
+
+        protected virtual void InitEnergy(float i_CurrentEnergyLevel, float i_MaxEnergyCapacity, eEnergyType i_EnergyType)
+        {
+            if (i_CurrentEnergyLevel > i_MaxEnergyCapacity)
+            {
+                throw new ValueOutOfRangeException(0, i_MaxEnergyCapacity);
+            }
+
+            m_Energy = new Energy(i_CurrentEnergyLevel, i_MaxEnergyCapacity, i_EnergyType);
         }
 
         internal void FillTires(bool i_FillAll, float i_AirToFill = 0)
@@ -83,6 +91,11 @@ namespace Ex03.GarageLogic
             }  
         }
 
+        internal eEnergyType GetEnergyType()
+        {
+            return m_Energy.EnergyType;
+        }
+
         public virtual string AdvancesToStringAfterFeaturesWhereSet()
         {
             StringBuilder sbForWheels = new StringBuilder("");
@@ -95,7 +108,7 @@ namespace Ex03.GarageLogic
 
             return string.Format("{0}, type Of energy car takes: {1}\n, percentage left in car {2}:\n wheel info \n {3}",
                 ToString(), 
-                m_Energy.EnergyType,
+                GetEnergyType(),
                 m_Energy.GetEnergyPercentage(),
                 sbForWheels);
         }

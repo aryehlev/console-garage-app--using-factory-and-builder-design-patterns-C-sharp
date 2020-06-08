@@ -21,9 +21,21 @@ namespace Ex03.GarageLogic
             : base(i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner)
         {
         }
-        public override void SetParamaters(eEnergyType i_EnergyType, string i_WheelManufactor, float i_CurrentAirPressure, float i_CurrentEnergyLevel, float i_MaxAirPressure = k_MaxAirPressure, float i_NumOfWheels = k_NumOfWheels, float i_MaxEnergyCapacity = k_MaxEnergyCapacity, object[] i_SpecificFeatures = null)
+
+        public override void SetParamaters(
+            bool i_IsElectric,
+            string i_WheelManufactor,
+            float i_CurrentAirPressure,
+            float i_CurrentEnergyLevel,
+            params object[] i_SpecificFeatures)
         {
-            base.SetParamaters(i_EnergyType, i_WheelManufactor, i_CurrentAirPressure, i_CurrentEnergyLevel, i_MaxAirPressure, i_NumOfWheels, i_MaxEnergyCapacity, i_SpecificFeatures);            
+            if(i_IsElectric)
+            {
+                throw new ArgumentException("a truck cannot be electric(yet?)");
+            }
+            InitWheels(k_NumOfWheels, i_WheelManufactor, i_CurrentAirPressure, k_MaxAirPressure);
+            InitEnergy(i_CurrentEnergyLevel, k_MaxEnergyCapacity, eEnergyType.Soler);
+
             m_HasHazardasCargo = (bool)i_SpecificFeatures[0];
             m_VolumeOfCargo = (float)i_SpecificFeatures[1];
         }
@@ -31,7 +43,7 @@ namespace Ex03.GarageLogic
         public override Dictionary<string, string[]> GetSpecificFeatureDescription()
         {
             Dictionary<string, string[]> definitionAndValues = new Dictionary<string, string[]>();
-            definitionAndValues.Add("has hazardoes cargo?", new[] { "true" , "false"});
+            definitionAndValues.Add("has hazardoes cargo?", new[] { "true", "false" });
             definitionAndValues.Add("volume of cargo", new[] { "byte" });
             return definitionAndValues;
         }
@@ -42,7 +54,7 @@ namespace Ex03.GarageLogic
             string secondFeature = i_SpecificFeatures[1];
             object[] specificFeatures = new object[k_NumOfFeatures];
             bool hasHazardousCargo;
-            
+
             if (bool.TryParse(firstFeature, out hasHazardousCargo))
             {
                 specificFeatures[0] = hasHazardousCargo;

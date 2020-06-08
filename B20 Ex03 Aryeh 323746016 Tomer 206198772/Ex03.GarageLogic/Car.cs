@@ -8,10 +8,11 @@ namespace Ex03.GarageLogic
         private const float k_MaxAirPressure = 32;
         private const byte k_NumOfWheels = 4;
         private const float k_MaxElectric = 2.1f;
-        private const float k_MaxSolar = 60;
+        private const float k_MaxGas = 60;
         private const int k_NumOfFeatures = 2;
+        private const bool k_CanBeElecric = true;
         private eColour m_Colour;
-        private byte m_NumOfDoors;
+        private int m_NumOfDoors;
 
         public Car(
             string i_Model,
@@ -21,16 +22,23 @@ namespace Ex03.GarageLogic
             eStatus i_StatusOfvehicle = eStatus.InRepair)
             : base(i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner)
         {
-            m_Energy = null;
-
+            
         }
         
-        public override void SetParamaters(eEnergyType i_EnergyType, string i_WheelManufactor, float i_CurrentAirPressure, float i_CurrentEnergyLevel, float i_MaxAirPressure = k_MaxAirPressure, float i_NumOfWheels = k_NumOfWheels, float i_MaxEnergyCapacity = 0, object[] i_SpecificFeatures = null)
+        public override void SetParamaters(
+            bool i_IsElectric,
+            string i_WheelManufactor,
+            float i_CurrentAirPressure,
+            float i_CurrentEnergyLevel,
+            params object[] i_SpecificFeatures)
         {
-            i_MaxEnergyCapacity = i_EnergyType == eEnergyType.Electric ? k_MaxElectric : k_MaxSolar;
-            base.SetParamaters(i_EnergyType, i_WheelManufactor, i_CurrentAirPressure, i_CurrentEnergyLevel, i_MaxAirPressure, i_NumOfWheels, i_MaxEnergyCapacity, i_SpecificFeatures);
+            float maxEnergyCapacity = i_IsElectric ? k_MaxElectric : k_MaxGas;
+            eEnergyType energyType = !i_IsElectric ? eEnergyType.Octan96 : eEnergyType.Electric;
+            InitWheels(k_NumOfWheels, i_WheelManufactor, i_CurrentAirPressure, k_MaxAirPressure);
+            InitEnergy(i_CurrentEnergyLevel, maxEnergyCapacity, energyType);
+            
             m_Colour = (eColour)i_SpecificFeatures[0];
-            m_NumOfDoors = (byte)i_SpecificFeatures[1];
+            m_NumOfDoors = (int)i_SpecificFeatures[1];
         }
 
         public override Dictionary<string, string[]> GetSpecificFeatureDescription()

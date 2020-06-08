@@ -17,16 +17,18 @@
         {
             if(!i_FillAll)
             {
-                float airToFill = i_AirToFill + m_CurrentPressure;
-                if(airToFill > r_MaxPressure)
+                float newPressure = i_AirToFill + m_CurrentPressure;
+                if(newPressure > r_MaxPressure)
                 {
                     throw new ValueOutOfRangeException(0, r_MaxPressure - m_CurrentPressure, "air to fill");
                 }
 
-                m_CurrentPressure = airToFill;
+                m_CurrentPressure = newPressure;
             }
-
-            m_CurrentPressure = r_MaxPressure - m_CurrentPressure;  
+            else
+            {
+                m_CurrentPressure = r_MaxPressure;
+            }
         }
 
         public override string ToString()
