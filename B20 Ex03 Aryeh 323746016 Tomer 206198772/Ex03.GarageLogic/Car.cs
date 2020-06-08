@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
@@ -24,35 +25,20 @@ namespace Ex03.GarageLogic
 
         }
         
-        public override void SetParamaters(eEnergyType i_EnergyType, string i_WheelManufactor, float i_CurrentAirPressure, float i_CurrentEnergyLevel, object[] i_SpecificFeatures = null)
+        public override void SetParamaters(eEnergyType i_EnergyType, string i_WheelManufactor, float i_CurrentAirPressure, float i_CurrentEnergyLevel, float i_MaxAirPressure = k_MaxAirPressure, float i_NumOfWheels = k_NumOfWheels, float i_MaxEnergyCapacity = 0, object[] i_SpecificFeatures = null)
         {
-
-            float maxEnergyCapacity = i_EnergyType == eEnergyType.Electric ? k_MaxElectric : k_MaxSolar;
-
-            if (i_CurrentEnergyLevel > maxEnergyCapacity)
-            {
-                throw new ValueOutOfRangeException(0, maxEnergyCapacity);
-            }
-
-            m_Energy = new Energy(i_CurrentEnergyLevel, maxEnergyCapacity, i_EnergyType);
-
-            if (i_CurrentAirPressure > k_MaxAirPressure)
-            {
-                throw new ValueOutOfRangeException(0, k_MaxAirPressure);
-            }
-
-            for (int i = 0; i < k_NumOfWheels; i++)
-            {
-                m_Wheels.Add(new Wheel(i_WheelManufactor, k_MaxAirPressure, i_CurrentAirPressure));
-            }
-
+            i_MaxEnergyCapacity = i_EnergyType == eEnergyType.Electric ? k_MaxElectric : k_MaxSolar;
+            base.SetParamaters(i_EnergyType, i_WheelManufactor, i_CurrentAirPressure, i_CurrentEnergyLevel, i_MaxAirPressure, i_NumOfWheels, i_MaxEnergyCapacity, i_SpecificFeatures);
             m_Colour = (eColour)i_SpecificFeatures[0];
             m_NumOfDoors = (byte)i_SpecificFeatures[1];
         }
 
-        public override string[] GetSpecificFeatureDescription()
+        public override Dictionary<string, string[]> GetSpecificFeatureDescription()
         {
-            return new[] { "Colour", "number of doors" };
+            Dictionary<string, string[]> definitionAndValues = new Dictionary<string, string[]>();
+            definitionAndValues.Add("Colour", Enum.GetNames(typeof(eColour)));
+            definitionAndValues.Add("number of doors", new[] { "byte" });
+            return definitionAndValues;
         }
 
         public override object[] ParseSpecificFeatures(string[] i_SpecificFeatures)

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Reflection;
+using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
@@ -21,32 +21,19 @@ namespace Ex03.GarageLogic
             : base(i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner)
         {
         }
-        public override void SetParamaters(eEnergyType i_EnergyType, string i_WheelManufactor, float i_CurrentAirPressure, float i_CurrentEnergyLevel, object[] i_SpecificFeatures = null)
-        { 
-            if (i_CurrentEnergyLevel > k_MaxEnergyCapacity)
-            {
-                throw new ValueOutOfRangeException(0, k_MaxEnergyCapacity);
-            }
-           
-            m_Energy = new Energy(i_CurrentEnergyLevel, k_MaxEnergyCapacity, i_EnergyType);
-            
-            if (i_CurrentAirPressure > k_MaxAirPressure)
-            {
-                throw new ValueOutOfRangeException(0, k_MaxAirPressure);
-            }
-            
-            for (int i = 0; i < k_NumOfWheels; i++)
-            {
-                m_Wheels.Add(new Wheel(i_WheelManufactor, k_MaxAirPressure, i_CurrentAirPressure));
-            }
-
+        public override void SetParamaters(eEnergyType i_EnergyType, string i_WheelManufactor, float i_CurrentAirPressure, float i_CurrentEnergyLevel, float i_MaxAirPressure = k_MaxAirPressure, float i_NumOfWheels = k_NumOfWheels, float i_MaxEnergyCapacity = k_MaxEnergyCapacity, object[] i_SpecificFeatures = null)
+        {
+            base.SetParamaters(i_EnergyType, i_WheelManufactor, i_CurrentAirPressure, i_CurrentEnergyLevel, i_MaxAirPressure, i_NumOfWheels, i_MaxEnergyCapacity, i_SpecificFeatures);            
             m_HasHazardasCargo = (bool)i_SpecificFeatures[0];
             m_VolumeOfCargo = (float)i_SpecificFeatures[1];
         }
 
-        public override string[] GetSpecificFeatureDescription()
+        public override Dictionary<string, string[]> GetSpecificFeatureDescription()
         {
-            return new[] {"has hazardoes cargo?", "volume of cargo"};
+            Dictionary<string, string[]> definitionAndValues = new Dictionary<string, string[]>();
+            definitionAndValues.Add("has hazardoes cargo?", new[] { "true" , "false"});
+            definitionAndValues.Add("volume of cargo", new[] { "byte" });
+            return definitionAndValues;
         }
 
         public override object[] ParseSpecificFeatures(string[] i_SpecificFeatures)

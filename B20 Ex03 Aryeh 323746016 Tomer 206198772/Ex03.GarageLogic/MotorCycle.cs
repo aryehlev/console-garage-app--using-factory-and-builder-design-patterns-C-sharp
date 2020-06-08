@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
@@ -6,6 +7,8 @@ namespace Ex03.GarageLogic
     {
         private const float k_MaxAirPressure = 30;
         private const float k_NumOfWheels = 2;
+        private const float k_MaxElectric = 1.2f;
+        private const float k_MaxSolar = 7;
         private const int k_NumOfFeatures = 2;
         private eLicenseType m_TypeOfLicense;
         private byte m_Cc;
@@ -19,34 +22,20 @@ namespace Ex03.GarageLogic
         {
         }
 
-        public override void SetParamaters(eEnergyType i_EnergyType, string i_WheelManufactor, float i_CurrentAirPressure, float i_CurrentEnergyLevel, object[] i_SpecificFeatures = null)
+        public override void SetParamaters(eEnergyType i_EnergyType, string i_WheelManufactor, float i_CurrentAirPressure, float i_CurrentEnergyLevel, float i_MaxAirPressure = k_MaxAirPressure, float i_NumOfWheels = k_NumOfWheels, float i_MaxEnergyCapacity = 0, object[] i_SpecificFeatures = null)
         {
-            float maxEnergyCapacity = i_EnergyType == eEnergyType.Electric ? 1.2f : 7;
-            
-            if (i_CurrentEnergyLevel > maxEnergyCapacity)
-            {
-                throw new ValueOutOfRangeException(0, maxEnergyCapacity);
-            }
-            
-            m_Energy = new Energy(i_CurrentEnergyLevel, maxEnergyCapacity, i_EnergyType);
-            
-            if (i_CurrentAirPressure > k_MaxAirPressure)
-            {
-                throw new ValueOutOfRangeException(0, k_MaxAirPressure);
-            }
-           
-            for (int i = 0; i < k_NumOfWheels; i++)
-            {
-                m_Wheels.Add(new Wheel(i_WheelManufactor, k_MaxAirPressure, i_CurrentAirPressure));
-            }
-
+            i_MaxEnergyCapacity = i_EnergyType == eEnergyType.Electric ? k_MaxElectric : k_MaxSolar;
+            base.SetParamaters(i_EnergyType, i_WheelManufactor, i_CurrentAirPressure, i_CurrentEnergyLevel, i_MaxAirPressure, i_NumOfWheels, i_MaxEnergyCapacity, i_SpecificFeatures);        
             m_TypeOfLicense = (eLicenseType)i_SpecificFeatures[0];
             m_Cc = (byte)i_SpecificFeatures[1];
         }
 
-        public override string[] GetSpecificFeatureDescription()
+        public override Dictionary<string, string[]> GetSpecificFeatureDescription()
         {
-            return new[] { "license type", "volume of engine(cc)" };
+            Dictionary<string, string[]> definitionAndValues = new Dictionary<string, string[]>();
+            definitionAndValues.Add("license type", Enum.GetNames(typeof(eLicenseType)));
+            definitionAndValues.Add("volume of engine(cc)", new[] { "float" });
+            return definitionAndValues;
         }
 
         public override object[] ParseSpecificFeatures(string[] i_SpecificFeatures)

@@ -29,17 +29,35 @@ namespace Ex03.GarageLogic
             m_Wheels = new List<Wheel>();
         }
         
-        public abstract string[] GetSpecificFeatureDescription();
+        public abstract Dictionary<string, string[]> GetSpecificFeatureDescription();
         
         public abstract object[] ParseSpecificFeatures(string[] i_SpecificFeatures);
         
-        public abstract void SetParamaters(
+        public virtual void SetParamaters(
             eEnergyType i_EnergyType,
             string i_WheelManufactor,
             float i_CurrentAirPressure,
-            float i_CurrentEnergyLevel,
-            object[] i_SpecificFeatures = null);
-        
+            float i_CurrentEnergyLevel, float i_MaxAirPressure, float i_NumOfWheels, float i_MaxEnergyCapacity,
+            object[] i_SpecificFeatures = null)
+        {
+            if (i_CurrentEnergyLevel > i_MaxEnergyCapacity)
+            {
+                throw new ValueOutOfRangeException(0, i_MaxEnergyCapacity);
+            }
+
+            m_Energy = new Energy(i_CurrentEnergyLevel, i_MaxEnergyCapacity, i_EnergyType);
+
+            if (i_CurrentAirPressure > i_MaxAirPressure)
+            {
+                throw new ValueOutOfRangeException(0, i_MaxAirPressure);
+            }
+
+            for (int i = 0; i < i_NumOfWheels; i++)
+            {
+                m_Wheels.Add(new Wheel(i_WheelManufactor, i_MaxAirPressure, i_CurrentAirPressure));
+            }
+        }
+
         internal void FillTires(bool i_FillAll, float i_AirToFill = 0)
         {
             foreach (Wheel wheel in m_Wheels)
@@ -72,7 +90,7 @@ namespace Ex03.GarageLogic
 
         public override string ToString()
         {
-            StringBuilder sbForWheels = new StringBuilder();
+            StringBuilder sbForWheels = new StringBuilder("");
             int i = 0;
             foreach (Wheel wheel in m_Wheels)
             {
@@ -85,10 +103,6 @@ namespace Ex03.GarageLogic
                 r_LicenseNumber,
                 r_Model,
                 r_NameOfOwner,
-                m_StatusOfVehicle,
-                m_Energy.EnergyType,
-                m_Energy.GetEnergyPercentage(), 
-                sbForWheels,
                 r_PhoneNumOfOwner);
         }
 
