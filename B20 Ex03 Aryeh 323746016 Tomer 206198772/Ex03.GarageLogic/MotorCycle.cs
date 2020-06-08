@@ -66,9 +66,9 @@ namespace Ex03.GarageLogic
             return specificFeatures;
         }
         
-        public override string ToString()
+        public override string AdvancesToStringAfterFeaturesWhereSet()
         {
-            return string.Format("{0}\n, type of license: {1},\n volume of engine: {2}\n", base.ToString(), m_TypeOfLicense, m_Cc);
+            return string.Format("{0}\n, type of license: {1},\n volume of engine: {2}\n", base.AdvancesToStringAfterFeaturesWhereSet(), m_TypeOfLicense, m_Cc);
         }
     }
 }

@@ -70,9 +70,9 @@ namespace Ex03.GarageLogic
             return specificFeatures;
         }
 
-        public override string ToString()
+        public override string AdvancesToStringAfterFeaturesWhereSet()
         {
-            return string.Format("{0}\n, colour of car: {1},\n number of doors in car: {2}\n", base.ToString(), m_Colour, m_NumOfDoors);
+            return string.Format("{0}\n, colour of car: {1},\n number of doors in car: {2}\n", base.AdvancesToStringAfterFeaturesWhereSet(), m_Colour, m_NumOfDoors);
         }
     }
 }

@@ -71,11 +71,6 @@ namespace Ex03.GarageLogic
             m_Energy.FillEnergy(i_Energy, i_EnergyType);  
         }
 
-        internal float GetEnergyPercentage()
-        {
-            return m_Energy.GetEnergyPercentage();
-        }
-
         internal eStatus StatusOfVehicle  
         {
             get
@@ -88,7 +83,7 @@ namespace Ex03.GarageLogic
             }  
         }
 
-        public override string ToString()
+        public virtual string AdvancesToStringAfterFeaturesWhereSet()
         {
             StringBuilder sbForWheels = new StringBuilder("");
             int i = 0;
@@ -98,12 +93,22 @@ namespace Ex03.GarageLogic
                 i++;
             }
 
+            return string.Format("{0}, type Of energy car takes: {1}\n, percentage left in car {2}:\n wheel info \n {3}",
+                ToString(), 
+                m_Energy.EnergyType,
+                m_Energy.GetEnergyPercentage(),
+                sbForWheels);
+        }
+
+        public override string ToString()
+        {
             return string.Format(
-                "Licence Number: {0}\n, Model {1}\n, name of owner: {2}\n, status of vehicle {3}\n, type Of energy car takes: {4}\n, percentage left in car {5}:\n wheel info \n {6}, owner phone number {7}",
+                "Licence Number: {0}\n, Model {1}\n, name of owner: {2}\n, owner phone number {3}, status of vehicle {4}\n",
                 r_LicenseNumber,
                 r_Model,
                 r_NameOfOwner,
-                r_PhoneNumOfOwner);
+                r_PhoneNumOfOwner,
+                StatusOfVehicle);
         }
 
         public override int GetHashCode()

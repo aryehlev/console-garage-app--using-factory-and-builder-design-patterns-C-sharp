@@ -65,9 +65,9 @@ namespace Ex03.GarageLogic
             return specificFeatures;
         }
 
-        public override string ToString()
+        public override string AdvancesToStringAfterFeaturesWhereSet()
         {
-            return string.Format("{0}\n, has hazardoes cargo: {1},\n volume of cargo: {2}\n", base.ToString(), m_HasHazardasCargo, m_VolumeOfCargo);
+            return string.Format("{0}\n, has hazardoes cargo: {1},\n volume of cargo: {2}\n", base.AdvancesToStringAfterFeaturesWhereSet(), m_HasHazardasCargo, m_VolumeOfCargo);
         }
     }
 }
