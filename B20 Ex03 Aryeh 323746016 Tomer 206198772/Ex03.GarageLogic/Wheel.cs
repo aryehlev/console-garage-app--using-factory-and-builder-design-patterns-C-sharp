@@ -30,7 +30,7 @@
                 m_CurrentPressure = r_MaxPressure;
             }
         }
-
+        
         public override string ToString()
         {
             return string.Format("manufactor of wheel: {0}, pressure of wheel: {1}", r_Manufactor, m_CurrentPressure);

@@ -18,10 +18,10 @@ namespace Ex03.ConsoleUI
                         UserInterface.AddVehicle();
                         break;
                     case 2:
-                        UserInterface.GetAllLicenseNumbers();
+                        UserInterface.AllLicenseNumbersMode();
                         break;
                     case 3:
-                        UserInterface.ChangeStatusOfVehicle();
+                        UserInterface.ChangeStatusOfVehicleMode();
                         break;
                     case 4:
                         UserInterface.FillTiresToMax();
@@ -33,7 +33,7 @@ namespace Ex03.ConsoleUI
                         UserInterface.FillEnergy(true);
                         break;
                     case 7:
-                        UserInterface.GetVehicleData();
+                        UserInterface.VehicleDataMode();
                         break;
                     case 0:
                         UserInterface.GoodbyeMsg();

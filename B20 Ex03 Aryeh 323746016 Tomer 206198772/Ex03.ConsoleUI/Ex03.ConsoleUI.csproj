@@ -42,7 +42,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckInput.cs" />
     <Compile Include="EnumMenu.cs" />
+    <Compile Include="GetInput.cs" />
     <Compile Include="ParsingValidation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="UserInterface.cs" />

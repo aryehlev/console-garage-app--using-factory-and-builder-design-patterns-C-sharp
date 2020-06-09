@@ -6,7 +6,7 @@ namespace Ex03.ConsoleUI
 {
     class ParsingValidation
     {  
-        //internal static int checkModePicker()
+        //internal static int CheckModePicker()
         //{
         //    string input = Console.ReadLine();
         //    if (input.Length > 1 || !char.IsDigit(input[0]) || int.Parse(input) > 7)
@@ -43,7 +43,7 @@ namespace Ex03.ConsoleUI
         ////    return vehicleStatuses[result - 1];
         ////}
 
-        //internal static string checkValidString(string i_Input, bool i_DigitsOnly, bool i_LettersOnly)
+        //internal static string CheckIfValidString(string i_Input, bool i_DigitsOnly, bool i_LettersOnly)
         //{
         //    if (string.IsNullOrEmpty(i_Input))
         //    {

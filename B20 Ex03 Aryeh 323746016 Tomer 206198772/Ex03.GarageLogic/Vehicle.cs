@@ -63,23 +63,23 @@ namespace Ex03.GarageLogic
 
         protected virtual void InitEnergy(float i_CurrentEnergyLevel, float i_MaxEnergyCapacity, eEnergyType i_EnergyType)
         {
-            if (m_Energy == null)
-            {
-                if (i_CurrentEnergyLevel > i_MaxEnergyCapacity)
-                { 
-                    throw new ValueOutOfRangeException(0, i_MaxEnergyCapacity, "energy");
-                }
-
-                m_Energy = new Energy(i_CurrentEnergyLevel, i_MaxEnergyCapacity, i_EnergyType);
+            if (i_CurrentEnergyLevel > i_MaxEnergyCapacity)
+            { 
+                throw new ValueOutOfRangeException(0, i_MaxEnergyCapacity, "energy");
             }
+
+             m_Energy = new Energy(i_CurrentEnergyLevel, i_MaxEnergyCapacity, i_EnergyType);
+            
         }
 
         internal void FillTires(bool i_FillAll, float i_AirToFill = 0)
         {
-            foreach (Wheel wheel in m_Wheels)
+            
+            foreach(Wheel wheel in m_Wheels)
             { 
                 wheel.FillTire(i_FillAll, i_AirToFill);
             }
+            
         } 
         
         internal void FillEnergy(float i_Energy, eEnergyType i_EnergyType)
@@ -104,6 +104,10 @@ namespace Ex03.GarageLogic
             return m_Energy.EnergyType;
         }
 
+        internal float GetMaxAmountThatCanFill()
+        {
+            return m_Energy.GetMaxAmountThatCanFill();
+        }
 
 
         public virtual string AdvancesToStringAfterFeaturesWhereSet()
@@ -132,11 +136,6 @@ namespace Ex03.GarageLogic
                 r_NameOfOwner,
                 r_PhoneNumOfOwner,
                 StatusOfVehicle);
-        }
-
-        public override int GetHashCode()
-        {
-            return int.Parse(r_LicenseNumber);
         }
     }
 }

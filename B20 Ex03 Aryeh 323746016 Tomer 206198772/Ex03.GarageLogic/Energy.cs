@@ -43,5 +43,10 @@ namespace Ex03.GarageLogic
         {
             return (m_CurrentFilled / r_MaxCapacity) * 100;
         }
+
+        internal float GetMaxAmountThatCanFill()
+        {
+            return r_MaxCapacity - m_CurrentFilled;
+        }
     }
 }

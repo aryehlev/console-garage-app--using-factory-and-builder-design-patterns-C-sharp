@@ -54,35 +54,6 @@ namespace Ex03.GarageLogic
             return definitionAndValues;
         }
 
-        //public override object[] ParseSpecificFeatures(string[] i_SpecificFeatures)
-        //{
-        //    string firstFeature = i_SpecificFeatures[0];
-        //    string secondFeature = i_SpecificFeatures[1];
-        //    object[] specificFeatures = new object[k_NumOfFeatures];
-        //    eColour colour;
-        //    if (Enum.TryParse(firstFeature, true, out colour))
-        //    {
-        //        specificFeatures[0] = colour;
-        //    }
-        //    else
-        //    {
-        //        throw new FormatException("needs a colour of White, Black, Silver or Red");
-        //    }
-
-        //    byte numOfDoors;
-        //    if (byte.TryParse(secondFeature, out numOfDoors) && (numOfDoors == 2 || numOfDoors == 3 || numOfDoors == 4 || numOfDoors == 5))
-        //    {
-
-        //        specificFeatures[1] = numOfDoors;
-        //    }
-        //    else
-        //    {
-        //        throw new FormatException("needs a door 2,3,4 or 5");
-        //    }
-
-        //    return specificFeatures;
-        //}
-
         public override object ParseSpecificFeature(string i_SpecificFeature, string i_FeatureKey)
         {
             object parsedSpecificFeature = null;
