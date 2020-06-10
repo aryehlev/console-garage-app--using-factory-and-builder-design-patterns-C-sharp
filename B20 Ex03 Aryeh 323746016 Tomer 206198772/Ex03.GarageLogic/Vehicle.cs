@@ -35,17 +35,12 @@ namespace Ex03.GarageLogic
 
         public abstract object ParseUniqueFeature(string i_UniqueFeature, string i_FeatureKey);
 
-        public abstract void SetUniqueParamaters(params object[] i_UniqueFeatures);
+        public abstract void SetUniqueFeatures(params object[] i_UniqueFeatures);
 
         public abstract void SetWheels(string i_WheelManufactor, float i_CurrentAirPressure);
 
         public abstract void SetEnergy(bool i_IsElectric, float i_CurrentEnergyLevel);
-        
-        public bool CanBeElectric()
-        {
-            return m_CanBeElectric;
-        }
-        
+                        
         protected virtual void InitWheels(byte i_NumOfWheels, string i_WheelManufactor, float i_CurrentAirPressure, float i_MaxAirPressure)
         {
             if (m_Wheels.Count == 0)
@@ -103,6 +98,11 @@ namespace Ex03.GarageLogic
         internal eEnergyType GetEnergyType()
         {
             return m_Energy.EnergyType;
+        }
+
+        public bool CanBeElectric()
+        {
+            return m_CanBeElectric;
         }
 
         public override string ToString()

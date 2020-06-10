@@ -24,7 +24,7 @@ namespace Ex03.GarageLogic
             m_CanBeElectric = k_CanBeElectric;
         }
 
-        public override void SetUniqueParamaters(params object[] i_UniqueFeatures)
+        public override void SetUniqueFeatures(params object[] i_UniqueFeatures)
         {
             m_HasHazardousCargo = (bool)i_UniqueFeatures[0];
             m_VolumeOfCargo = (byte)i_UniqueFeatures[1];

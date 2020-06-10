@@ -172,7 +172,7 @@ Registration complete!";
                 
                 if (uniqueFeatures != null)
                 {
-                    newVehicle.SetUniqueParamaters(uniqueFeatures);
+                    newVehicle.SetUniqueFeatures(uniqueFeatures);
                 }
 
                 Console.WriteLine(successMsg);

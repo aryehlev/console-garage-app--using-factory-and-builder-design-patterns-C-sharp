@@ -24,7 +24,7 @@ namespace Ex03.GarageLogic
             m_CanBeElectric = k_CanBeElectric;
         }
         
-        public override void SetUniqueParamaters(params object[] i_UniqueFeatures)
+        public override void SetUniqueFeatures(params object[] i_UniqueFeatures)
         {
             m_TypeOfLicense = (eLicenseType)i_UniqueFeatures[0];
             m_Cc = (int)i_UniqueFeatures[1];
