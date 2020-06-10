@@ -269,10 +269,30 @@ Please enter the desired amount of {0} to fill ({1}):";
                     getEnergyAmountMsg = string.Format(getEnergyAmountMsg, energyType, "litres of gas");
                 }
                 Console.WriteLine(getEnergyAmountMsg);
-                energyToFill = GetInput.GetValidFloat(0, s_Garage.GetMaxEnergyLeftToFill(licenseNumber));
-                s_Garage.FllEnergy(licenseNumber, energyToFill, energyType);
+                energyToFill = GetInput.GetValidFloat();
+                fillEnergyUI(licenseNumber, energyToFill, energyType);
             }
         }
+
+        private static void fillEnergyUI(string licenseNumber,  float i_AmountToFill, eEnergyType i_EnergyType)
+        {
+
+            bool tryAgain = true;
+            while (tryAgain)
+            {
+                try
+                {
+                    s_Garage.FllEnergy(licenseNumber, i_AmountToFill, i_EnergyType);
+                    tryAgain = false;
+                }
+                catch (ValueOutOfRangeException e)
+                {
+                    Console.WriteLine(e.Message);
+                    i_AmountToFill = GetInput.GetValidFloat();
+                }
+            }
+        }
+
         // mode 7
         public static void VehicleDataMode()
         {

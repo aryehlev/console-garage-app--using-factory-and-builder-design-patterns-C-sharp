@@ -105,26 +105,6 @@ namespace Ex03.GarageLogic
             return m_Energy.EnergyType;
         }
 
-        //public float GetMaxEnergyCapacity()
-        //{
-        //    return m_Energy.EnergyCapacity;
-        //}
-
-        //public float GetMaxAirCapacity()
-        //{
-        //    return m_Wheels[0].MaxPressure;
-        //}
-
-        //public float GetCurrentEnergyAmount()
-        //{
-        //    return m_Energy.CurrentEnergyAmount;
-        //}
-
-        //public float GetCurrentAirInWheelsAmount()
-        //{
-        //    return m_Wheels[0].CurrentPressure;
-        //}
-        
         public virtual string AdvancesToStringAfterFeaturesWhereSet()
         {
             StringBuilder sbForWheels = new StringBuilder("");

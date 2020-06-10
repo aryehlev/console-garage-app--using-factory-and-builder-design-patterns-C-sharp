@@ -79,10 +79,5 @@ namespace Ex03.GarageLogic
         {
             return getVehicle(i_LicenseNumber).AdvancesToStringAfterFeaturesWhereSet();
         }
-
-        public float GetMaxEnergyLeftToFill(string i_LicenseNumber)
-        {
-            return getVehicle(i_LicenseNumber).GetMaxEnergyCapacity();
-        }
     }
 }
