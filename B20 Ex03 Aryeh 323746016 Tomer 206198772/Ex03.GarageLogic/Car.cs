@@ -22,28 +22,26 @@ namespace Ex03.GarageLogic
             eStatus i_StatusOfvehicle = eStatus.InRepair)
             : base(i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner)
         {
-            
-        }
-        
-        public override bool CanBeElectric()
-        {
-            return k_CanBeElectric;
+            m_CanBeElectric = k_CanBeElectric;
         }
 
-        public override void SetParamaters(
-            bool i_IsElectric,
-            string i_WheelManufactor,
-            float i_CurrentAirPressure,
-            float i_CurrentEnergyLevel,
-            params object[] i_SpecificFeatures)
+        public override void SetUniqueParamaters(params object[] i_SpecificFeatures)
+        {
+            m_Colour = (eColour)i_SpecificFeatures[0];
+            m_NumOfDoors = (byte)i_SpecificFeatures[1];
+        }
+
+        public override void SetWheels(string i_WheelManufactor, float i_CurrentAirPressure)
+        {
+            InitWheels(k_NumOfWheels, i_WheelManufactor, i_CurrentAirPressure, k_MaxAirPressure);
+        }
+
+        public override void SetEnergy(bool i_IsElectric, float i_CurrentEnergyLevel)
         {
             float maxEnergyCapacity = i_IsElectric ? k_MaxElectric : k_MaxGas;
             eEnergyType energyType = !i_IsElectric ? eEnergyType.Octan96 : eEnergyType.Electric;
-            InitWheels(k_NumOfWheels, i_WheelManufactor, i_CurrentAirPressure, k_MaxAirPressure);
+
             InitEnergy(i_CurrentEnergyLevel, maxEnergyCapacity, energyType);
-            
-            m_Colour = (eColour)i_SpecificFeatures[0];
-            m_NumOfDoors = (byte)i_SpecificFeatures[1];
         }
 
         public override Tuple<string, string[]>[] GetSpecificFeatureDescription()

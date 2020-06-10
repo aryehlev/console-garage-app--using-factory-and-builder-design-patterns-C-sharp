@@ -151,6 +151,7 @@ Please enter {0}, possible values are:
                 phoneNumOfOwner = GetInput.GetValidString(true, false);
 
                 Vehicle newVehicle = s_Garage.AddVehicle(vehicleType, model, licenseNumber, nameOfOwner, phoneNumOfOwner);
+                
                 if (newVehicle.CanBeElectric())
                 {
                     Console.WriteLine(getIsElectricMsg);
@@ -294,7 +295,7 @@ In order to get the vehicle's data, please enter its license number:";
             {
                 try
                 {
-                    i_Vehicle.SetParamaters(i_IsElectric, i_WheelManufactor, i_CurrentAirPreasure, i_CurrentEnergyLevel, i_SpecificFeatures);
+                    i_Vehicle.InitUniqueParamaters(i_IsElectric, i_WheelManufactor, i_CurrentAirPreasure, i_CurrentEnergyLevel, i_SpecificFeatures);
                     tryAgain = false;
                 }
                 catch (ValueOutOfRangeException e)

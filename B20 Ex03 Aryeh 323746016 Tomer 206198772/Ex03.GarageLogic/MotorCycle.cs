@@ -21,27 +21,26 @@ namespace Ex03.GarageLogic
             string i_PhoneNumOfOwner)
             : base(i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner)
         {
+            m_CanBeElectric = k_CanBeElectric;
         }
         
-        public override bool CanBeElectric()
+        public override void SetUniqueParamaters(params object[] i_SpecificFeatures)
         {
-            return k_CanBeElectric;
-        }
-
-        public override void SetParamaters(
-            bool i_IsElectric,
-            string i_WheelManufactor,
-            float i_CurrentAirPressure,
-            float i_CurrentEnergyLevel,
-            params object[] i_SpecificFeatures)
-        {
-            float maxEnergyCapacity = i_IsElectric ? k_MaxElectric : k_MaxSolar;
-            eEnergyType energyType = !i_IsElectric ? eEnergyType.Octan95 : eEnergyType.Electric;
-            InitWheels(k_NumOfWheels, i_WheelManufactor, i_CurrentAirPressure, k_MaxAirPressure);
-            InitEnergy(i_CurrentEnergyLevel, maxEnergyCapacity, energyType);
-
             m_TypeOfLicense = (eLicenseType)i_SpecificFeatures[0];
             m_Cc = (byte)i_SpecificFeatures[1];
+        }
+
+        public override void SetWheels(string i_WheelManufactor, float i_CurrentAirPressure)
+        {
+            InitWheels(k_NumOfWheels, i_WheelManufactor, i_CurrentAirPressure, k_MaxAirPressure);
+        }
+
+        public override void SetEnergy(bool i_IsElectric, float i_CurrentEnergyLevel)
+        {
+            float maxEnergyCapacity = i_IsElectric ? k_MaxElectric : k_MaxSolar;
+            eEnergyType energyType = !i_IsElectric ? eEnergyType.Octan96 : eEnergyType.Electric;
+
+            InitEnergy(i_CurrentEnergyLevel, maxEnergyCapacity, energyType);
         }
 
         public override Tuple<string, string[]>[] GetSpecificFeatureDescription()
@@ -51,34 +50,6 @@ namespace Ex03.GarageLogic
             definitionAndValues[1] = new Tuple<string, string[]>("Volume of engine(cc)", new[] { "float" });
             return definitionAndValues;
         }
-
-        //public override object[] ParseSpecificFeatures(string[] i_SpecificFeatures)
-        //{
-        //    string firstFeature = i_SpecificFeatures[0];
-        //    string secondFeature = i_SpecificFeatures[1];
-        //    object[] specificFeatures = new object[k_NumOfFeatures];
-        //    eLicenseType licenseType;
-        //    if (Enum.TryParse(firstFeature, true, out licenseType))
-        //    {
-        //        specificFeatures[0] = licenseType;
-        //    }
-        //    else
-        //    {
-        //        throw new FormatException("needs a license type of A, A1, AA or B");
-        //    }
-
-        //    byte cc;
-        //    if (byte.TryParse(secondFeature, out cc))
-        //    {
-        //        specificFeatures[1] = cc;
-        //    }
-        //    else
-        //    {
-        //        throw new FormatException("needs a volume(cc)");
-        //    }
-
-        //    return specificFeatures;
-        //}
 
         public override object ParseSpecificFeature(string i_SpecificFeature, string i_FeatureKey)
         {

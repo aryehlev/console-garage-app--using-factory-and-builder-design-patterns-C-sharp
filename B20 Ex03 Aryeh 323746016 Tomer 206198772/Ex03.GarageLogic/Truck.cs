@@ -21,29 +21,31 @@ namespace Ex03.GarageLogic
             eStatus i_StatusOfvehicle = eStatus.InRepair)
             : base(i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner)
         {
+            m_CanBeElectric = k_CanBeElectric;
         }
 
-        public override bool CanBeElectric()
+        public override void SetUniqueParamaters(params object[] i_SpecificFeatures)
         {
-            return k_CanBeElectric;
+            m_HasHazardasCargo = (bool)i_SpecificFeatures[0];
+            m_VolumeOfCargo = (float)i_SpecificFeatures[1];
+        }
+       
+        public override void SetWheels(string i_WheelManufactor, float i_CurrentAirPressure)
+        {
+            InitWheels(k_NumOfWheels, i_WheelManufactor, i_CurrentAirPressure, k_MaxAirPressure);
         }
 
-        public override void SetParamaters(
-            bool i_IsElectric,
-            string i_WheelManufactor,
-            float i_CurrentAirPressure,
-            float i_CurrentEnergyLevel,
-            params object[] i_SpecificFeatures)
+        public override void SetEnergy(bool i_IsElectric, float i_CurrentEnergyLevel)
         {
-            if(i_IsElectric)
+
+            if (i_IsElectric)
             {
                 throw new ArgumentException("a truck cannot be electric(yet?)");
             }
-            InitWheels(k_NumOfWheels, i_WheelManufactor, i_CurrentAirPressure, k_MaxAirPressure);
-            InitEnergy(i_CurrentEnergyLevel, k_MaxEnergyCapacity, eEnergyType.Soler);
+            
+            eEnergyType energyType = !i_IsElectric ? eEnergyType.Octan96 : eEnergyType.Electric;
 
-            m_HasHazardasCargo = (bool)i_SpecificFeatures[0];
-            m_VolumeOfCargo = (float)i_SpecificFeatures[1];
+            InitEnergy(i_CurrentEnergyLevel, k_MaxEnergyCapacity, energyType);
         }
 
         public override Tuple<string, string[]>[] GetSpecificFeatureDescription()

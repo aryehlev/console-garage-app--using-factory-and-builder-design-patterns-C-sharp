@@ -10,6 +10,7 @@ namespace Ex03.GarageLogic
         private readonly string r_LicenseNumber;
         private readonly string r_NameOfOwner;
         private readonly string r_PhoneNumOfOwner;
+        protected bool m_CanBeElectric;
         private eStatus m_StatusOfVehicle;
         protected List<Wheel> m_Wheels;
         protected Energy m_Energy;
@@ -31,20 +32,20 @@ namespace Ex03.GarageLogic
         }
         
         public abstract Tuple<string, string[]>[] GetSpecificFeatureDescription();
-        
-        //public abstract object[] ParseSpecificFeatures(string[] i_SpecificFeatures);
 
         public abstract object ParseSpecificFeature(string i_SpecificFeature, string i_FeatureKey);
 
-        public abstract void SetParamaters(
-            bool i_IsElectric,
-            string i_WheelManufactor,
-            float i_CurrentAirPressure,
-            float i_CurrentEnergyLevel,
-            params object[] i_SpecificFeatures);
+        public abstract void SetUniqueParamaters(params object[] i_SpecificFeatures);
 
-        public abstract bool CanBeElectric();
+        public abstract void SetWheels(string i_WheelManufactor, float i_CurrentAirPressure);
 
+        public abstract void SetEnergy(bool i_IsElectric, float i_CurrentEnergyLevel);
+        
+        public bool CanBeElectric()
+        {
+            return m_CanBeElectric;
+        }
+        
         protected virtual void InitWheels(byte i_NumOfWheels, string i_WheelManufactor, float i_CurrentAirPressure, float i_MaxAirPressure)
         {
             if (m_Wheels.Count == 0)
@@ -68,7 +69,7 @@ namespace Ex03.GarageLogic
                 throw new ValueOutOfRangeException(0, i_MaxEnergyCapacity, "energy");
             }
 
-             m_Energy = new Energy(i_CurrentEnergyLevel, i_MaxEnergyCapacity, i_EnergyType);
+            m_Energy = new Energy(i_CurrentEnergyLevel, i_MaxEnergyCapacity, i_EnergyType);
             
         }
 
@@ -104,10 +105,16 @@ namespace Ex03.GarageLogic
             return m_Energy.EnergyType;
         }
 
-        internal float GetMaxEnergyAmountThatCanFill()
+        internal float GetMaxEnergyCapacity()
         {
             return m_Energy.GetMaxAmountThatCanFill();
         }
+        
+        internal float GetMaxAirCapacity()
+        {
+            return m_Wheels[0].GetMaxAmountThatCanFill();
+        }
+
 
 
         public virtual string AdvancesToStringAfterFeaturesWhereSet()

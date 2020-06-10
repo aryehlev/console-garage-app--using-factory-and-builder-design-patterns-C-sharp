@@ -82,7 +82,7 @@ namespace Ex03.GarageLogic
 
         public float GetMaxEnergyLeftToFill(string i_LicenseNumber)
         {
-            return getVehicle(i_LicenseNumber).GetMaxEnergyAmountThatCanFill();
+            return getVehicle(i_LicenseNumber).GetMaxEnergyCapacity();
         }
     }
 }
