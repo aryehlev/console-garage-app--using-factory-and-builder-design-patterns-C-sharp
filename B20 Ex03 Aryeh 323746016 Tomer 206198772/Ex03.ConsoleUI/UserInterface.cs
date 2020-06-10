@@ -9,7 +9,7 @@ namespace Ex03.ConsoleUI
 {
     class UserInterface
     {
-        internal static Garage s_Garage = new Garage();  // PROBLEMATIC???
+        internal static Garage s_Garage = new Garage();
         internal static void WelcomeMsg()
         {
             string welcomeLogo = @"
@@ -229,6 +229,7 @@ In order to fill the vehicle's tires to max, please enter its license number:";
         {
             string licenseNumber = "";
             eEnergyType energyType = eEnergyType.Electric;
+            float energyToFill = 0.0f;
             string getLicenseNumberMsg = @"
 In order to {0} the vehicle, please enter its license number:";
             string getEnergyAmountMsg = @"
@@ -268,7 +269,8 @@ Please enter the desired amount of {0} to fill ({1}):";
                     getEnergyAmountMsg = string.Format(getEnergyAmountMsg, energyType, "litres of gas");
                 }
                 Console.WriteLine(getEnergyAmountMsg);
-                GetInput.GetEnergyAmount(licenseNumber, energyType);
+                energyToFill = GetInput.GetValidFloat(0, s_Garage.GetMaxEnergyLeftToFill(licenseNumber));
+                s_Garage.FllEnergy(licenseNumber, energyToFill, energyType);
             }
         }
 
@@ -284,10 +286,6 @@ In order to get the vehicle's data, please enter its license number:";
             Console.WriteLine(s_Garage.GetVehicleData(licenseNumber));
         }
 
-        
-
-       
-      
 
         private static void setParametersUI(Vehicle i_Vehicle, bool i_IsElectric, string i_WheelManufactor, float i_CurrentAirPreasure, float i_CurrentEnergyLevel, object[] i_SpecificFeatures)
         {

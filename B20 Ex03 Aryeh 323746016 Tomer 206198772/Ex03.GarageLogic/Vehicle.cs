@@ -104,7 +104,7 @@ namespace Ex03.GarageLogic
             return m_Energy.EnergyType;
         }
 
-        internal float GetMaxAmountThatCanFill()
+        internal float GetMaxEnergyAmountThatCanFill()
         {
             return m_Energy.GetMaxAmountThatCanFill();
         }
