@@ -3,7 +3,6 @@ using Ex02.ConsoleUtils;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Ex03.ConsoleUI
 {
@@ -38,7 +37,7 @@ namespace Ex03.ConsoleUI
 
         internal static void BackToModePickerMsg()
         {
-            Console.WriteLine("Hit enter to go back to the main menu...");
+            Console.WriteLine("\nHit enter to go back to the main menu...");
             Console.ReadLine();
             Screen.Clear();
         }
@@ -72,6 +71,7 @@ please pick an action from the folowing:
                     Console.WriteLine($"Your input was '{e.Message}' but mode must be a digit between 0 - 7. Try again");
                 }
             }
+            Console.Clear();
             return modePicked;
         }
 
@@ -113,7 +113,7 @@ In order to add a new vehicle to the system, please enter its license number:";
                 float currentEnergyLevel = 0.0f;
                 float currentAirPreasure = 0.0f;
                 string wheelManufactor = "";
-                object[] specificFeatures = null;
+                object[] uniqueFeatures = null;
 
                 string getVehicleTypeMsg = @"
 Please pick a vehicle type:
@@ -126,8 +126,6 @@ Please enter the vehicle's owner name (letters only):";
                 string getPhoneNumOfOwnerMsg = @"
 Please enter the owner's phone number (digits only):";
 
-
-
                 string getIsElectricMsg = @"
 Is the vehicle electric? (yes / no)";
                 string getCurrentEnergyLevelMsg = @"
@@ -137,9 +135,11 @@ Please enter the current air presure:";
                 
                 string getWheelManufactorMsg = @"
 Please enter the wheels manufactor:";
-                string specialFeatureMsg = @"
+                string uniqueFeatureMsg = @"
 Please enter {0}, possible values are:
 {1}";
+                string successMsg = @"
+Registration complete!";
 
                 Console.WriteLine(getVehicleTypeMsg);
                 vehicleType = GetInput.GetVehicleType();
@@ -149,7 +149,6 @@ Please enter {0}, possible values are:
                 nameOfOwner = GetInput.GetValidString(false, true);
                 Console.WriteLine(getPhoneNumOfOwnerMsg);
                 phoneNumOfOwner = GetInput.GetValidString(true, false);
-
                 Vehicle newVehicle = s_Garage.AddVehicle(vehicleType, model, licenseNumber, nameOfOwner, phoneNumOfOwner);
                 
                 if (newVehicle.CanBeElectric())
@@ -162,19 +161,63 @@ Please enter {0}, possible values are:
                 Console.WriteLine(getCurrentEnergyLevelMsg);
                 currentEnergyLevel = GetInput.GetValidFloat();
                 setEnergyUI(newVehicle, isElectric, currentEnergyLevel);
-                
-                Console.WriteLine(getCurrentAirPresureMsg);
-                currentAirPreasure = GetInput.GetValidFloat();               
+
                 Console.WriteLine(getWheelManufactorMsg);
                 wheelManufactor = GetInput.GetValidString(false, false);
-                
+                Console.WriteLine(getCurrentAirPresureMsg);
+                currentAirPreasure = GetInput.GetValidFloat();               
                 setWheelsUI(newVehicle, wheelManufactor, currentAirPreasure);
 
-                specificFeatures = GetInput.GetSpecialFeatures(specialFeatureMsg, newVehicle);
+                uniqueFeatures = GetInput.GetUniqueFeatures(uniqueFeatureMsg, newVehicle);
                 
-                newVehicle.SetUniqueParamaters(specificFeatures);
+                if (uniqueFeatures != null)
+                {
+                    newVehicle.SetUniqueParamaters(uniqueFeatures);
+                }
+
+                Console.WriteLine(successMsg);
             }
         }
+        
+        private static void setWheelsUI(Vehicle i_Vehicle, string i_WheelManufactor, float i_CurrentAirPreasure)
+        {
+
+            bool tryAgain = true;
+            while (tryAgain)
+            {
+                try
+                {
+                    i_Vehicle.SetWheels(i_WheelManufactor, i_CurrentAirPreasure);
+                    tryAgain = false;
+                }
+                catch (ValueOutOfRangeException e)
+                {
+                    Console.WriteLine($"{e.Message}. The amount must be between {e.MinValue} to {e.MaxValue}. Try again"); ;
+                    i_CurrentAirPreasure = GetInput.GetValidFloat(e.MinValue, e.MaxValue);
+                }
+            }
+        }
+
+        private static void setEnergyUI(Vehicle i_Vehicle, bool i_IsElectric, float i_CurrentEnergyLevel)
+        {
+
+            bool tryAgain = true;
+            while (tryAgain)
+            {
+                try
+                {
+                    i_Vehicle.SetEnergy(i_IsElectric, i_CurrentEnergyLevel);
+                    tryAgain = false;
+                }
+                catch (ValueOutOfRangeException e)
+                {
+                    Console.WriteLine($"{e.Message}. The amount must be between {e.MinValue} to {e.MaxValue}. Try again");
+                    i_CurrentEnergyLevel = GetInput.GetValidFloat(e.MinValue, e.MaxValue);
+                }
+            }
+        }
+
+
         // mode 2
         internal static void AllLicenseNumbersMode()
         {
@@ -183,6 +226,11 @@ Please enter {0}, possible values are:
             string getLicensePlatesMsg = @"
 please pick a status mode to sort the license plate numbers by:
 {0}";
+            string successMsg = @"
+The license numbers requested are:
+{0}";
+            string failMsg = @"
+No license numbers found";
             getLicensePlatesMsg = string.Format(getLicensePlatesMsg, buildMenuFromEnum(typeof(eStatus)));
             Console.WriteLine(getLicensePlatesMsg);
             sortBy = GetInput.GetVehicleStatus(false);
@@ -192,7 +240,8 @@ please pick a status mode to sort the license plate numbers by:
                 licenseNumbersStr.Append(licenseNumber);
                 licenseNumbersStr.Append(Environment.NewLine);
             }
-            Console.WriteLine(licenseNumbersStr.ToString());
+            successMsg = string.Format(successMsg, licenseNumbersStr.ToString());
+            Console.WriteLine(licenseNumbersStr.Length > 0 ? successMsg : failMsg);
         }
 
         // mode 3
@@ -204,12 +253,16 @@ In order to change the status of a vehicle, please enter its license number:";
             string getStatusMsg = @"
 please pick a status mode to set for license number {0}:
 {1}";
+            string successMsg = @"
+vehicle number {0} is now on {1} status";
             Console.WriteLine(getLicenseNumberMsg);
             licenseNumber = GetInput.GetLicenseNumber(false, out _);
             getStatusMsg = string.Format(getStatusMsg, licenseNumber, buildMenuFromEnum(typeof(eStatus), eStatus.None));
             Console.WriteLine(getStatusMsg);
             eStatus statusToSet = GetInput.GetVehicleStatus(false);
             s_Garage.ChangeStatusOfVehicle(licenseNumber, statusToSet);
+            successMsg = string.Format(successMsg, licenseNumber, statusToSet);
+            Console.WriteLine(successMsg);
         }
 
         // mode 4
@@ -218,10 +271,14 @@ please pick a status mode to set for license number {0}:
             string licenseNumber;
             string fillTiresToMaxMsg = @"
 In order to fill the vehicle's tires to max, please enter its license number:";
+            string successMsg = @"
+The tires of vehicle number {0} is now full";
 
             Console.WriteLine(fillTiresToMaxMsg);
             licenseNumber = GetInput.GetLicenseNumber(false, out _);
             s_Garage.FillTiresToMax(licenseNumber);
+            successMsg = string.Format(successMsg, licenseNumber);
+            Console.WriteLine(successMsg);
         }
 
         // modes 5 and 6
@@ -234,6 +291,8 @@ In order to fill the vehicle's tires to max, please enter its license number:";
 In order to {0} the vehicle, please enter its license number:";
             string getEnergyAmountMsg = @"
 Please enter the desired amount of {0} to fill ({1}):";
+            string successMsg = @"
+{0} vehicle number {1} is complete";
 
             if (i_IsElectric)
             {
@@ -271,6 +330,8 @@ Please enter the desired amount of {0} to fill ({1}):";
                 Console.WriteLine(getEnergyAmountMsg);
                 energyToFill = GetInput.GetValidFloat();
                 fillEnergyUI(licenseNumber, energyToFill, energyType);
+                successMsg = string.Format(successMsg, energyType == eEnergyType.Electric ? "charging" : "refueling" ,licenseNumber);
+                Console.WriteLine(successMsg);
             }
         }
 
@@ -287,7 +348,7 @@ Please enter the desired amount of {0} to fill ({1}):";
                 }
                 catch (ValueOutOfRangeException e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine($"{e.Message}, must be between {e.MinValue} - {e.MaxValue}");
                     i_AmountToFill = GetInput.GetValidFloat();
                 }
             }
@@ -303,44 +364,6 @@ In order to get the vehicle's data, please enter its license number:";
             Console.WriteLine(getVehicleDataMsg);
             licenseNumber = GetInput.GetLicenseNumber(false, out _);
             Console.WriteLine(s_Garage.GetVehicleData(licenseNumber));
-        }
-
-        private static void setWheelsUI(Vehicle i_Vehicle, string i_WheelManufactor, float i_CurrentAirPreasure)
-        {
-
-            bool tryAgain = true;
-            while(tryAgain)
-            {
-                try
-                {
-                    i_Vehicle.SetWheels(i_WheelManufactor, i_CurrentAirPreasure);
-                    tryAgain = false;
-                }
-                catch(ValueOutOfRangeException e)
-                {
-                    Console.WriteLine(e.Message);
-                    i_CurrentAirPreasure = GetInput.GetValidFloat();
-                }
-            }
-        }
-
-        private static void setEnergyUI(Vehicle i_Vehicle, bool i_IsElectric, float i_CurrentEnergyLevel)
-        {
-
-            bool tryAgain = true;
-            while (tryAgain)
-            {
-                try
-                {
-                    i_Vehicle.SetEnergy(i_IsElectric, i_CurrentEnergyLevel);
-                    tryAgain = false;
-                }
-                catch (ValueOutOfRangeException e)
-                {
-                    Console.WriteLine(e.Message);
-                    i_CurrentEnergyLevel = GetInput.GetValidFloat();
-                }
-            }
         }
     }
 }

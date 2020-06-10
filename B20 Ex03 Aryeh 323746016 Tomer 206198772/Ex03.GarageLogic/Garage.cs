@@ -77,7 +77,7 @@ namespace Ex03.GarageLogic
 
         public string GetVehicleData(string i_LicenseNumber)
         {
-            return getVehicle(i_LicenseNumber).AdvancesToStringAfterFeaturesWhereSet();
+            return getVehicle(i_LicenseNumber).ToString();
         }
     }
 }

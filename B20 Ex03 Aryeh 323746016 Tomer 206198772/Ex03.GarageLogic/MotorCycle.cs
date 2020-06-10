@@ -12,7 +12,7 @@ namespace Ex03.GarageLogic
         private const int k_NumberOfUniqueFeatures = 2;
         private const bool k_CanBeElectric = true;
         private eLicenseType m_TypeOfLicense;
-        private byte m_Cc;
+        private int m_Cc;
 
         public MotorCycle(
             string i_Model,
@@ -24,10 +24,10 @@ namespace Ex03.GarageLogic
             m_CanBeElectric = k_CanBeElectric;
         }
         
-        public override void SetUniqueParamaters(params object[] i_SpecificFeatures)
+        public override void SetUniqueParamaters(params object[] i_UniqueFeatures)
         {
-            m_TypeOfLicense = (eLicenseType)i_SpecificFeatures[0];
-            m_Cc = (byte)i_SpecificFeatures[1];
+            m_TypeOfLicense = (eLicenseType)i_UniqueFeatures[0];
+            m_Cc = (int)i_UniqueFeatures[1];
         }
 
         public override void SetWheels(string i_WheelManufactor, float i_CurrentAirPressure)
@@ -43,26 +43,26 @@ namespace Ex03.GarageLogic
             InitEnergy(i_CurrentEnergyLevel, maxEnergyCapacity, energyType);
         }
 
-        public override Tuple<string, string[]>[] GetSpecificFeatureDescription()
+        public override Tuple<string, string[]>[] GetUniqueFeatureDescription()
         {
             Tuple<string, string[]>[] definitionAndValues = new Tuple<string, string[]>[k_NumberOfUniqueFeatures];
             definitionAndValues[0] = new Tuple<string, string[]>("License type", Enum.GetNames(typeof(eLicenseType)));
-            definitionAndValues[1] = new Tuple<string, string[]>("Volume of engine(cc)", new[] { "float" });
+            definitionAndValues[1] = new Tuple<string, string[]>("Volume of engine(cc)", new[] { "a positive number" });
             return definitionAndValues;
         }
 
-        public override object ParseSpecificFeature(string i_SpecificFeature, string i_FeatureKey)
+        public override object ParseUniqueFeature(string i_UniqueFeature, string i_FeatureKey)
         {
-            object parsedSpecificFeature = null;
+            object parsedUniqueFeature = null;
             switch(i_FeatureKey)
             {
                 case "License type":
-                    if(!int.TryParse(i_SpecificFeature, out _) && Enum.TryParse(
-                           i_SpecificFeature,
+                    if(!int.TryParse(i_UniqueFeature, out _) && Enum.TryParse(
+                           i_UniqueFeature,
                            true,
                            out eLicenseType licenseType))
                     {
-                        parsedSpecificFeature = licenseType;
+                        parsedUniqueFeature = licenseType;
                         break;
                     }
                     else
@@ -70,26 +70,29 @@ namespace Ex03.GarageLogic
                         throw new FormatException("needs a license type of A, A1, AA or B");
                     }
                 case "Volume of engine(cc)":
-                    if(byte.TryParse(i_SpecificFeature, out byte cc))
+                    if(int.TryParse(i_UniqueFeature, out int cc) && cc > 0)
                     {
-                        parsedSpecificFeature = cc;
+                        parsedUniqueFeature = cc;
                         break;
                     }
                     else
                     {
-                        throw new FormatException("needs a volume(cc)");
+                        throw new FormatException("needs a valid volume (cc) - a positive number");
                     }
                 default:
                     throw new ArgumentException("The Feature Index is out of bounds");
             }
 
-            return parsedSpecificFeature;
+            return parsedUniqueFeature;
         }
 
-
-        public override string AdvancesToStringAfterFeaturesWhereSet()
+        public override string ToString()
         {
-            return string.Format("{0}\n, type of license: {1},\n volume of engine: {2}\n", base.AdvancesToStringAfterFeaturesWhereSet(), m_TypeOfLicense, m_Cc);
+            string strToReturn = @"
+{0}
+# Type of license: {1}
+# Volume of engine: {2}";
+            return string.Format(strToReturn, base.ToString(), m_TypeOfLicense, m_Cc);
         }
     }
 }

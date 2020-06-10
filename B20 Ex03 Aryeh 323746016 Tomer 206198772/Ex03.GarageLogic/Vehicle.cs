@@ -31,11 +31,11 @@ namespace Ex03.GarageLogic
             m_Energy = null;
         }
         
-        public abstract Tuple<string, string[]>[] GetSpecificFeatureDescription();
+        public abstract Tuple<string, string[]>[] GetUniqueFeatureDescription();
 
-        public abstract object ParseSpecificFeature(string i_SpecificFeature, string i_FeatureKey);
+        public abstract object ParseUniqueFeature(string i_UniqueFeature, string i_FeatureKey);
 
-        public abstract void SetUniqueParamaters(params object[] i_SpecificFeatures);
+        public abstract void SetUniqueParamaters(params object[] i_UniqueFeatures);
 
         public abstract void SetWheels(string i_WheelManufactor, float i_CurrentAirPressure);
 
@@ -105,32 +105,38 @@ namespace Ex03.GarageLogic
             return m_Energy.EnergyType;
         }
 
-        public virtual string AdvancesToStringAfterFeaturesWhereSet()
+        public override string ToString()
         {
             StringBuilder sbForWheels = new StringBuilder("");
             int i = 0;
             foreach (Wheel wheel in m_Wheels)
             {
-                sbForWheels.Append(string.Format("wheel number {0}: {1}", i, wheel));
+                sbForWheels.Append(string.Format("  wheel number {0}: {1}", i, wheel));
+                sbForWheels.Append(Environment.NewLine);
                 i++;
             }
+            sbForWheels.Remove(sbForWheels.Length - 1, 1);
 
-            return string.Format("{0}, type Of energy car takes: {1}\n, percentage left in car {2}:\n wheel info \n {3}",
-                ToString(), 
-                GetEnergyType(),
-                m_Energy.GetEnergyPercentage(),
-                sbForWheels);
-        }
+            string strToReturn = @"
+# Licence Number: {0}
+# Model: {1}
+# Name of owner: {2}
+# Owner phone number: {3}
+# Status of vehicle: {4}
+# Type of energy vehicle takes: {5}
+# Energy left: {6}%
+# Wheels info:
+{7}";
 
-        public override string ToString()
-        {
-            return string.Format(
-                "Licence Number: {0}\n, Model {1}\n, name of owner: {2}\n, owner phone number {3}, status of vehicle {4}\n",
-                r_LicenseNumber,
+            return string.Format(strToReturn,
+                r_LicenseNumber, 
                 r_Model,
                 r_NameOfOwner,
                 r_PhoneNumOfOwner,
-                StatusOfVehicle);
+                m_StatusOfVehicle,
+                m_Energy.EnergyType,
+                m_Energy.GetEnergyPercentage(),
+                sbForWheels);
         }
     }
 }

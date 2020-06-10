@@ -73,36 +73,15 @@ namespace Ex03.ConsoleUI
         {
             string input = Console.ReadLine();
             bool isElectric;
-            while (input == null || input.ToLower() != "yes" || input.ToLower() != "no")
+            while (input == null || (input.ToLower() != "yes" && input.ToLower() != "no"))
             {
                 Console.WriteLine($"Please enter Yes or No");
                 input = Console.ReadLine();
             }
 
             isElectric = input.ToLower() == "yes";
-
             return isElectric;
         }
-
-        //internal static void GetEnergyAmount(string i_licenseNumber, eEnergyType i_energyType)
-        //{
-        //    float energyAmount = 0.0f;
-        //    bool tryAgain = true;
-        //    while (tryAgain)
-        //    {
-        //        try
-        //        {
-        //            string input = Console.ReadLine();
-        //            energyAmount = CheckInput.CheckIfValidFloat(input);
-        //            UserInterface.s_Garage.FllEnergy(i_licenseNumber, energyAmount, i_energyType);
-        //            tryAgain = false;
-        //        }
-        //        catch (ValueOutOfRangeException e)
-        //        {
-        //            Console.WriteLine($"The amount should be between {e.MinValue} - {e.MaxValue} (and you entered {energyAmount}). Try again");
-        //        }
-        //    }
-        //}
 
         internal static string GetValidString(bool i_DigitsOnly, bool i_LettersOnly)
         {
@@ -125,29 +104,28 @@ namespace Ex03.ConsoleUI
             return validString;
         }
 
-        internal static object[] GetSpecialFeatures(string i_SpecialFeatureMsg, Vehicle i_Vehicle)
+        internal static object[] GetUniqueFeatures(string i_UniqueFeatureMsg, Vehicle i_Vehicle)
         {
-            Object[] SpecificFeatures = null;
-            Tuple<string, string[]>[] specificFeatureDescriptions = i_Vehicle.GetSpecificFeatureDescription();
-            if (specificFeatureDescriptions != null)
+            Object[] UniqueFeatures = null;
+            Tuple<string, string[]>[] uniqueFeatureDescriptions = i_Vehicle.GetUniqueFeatureDescription();
+            if (uniqueFeatureDescriptions != null)
             {
-                SpecificFeatures = new object[specificFeatureDescriptions.Length];
+                UniqueFeatures = new object[uniqueFeatureDescriptions.Length];
                 int objectIndex = 0;
-                foreach (Tuple<string, string[]> specificFeatureDescription in specificFeatureDescriptions)
+                foreach (Tuple<string, string[]> uniqueFeatureDescription in uniqueFeatureDescriptions)
                 {
-                    string descriptionOfValues = getPossibleFeaturesToString(specificFeatureDescription.Item2);
-                    Console.Out.WriteLine(specificFeatureDescription.Item1);
-                    string currentSpecialFeatureMsg = string.Format(
-                        i_SpecialFeatureMsg,
-                        specificFeatureDescription.Item1,
+                    string descriptionOfValues = getPossibleFeaturesToString(uniqueFeatureDescription.Item2);
+                    string currentUniqueFeatureMsg = string.Format(
+                        i_UniqueFeatureMsg,
+                        uniqueFeatureDescription.Item1,
                         descriptionOfValues);
-                    Console.WriteLine(currentSpecialFeatureMsg);
-                    SpecificFeatures[objectIndex] = getSpecialFeature(specificFeatureDescription.Item1, i_Vehicle);
+                    Console.WriteLine(currentUniqueFeatureMsg);
+                    UniqueFeatures[objectIndex] = getUniqueFeature(uniqueFeatureDescription.Item1, i_Vehicle);
                     objectIndex++;
                 }
             }
 
-            return SpecificFeatures;
+            return UniqueFeatures;
         }
 
         private static string getPossibleFeaturesToString(string[] i_PossibleFeatures)
@@ -161,16 +139,16 @@ namespace Ex03.ConsoleUI
 
             return sb.ToString();
         }
-        private static object getSpecialFeature(string i_FeatureKey, Vehicle i_Vehicle)
+        private static object getUniqueFeature(string i_FeatureKey, Vehicle i_Vehicle)
         {
-            object specialFeature = null;
+            object uniqueFeature = null;
             bool tryAgain = true;
             while (tryAgain)
             {
                 try
                 {
                     string input = Console.ReadLine();
-                    specialFeature = i_Vehicle.ParseSpecificFeature(input, i_FeatureKey);
+                    uniqueFeature = i_Vehicle.ParseUniqueFeature(input, i_FeatureKey);
                     tryAgain = false;
                 }
                 catch (FormatException e)
@@ -179,7 +157,7 @@ namespace Ex03.ConsoleUI
                 }
             }
 
-            return specialFeature;
+            return uniqueFeature;
         }
 
         internal static float GetValidFloat(float i_MinValue = 0, float i_MaxValue = float.MaxValue)
@@ -196,7 +174,14 @@ namespace Ex03.ConsoleUI
                 }
                 catch (FormatException e)
                 {
-                    Console.WriteLine($"Your input was '{e.Message}' but the amount must be between {i_MinValue} to {i_MaxValue}. Try again");
+                    if (i_MaxValue == float.MaxValue)
+                    {
+                        Console.WriteLine($"Your input was '{e.Message}' but the amount must be bigger than {i_MinValue}. Try again");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Your input was '{e.Message}' but the amount must be between {i_MinValue} to {i_MaxValue}. Try again");
+                    }
                 }
             }
 

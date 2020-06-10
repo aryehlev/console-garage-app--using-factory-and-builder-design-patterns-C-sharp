@@ -10,8 +10,8 @@ namespace Ex03.GarageLogic
         private const byte k_NumOfWheels = 16;
         private const int k_NumberOfUniquefeatures = 2;
         private const bool k_CanBeElectric = false;
-        private bool m_HasHazardasCargo;
-        private float m_VolumeOfCargo;
+        private bool m_HasHazardousCargo;
+        private byte m_VolumeOfCargo;
 
         public Truck(
             string i_Model,
@@ -24,10 +24,10 @@ namespace Ex03.GarageLogic
             m_CanBeElectric = k_CanBeElectric;
         }
 
-        public override void SetUniqueParamaters(params object[] i_SpecificFeatures)
+        public override void SetUniqueParamaters(params object[] i_UniqueFeatures)
         {
-            m_HasHazardasCargo = (bool)i_SpecificFeatures[0];
-            m_VolumeOfCargo = (float)i_SpecificFeatures[1];
+            m_HasHazardousCargo = (bool)i_UniqueFeatures[0];
+            m_VolumeOfCargo = (byte)i_UniqueFeatures[1];
         }
        
         public override void SetWheels(string i_WheelManufactor, float i_CurrentAirPressure)
@@ -48,52 +48,23 @@ namespace Ex03.GarageLogic
             InitEnergy(i_CurrentEnergyLevel, k_MaxEnergyCapacity, energyType);
         }
 
-        public override Tuple<string, string[]>[] GetSpecificFeatureDescription()
+        public override Tuple<string, string[]>[] GetUniqueFeatureDescription()
         {
             Tuple<string, string[]>[] definitionAndValues = new Tuple<string, string[]>[k_NumberOfUniquefeatures];
-            definitionAndValues[0] = new Tuple<string, string[]>("Has hazardas cargo", new[] { "true", "false" });
-            definitionAndValues[1] = new Tuple<string, string[]>("Volume of cargo", new[] { "byte" });
+            definitionAndValues[0] = new Tuple<string, string[]>("Has hazardous cargo", new[] { "true", "false" });
+            definitionAndValues[1] = new Tuple<string, string[]>("Volume of cargo", new[] { "a non-negative integer" });
             return definitionAndValues;
         }
 
-        //public override object[] ParseSpecificFeatures(string[] i_SpecificFeatures)
-        //{
-        //    string firstFeature = i_SpecificFeatures[0];
-        //    string secondFeature = i_SpecificFeatures[1];
-        //    object[] specificFeatures = new object[k_NumOfFeatures];
-        //    bool hasHazardousCargo;
-
-        //    if (bool.TryParse(firstFeature, out hasHazardousCargo))
-        //    {
-        //        specificFeatures[0] = hasHazardousCargo;
-        //    }
-        //    else
-        //    {
-        //        throw new FormatException("needs a colour of White, Black, Silver or Red");
-        //    }
-
-        //    float volumeOfCargo;
-        //    if (float.TryParse(secondFeature, out volumeOfCargo))
-        //    {
-        //        specificFeatures[1] = volumeOfCargo;
-        //    }
-        //    else
-        //    {
-        //        throw new FormatException("needs a normal volume in number");
-        //    }
-
-        //    return specificFeatures;
-        //}
-
-        public override object ParseSpecificFeature(string i_SpecificFeature, string i_FeatureKey)
+        public override object ParseUniqueFeature(string i_UniqueFeature, string i_FeatureKey)
         {
-            object parsedSpecificFeature = null;
+            object parsedUniqueFeature = null;
             switch(i_FeatureKey)
             {
-                case "Has hazardas cargo":
-                    if(bool.TryParse(i_SpecificFeature, out bool hasHazardoesCargo))
+                case "Has hazardous cargo":
+                    if(bool.TryParse(i_UniqueFeature, out bool hasHazardoesCargo))
                     {
-                        parsedSpecificFeature = hasHazardoesCargo;
+                        parsedUniqueFeature = hasHazardoesCargo;
                         break;
                     }
                     else
@@ -101,9 +72,9 @@ namespace Ex03.GarageLogic
                         throw new FormatException("needs a true or false value");
                     }
                 case "Volume of cargo":
-                    if (float.TryParse(i_SpecificFeature, out float volumeOfCargo) || volumeOfCargo >= 0)
+                    if (byte.TryParse(i_UniqueFeature, out byte volumeOfCargo) && volumeOfCargo >= 0)
                     {
-                        parsedSpecificFeature = volumeOfCargo;
+                        parsedUniqueFeature = volumeOfCargo;
                         break;
                     }
                     else
@@ -114,12 +85,16 @@ namespace Ex03.GarageLogic
                     throw new ArgumentException("The Feature Index is out of bounds");
             }
 
-            return parsedSpecificFeature;
+            return parsedUniqueFeature;
         }
 
-        public override string AdvancesToStringAfterFeaturesWhereSet()
+        public override string ToString()
         {
-            return string.Format("{0}\n, has hazardoes cargo: {1},\n volume of cargo: {2}\n", base.AdvancesToStringAfterFeaturesWhereSet(), m_HasHazardasCargo, m_VolumeOfCargo);
+            string strToReturn = @"
+{0}
+# Has hazardoes cargo: {1}
+# Volume of cargo: {2}";
+            return string.Format(strToReturn, base.ToString(), m_HasHazardousCargo, m_VolumeOfCargo);
         }
     }
 }

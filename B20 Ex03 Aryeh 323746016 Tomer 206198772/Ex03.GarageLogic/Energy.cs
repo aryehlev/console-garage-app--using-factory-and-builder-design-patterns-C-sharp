@@ -20,7 +20,7 @@ namespace Ex03.GarageLogic
             float newAmount = i_AmounOfEnergyToFill + m_CurrentFilled;
             if (newAmount > r_MaxCapacity)
             {
-                throw new ValueOutOfRangeException(0, r_MaxCapacity - m_CurrentFilled);  
+                throw new ValueOutOfRangeException(0, r_MaxCapacity - m_CurrentFilled, i_AmounOfEnergyToFill.ToString());  
             }
 
             if(r_EnergyType != i_EnergyType)

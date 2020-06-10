@@ -25,10 +25,10 @@ namespace Ex03.GarageLogic
             m_CanBeElectric = k_CanBeElectric;
         }
 
-        public override void SetUniqueParamaters(params object[] i_SpecificFeatures)
+        public override void SetUniqueParamaters(params object[] i_UniqueFeatures)
         {
-            m_Colour = (eColour)i_SpecificFeatures[0];
-            m_NumOfDoors = (byte)i_SpecificFeatures[1];
+            m_Colour = (eColour)i_UniqueFeatures[0];
+            m_NumOfDoors = (byte)i_UniqueFeatures[1];
         }
 
         public override void SetWheels(string i_WheelManufactor, float i_CurrentAirPressure)
@@ -44,7 +44,7 @@ namespace Ex03.GarageLogic
             InitEnergy(i_CurrentEnergyLevel, maxEnergyCapacity, energyType);
         }
 
-        public override Tuple<string, string[]>[] GetSpecificFeatureDescription()
+        public override Tuple<string, string[]>[] GetUniqueFeatureDescription()
         {
             Tuple<string, string[]>[] definitionAndValues = new Tuple<string, string[]>[k_NumberOfUniquefeatures];
             definitionAndValues[0] = new Tuple<string, string[]>("Colour", Enum.GetNames(typeof(eColour)));
@@ -52,15 +52,15 @@ namespace Ex03.GarageLogic
             return definitionAndValues;
         }
 
-        public override object ParseSpecificFeature(string i_SpecificFeature, string i_FeatureKey)
+        public override object ParseUniqueFeature(string i_UniqueFeature, string i_FeatureKey)
         {
-            object parsedSpecificFeature = null;
+            object parsedUniqueFeature = null;
             switch(i_FeatureKey)
             {
                 case "Colour":
-                    if (Enum.TryParse(i_SpecificFeature, true, out eColour colour))
+                    if (Enum.TryParse(i_UniqueFeature, true, out eColour colour))
                     {
-                        parsedSpecificFeature = colour;
+                        parsedUniqueFeature = colour;
                         break;
                     }
                     else
@@ -68,9 +68,9 @@ namespace Ex03.GarageLogic
                         throw new FormatException("needs a colour of White, Black, Silver or Red");
                     }
                 case "Number of doors":
-                    if (byte.TryParse(i_SpecificFeature, out byte numOfDoors) && (numOfDoors >= 2 && numOfDoors <= 5))
+                    if (byte.TryParse(i_UniqueFeature, out byte numOfDoors) && (numOfDoors >= 2 && numOfDoors <= 5))
                     {
-                        parsedSpecificFeature = numOfDoors;
+                        parsedUniqueFeature = numOfDoors;
                         break;
                     }
                     else
@@ -81,12 +81,16 @@ namespace Ex03.GarageLogic
                     throw new ArgumentException("The Feature Index is out of bounds");
             }
 
-            return parsedSpecificFeature;
+            return parsedUniqueFeature;
         }
 
-        public override string AdvancesToStringAfterFeaturesWhereSet()
+        public override string ToString()
         {
-            return string.Format("{0}\n, colour of car: {1},\n number of doors in car: {2}\n", base.AdvancesToStringAfterFeaturesWhereSet(), m_Colour, m_NumOfDoors);
+            string strToReturn = @"
+{0}
+# Colour of car: {1}
+# Number of doors in car: {2}";
+            return string.Format(strToReturn, base.ToString(), m_Colour, m_NumOfDoors);
         }
     }
 }
