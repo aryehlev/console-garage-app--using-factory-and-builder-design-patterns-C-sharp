@@ -273,7 +273,6 @@ Please enter the desired amount of {0} to fill ({1}):";
                 s_Garage.FllEnergy(licenseNumber, energyToFill, energyType);
             }
         }
-
         // mode 7
         public static void VehicleDataMode()
         {
