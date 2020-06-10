@@ -157,23 +157,22 @@ Please enter {0}, possible values are:
                     Console.WriteLine(getIsElectricMsg);
                     isElectric = GetInput.GetIsElectricOrNot();
                 }
-
+                
                 getCurrentEnergyLevelMsg = string.Format(getCurrentEnergyLevelMsg, isElectric ? "battery" : "gas");
                 Console.WriteLine(getCurrentEnergyLevelMsg);
                 currentEnergyLevel = GetInput.GetValidFloat();
+                setEnergyUI(newVehicle, isElectric, currentEnergyLevel);
+                
                 Console.WriteLine(getCurrentAirPresureMsg);
                 currentAirPreasure = GetInput.GetValidFloat();               
                 Console.WriteLine(getWheelManufactorMsg);
                 wheelManufactor = GetInput.GetValidString(false, false);
-                specificFeatures = GetInput.GetSpecialFeatures(specialFeatureMsg, newVehicle);
+                
+                setWheelsUI(newVehicle, wheelManufactor, currentAirPreasure);
 
-                setParametersUI(
-                    newVehicle,
-                    isElectric,
-                    wheelManufactor,
-                    currentAirPreasure,
-                    currentEnergyLevel,
-                    specificFeatures);
+                specificFeatures = GetInput.GetSpecialFeatures(specialFeatureMsg, newVehicle);
+                
+                newVehicle.SetUniqueParamaters(specificFeatures);
             }
         }
         // mode 2
@@ -287,43 +286,42 @@ In order to get the vehicle's data, please enter its license number:";
             Console.WriteLine(s_Garage.GetVehicleData(licenseNumber));
         }
 
-
-        private static void setParametersUI(Vehicle i_Vehicle, bool i_IsElectric, string i_WheelManufactor, float i_CurrentAirPreasure, float i_CurrentEnergyLevel, object[] i_SpecificFeatures)
+        private static void setWheelsUI(Vehicle i_Vehicle, string i_WheelManufactor, float i_CurrentAirPreasure)
         {
+
+            bool tryAgain = true;
+            while(tryAgain)
+            {
+                try
+                {
+                    i_Vehicle.SetWheels(i_WheelManufactor, i_CurrentAirPreasure);
+                    tryAgain = false;
+                }
+                catch(ValueOutOfRangeException e)
+                {
+                    Console.WriteLine(e.Message);
+                    i_CurrentAirPreasure = GetInput.GetValidFloat();
+                }
+            }
+        }
+
+        private static void setEnergyUI(Vehicle i_Vehicle, bool i_IsElectric, float i_CurrentEnergyLevel)
+        {
+
             bool tryAgain = true;
             while (tryAgain)
             {
                 try
                 {
-                    i_Vehicle.InitUniqueParamaters(i_IsElectric, i_WheelManufactor, i_CurrentAirPreasure, i_CurrentEnergyLevel, i_SpecificFeatures);
+                    i_Vehicle.SetEnergy(i_IsElectric, i_CurrentEnergyLevel);
                     tryAgain = false;
                 }
                 catch (ValueOutOfRangeException e)
                 {
-                    if(e.Message == "value energy out of range")
-                    {
-                        Console.Out.WriteLine($"The amount of energy (fuel/battery) is out of the allowed range ({e.MinValue} - {e.MaxValue})");
-                        i_CurrentEnergyLevel = GetInput.GetValidFloat(0.0f);
-                    }
-                    else if(e.Message == "value airPressure out of range")
-                    {
-                        Console.Out.WriteLine($"The air pressure is out of the allowed range ({e.MinValue} - {e.MaxValue})");
-                        i_CurrentAirPreasure = GetInput.GetValidFloat(0.0f);
-                    }
-                    else
-                    {
-                        Console.Out.WriteLine($"The amount of energy (fuel/battery) is out of the allowed range ({e.MinValue} - {e.MaxValue})");
-                        i_CurrentEnergyLevel = GetInput.GetValidFloat(0.0f);
-                        Console.Out.WriteLine($"The air pressure is out of the allowed range ({e.MinValue} - {e.MaxValue})");
-                        i_CurrentAirPreasure = GetInput.GetValidFloat(0.0f);
-
-                    }
+                    Console.WriteLine(e.Message);
+                    i_CurrentEnergyLevel = GetInput.GetValidFloat();
                 }
-                
             }
         }
-
-       
     }
-
 }

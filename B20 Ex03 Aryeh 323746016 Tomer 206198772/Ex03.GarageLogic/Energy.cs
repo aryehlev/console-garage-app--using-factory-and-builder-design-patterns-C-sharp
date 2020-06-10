@@ -38,15 +38,26 @@ namespace Ex03.GarageLogic
                 return r_EnergyType;
             }
         }
+        
+        internal float EnergyCapacity
+        {
+            get
+            {
+                return r_MaxCapacity;
+            }
+        }
 
+        internal float CurrentEnergyAmount
+        {
+            get
+            {
+                return m_CurrentFilled;
+            }
+        }
+        
         internal float GetEnergyPercentage()
         {
             return (m_CurrentFilled / r_MaxCapacity) * 100;
-        }
-
-        internal float GetMaxAmountThatCanFill()
-        {
-            return r_MaxCapacity - m_CurrentFilled;
         }
     }
 }
