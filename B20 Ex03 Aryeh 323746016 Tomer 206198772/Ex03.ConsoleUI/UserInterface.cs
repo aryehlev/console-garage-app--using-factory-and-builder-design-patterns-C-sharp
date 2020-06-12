@@ -1,14 +1,15 @@
-﻿using Ex03.GarageLogic;
-using Ex02.ConsoleUtils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Ex03.GarageLogic;
+using Ex02.ConsoleUtils;
 
 namespace Ex03.ConsoleUI
 {
-    class UserInterface
+    internal class UserInterface
     {
         internal static Garage s_Garage = new Garage();
+
         internal static void WelcomeMsg()
         {
             string welcomeLogo = @"
@@ -85,11 +86,12 @@ You can type 'EXIT' at any time to go back to the menu
                     Console.WriteLine($"Your input was '{e.Message}' but mode must be a digit between 0 - 7. Try again");
                 }
             }
+
             Console.Clear();
             return modePicked;
         }
 
-        static string buildMenuFromEnum(Type i_enumType, Enum i_valueToIgnore=null)
+        private static string buildMenuFromEnum(Type i_enumType, Enum i_valueToIgnore = null)
         {
             StringBuilder sb = new StringBuilder();
             foreach (string enumValue in Enum.GetNames(i_enumType))
@@ -103,10 +105,11 @@ You can type 'EXIT' at any time to go back to the menu
 
             return sb.ToString();
         }
+
         // mode 1
         internal static void AddVehicle()
         {
-            string licenseNumber = "";
+            string licenseNumber = string.Empty;
             string getLicenseNumberMsg = @"
 In order to add a new vehicle to the system, please enter its license number:";
             Console.WriteLine(getLicenseNumberMsg);
@@ -119,14 +122,14 @@ In order to add a new vehicle to the system, please enter its license number:";
             else
             {
                 eVehicleType vehicleType = eVehicleType.Car;
-                string model = "";
-                string nameOfOwner = "";
-                string phoneNumOfOwner = "";
+                string model = string.Empty;
+                string nameOfOwner = string.Empty;
+                string phoneNumOfOwner = string.Empty;
 
                 bool isElectric = false;
                 float currentEnergyLevel = 0.0f;
                 float currentAirPreasure = 0.0f;
-                string wheelManufactor = "";
+                string wheelManufactor = string.Empty;
                 object[] uniqueFeatures = null;
 
                 string getVehicleTypeMsg = @"
@@ -195,7 +198,6 @@ Registration complete!";
         
         private static void setWheelsUI(Vehicle i_Vehicle, string i_WheelManufactor, float i_CurrentAirPreasure)
         {
-
             bool tryAgain = true;
             while (tryAgain)
             {
@@ -206,7 +208,7 @@ Registration complete!";
                 }
                 catch (ValueOutOfRangeException e)
                 {
-                    Console.WriteLine($"{e.Message}. The amount must be between {e.MinValue} to {e.MaxValue}. Try again"); ;
+                    Console.WriteLine($"{e.Message}. The amount must be between {e.MinValue} to {e.MaxValue}. Try again");
                     i_CurrentAirPreasure = GetInput.GetValidFloat(e.MinValue, e.MaxValue);
                 }
             }
@@ -214,7 +216,6 @@ Registration complete!";
 
         private static void setEnergyUI(Vehicle i_Vehicle, bool i_IsElectric, float i_CurrentEnergyLevel)
         {
-
             bool tryAgain = true;
             while (tryAgain)
             {
@@ -230,7 +231,6 @@ Registration complete!";
                 }
             }
         }
-
 
         // mode 2
         internal static void AllLicenseNumbersMode()
@@ -254,6 +254,7 @@ No license numbers found";
                 licenseNumbersStr.Append(licenseNumber);
                 licenseNumbersStr.Append(Environment.NewLine);
             }
+
             successMsg = string.Format(successMsg, licenseNumbersStr.ToString());
             Console.WriteLine(licenseNumbersStr.Length > 0 ? successMsg : failMsg);
         }
@@ -261,7 +262,7 @@ No license numbers found";
         // mode 3
         internal static void ChangeStatusOfVehicleMode()
         {
-            string licenseNumber = "";
+            string licenseNumber = string.Empty;
             string getLicenseNumberMsg = @"
 In order to change the status of a vehicle, please enter its license number:";
             string getStatusMsg = @"
@@ -298,7 +299,7 @@ The tires of vehicle number {0} is now full";
         // modes 5 and 6
         public static void FillEnergy(bool i_IsElectric)
         {
-            string licenseNumber = "";
+            string licenseNumber = string.Empty;
             eEnergyType energyType = eEnergyType.Electric;
             float energyToFill = 0.0f;
             string getLicenseNumberMsg = @"
@@ -325,12 +326,10 @@ Please enter the desired amount of {0} to fill ({1}):";
             {
                 Console.WriteLine($"vehicle no. {licenseNumber} can not be charged (is not electric)");
             }
-
             else if (!i_IsElectric && energyType == eEnergyType.Electric)
             {
                 Console.WriteLine($"vehicle no. {licenseNumber} can not be refueled (is electric)");
             }
-
             else
             {
                 if (i_IsElectric)
@@ -341,17 +340,17 @@ Please enter the desired amount of {0} to fill ({1}):";
                 {
                     getEnergyAmountMsg = string.Format(getEnergyAmountMsg, energyType, "litres of gas");
                 }
+
                 Console.WriteLine(getEnergyAmountMsg);
                 energyToFill = GetInput.GetValidFloat();
                 fillEnergyUI(licenseNumber, energyToFill, energyType);
-                successMsg = string.Format(successMsg, energyType == eEnergyType.Electric ? "charging" : "refueling" ,licenseNumber);
+                successMsg = string.Format(successMsg, energyType == eEnergyType.Electric ? "charging" : "refueling", licenseNumber);
                 Console.WriteLine(successMsg);
             }
         }
 
         private static void fillEnergyUI(string licenseNumber,  float i_AmountToFill, eEnergyType i_EnergyType)
         {
-
             bool tryAgain = true;
             while (tryAgain)
             {
@@ -371,7 +370,7 @@ Please enter the desired amount of {0} to fill ({1}):";
         // mode 7
         public static void VehicleDataMode()
         {
-            string licenseNumber = "";
+            string licenseNumber = string.Empty;
             string getVehicleDataMsg = @"
 In order to get the vehicle's data, please enter its license number:";
 

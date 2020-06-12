@@ -67,6 +67,7 @@ namespace Ex03.GarageLogic
                     {
                         throw new FormatException("needs a colour of White, Black, Silver or Red");
                     }
+
                 case "Number of doors":
                     if (byte.TryParse(i_UniqueFeature, out byte numOfDoors) && (numOfDoors >= 2 && numOfDoors <= 5))
                     {
@@ -77,6 +78,7 @@ namespace Ex03.GarageLogic
                     {
                         throw new FormatException("needs a door 2,3,4 or 5");
                     }
+
                 default:
                     throw new ArgumentException("The Feature Index is out of bounds");
             }

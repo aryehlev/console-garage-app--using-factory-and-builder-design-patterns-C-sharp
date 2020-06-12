@@ -69,6 +69,7 @@ namespace Ex03.GarageLogic
                     {
                         throw new FormatException("needs a license type of A, A1, AA or B");
                     }
+
                 case "Volume of engine(cc)":
                     if(int.TryParse(i_UniqueFeature, out int cc) && cc > 0)
                     {
@@ -79,6 +80,7 @@ namespace Ex03.GarageLogic
                     {
                         throw new FormatException("needs a valid volume (cc) - a positive number");
                     }
+
                 default:
                     throw new ArgumentException("The Feature Index is out of bounds");
             }

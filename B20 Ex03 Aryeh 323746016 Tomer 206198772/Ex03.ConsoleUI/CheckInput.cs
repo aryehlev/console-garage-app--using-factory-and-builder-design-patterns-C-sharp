@@ -3,12 +3,12 @@ using System.Text.RegularExpressions;
 
 namespace Ex03.ConsoleUI
 {
-    class CheckInput
+    internal class CheckInput
     {
         // CHECKERS
         internal static int CheckModePicker(string i_Input)
         {
-            if (i_Input == "" || i_Input.Length > 1 || !char.IsDigit(i_Input[0]) || int.Parse(i_Input) > 7)
+            if (i_Input == string.Empty || i_Input.Length > 1 || !char.IsDigit(i_Input[0]) || int.Parse(i_Input) > 7)
             {
                 throw new FormatException(i_Input);
             }
@@ -22,10 +22,12 @@ namespace Ex03.ConsoleUI
             {
                 throw new FormatException("empty");
             }
+
             if (i_DigitsOnly && !Regex.IsMatch(i_Input, @"^[0-9]+$"))
             {
                 throw new FormatException("not digits only");
             }
+
             if (i_LettersOnly && !Regex.IsMatch(i_Input, @"^[a-zA-Z]+$"))
             {
                 throw new FormatException("not letters only");

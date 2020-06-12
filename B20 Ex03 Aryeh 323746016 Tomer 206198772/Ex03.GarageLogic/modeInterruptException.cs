@@ -6,7 +6,6 @@ namespace Ex03.GarageLogic
     {
         public ModeInterruptException() : base("mode was interuppted by the user")
         {
-
         }
     }
 }

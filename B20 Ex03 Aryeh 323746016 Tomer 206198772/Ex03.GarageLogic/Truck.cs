@@ -37,7 +37,6 @@ namespace Ex03.GarageLogic
 
         public override void SetEnergy(bool i_IsElectric, float i_CurrentEnergyLevel)
         {
-
             if (i_IsElectric)
             {
                 throw new ArgumentException("a truck cannot be electric(yet?)");
@@ -71,6 +70,7 @@ namespace Ex03.GarageLogic
                     {
                         throw new FormatException("needs a true or false value");
                     }
+
                 case "Volume of cargo":
                     if (byte.TryParse(i_UniqueFeature, out byte volumeOfCargo) && volumeOfCargo >= 0)
                     {
@@ -81,6 +81,7 @@ namespace Ex03.GarageLogic
                     {
                         throw new FormatException("needs a non-negative amount of cargo");
                     }
+
                 default:
                     throw new ArgumentException("The Feature Index is out of bounds");
             }

@@ -7,8 +7,7 @@
             string i_Model,
             string i_LicenseNumber,
             string i_NameOfOwner,
-            string i_PhoneNumOfOwner
-            )
+            string i_PhoneNumOfOwner)
         {
             Vehicle vehicleWanted = null;
             switch(i_VehicleType)
@@ -20,7 +19,7 @@
                     vehicleWanted = new Truck(i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner);
                     break;
                 case eVehicleType.MotorCycle:
-                    vehicleWanted = new MotorCycle( i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner);
+                    vehicleWanted = new MotorCycle(i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner);
                     break;
             }
 

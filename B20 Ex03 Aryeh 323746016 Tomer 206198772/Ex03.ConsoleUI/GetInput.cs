@@ -4,7 +4,7 @@ using Ex03.GarageLogic;
 
 namespace Ex03.ConsoleUI
 {
-    class GetInput
+    internal class GetInput
     {
         private static string readLineOrInterrupt()
         {
@@ -13,14 +13,14 @@ namespace Ex03.ConsoleUI
             {
                 throw new ModeInterruptException();
             }
+
             return input;
-        }
-    
+        }  
 
         internal static string GetLicenseNumber(bool i_AllowNonRegistered, out bool o_IslicenseNumberRegistered)
         {
             o_IslicenseNumberRegistered = false;
-            string licenseNumber = "";
+            string licenseNumber = string.Empty;
             bool tryAgain = true;
             while (tryAgain)
             {
@@ -96,7 +96,7 @@ namespace Ex03.ConsoleUI
 
         internal static string GetValidString(bool i_DigitsOnly, bool i_LettersOnly)
         {
-            string validString = "";
+            string validString = string.Empty;
             bool tryAgain = true;
             while (tryAgain)
             {
@@ -117,7 +117,7 @@ namespace Ex03.ConsoleUI
 
         internal static object[] GetUniqueFeatures(string i_UniqueFeatureMsg, Vehicle i_Vehicle)
         {
-            Object[] UniqueFeatures = null;
+            object[] UniqueFeatures = null;
             Tuple<string, string[]>[] uniqueFeatureDescriptions = i_Vehicle.GetUniqueFeatureDescription();
             if (uniqueFeatureDescriptions != null)
             {
@@ -150,6 +150,7 @@ namespace Ex03.ConsoleUI
 
             return sb.ToString();
         }
+
         private static object getUniqueFeature(string i_FeatureKey, Vehicle i_Vehicle)
         {
             object uniqueFeature = null;

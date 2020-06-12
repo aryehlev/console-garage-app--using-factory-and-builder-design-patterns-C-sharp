@@ -4,14 +4,14 @@ using Ex03.GarageLogic;
 
 namespace Ex03.ConsoleUI
 {
-    class Program
+    public class Program
     {
         public static void Main()
         {
-            //Vehicle newCar = UserInterface.s_Garage.AddVehicle(eVehicleType.Car, "FORD", "123", "TOMER", "050");
-            //newCar.SetEnergy(false, 10);
-            //newCar.SetWheels("MANUFACTOR", 20);
-            //newCar.SetUniqueFeatures(eColour.Red, (byte)4);
+            ////Vehicle newCar = UserInterface.s_Garage.AddVehicle(eVehicleType.Car, "FORD", "123", "TOMER", "050");
+            ////newCar.SetEnergy(false, 10);
+            ////newCar.SetWheels("MANUFACTOR", 20);
+            ////newCar.SetUniqueFeatures(eColour.Red, (byte)4);
             while (true)
             {
                 try
@@ -45,6 +45,7 @@ namespace Ex03.ConsoleUI
                             Environment.Exit(0);
                             break;
                     }
+
                     UserInterface.BackToModePickerMsg();
                 } 
                 catch(ModeInterruptException)
