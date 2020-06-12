@@ -36,11 +36,11 @@ namespace Ex03.GarageLogic
 
         public abstract void SetUniqueFeatures(params object[] i_UniqueFeatures);
 
-        public abstract void SetWheels(string i_WheelManufactor, float i_CurrentAirPressure);
+        public abstract void SetWheels(string i_WheelManufacturer, float i_CurrentAirPressure);
 
         public abstract void SetEnergy(bool i_IsElectric, float i_CurrentEnergyLevel);
                         
-        protected virtual void InitWheels(byte i_NumOfWheels, string i_WheelManufactor, float i_CurrentAirPressure, float i_MaxAirPressure)
+        protected virtual void InitWheels(byte i_NumOfWheels, string i_WheelManufacturer, float i_CurrentAirPressure, float i_MaxAirPressure)
         {
             if (m_Wheels.Count == 0)
             {
@@ -51,7 +51,7 @@ namespace Ex03.GarageLogic
 
                 for(int i = 0; i < i_NumOfWheels; i++)
                 {
-                    m_Wheels.Add(new Wheel(i_WheelManufactor, i_MaxAirPressure, i_CurrentAirPressure));
+                    m_Wheels.Add(new Wheel(i_WheelManufacturer, i_MaxAirPressure, i_CurrentAirPressure));
                 }
             }
         }
@@ -123,7 +123,7 @@ namespace Ex03.GarageLogic
             int i = 0;
             foreach (Wheel wheel in m_Wheels)
             {
-                sbForWheels.Append(string.Format("  wheel number {0}: {1}", i, wheel));
+                sbForWheels.Append($"  wheel number {i}: {wheel}");
                 sbForWheels.Append(Environment.NewLine);
                 i++;
             }
@@ -131,7 +131,7 @@ namespace Ex03.GarageLogic
             sbForWheels.Remove(sbForWheels.Length - 1, 1);
 
             string strToReturn = @"
-# Licence Number: {0}
+# License Number: {0}
 # Model: {1}
 # Name of owner: {2}
 # Owner phone number: {3}

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
@@ -30,9 +29,9 @@ namespace Ex03.GarageLogic
             m_Cc = (int)i_UniqueFeatures[1];
         }
 
-        public override void SetWheels(string i_WheelManufactor, float i_CurrentAirPressure)
+        public override void SetWheels(string i_WheelManufacturer, float i_CurrentAirPressure)
         {
-            InitWheels(k_NumOfWheels, i_WheelManufactor, i_CurrentAirPressure, k_MaxAirPressure);
+            InitWheels(k_NumOfWheels, i_WheelManufacturer, i_CurrentAirPressure, k_MaxAirPressure);
         }
 
         public override void SetEnergy(bool i_IsElectric, float i_CurrentEnergyLevel)

@@ -9,7 +9,7 @@ namespace Ex03.ConsoleUI
         private static string readLineOrInterrupt()
         {
             string input = Console.ReadLine();
-            if (input.ToLower() == "exit")
+            if (input != null && input.ToLower() == "exit")
             {
                 throw new ModeInterruptException();
             }
@@ -17,9 +17,9 @@ namespace Ex03.ConsoleUI
             return input;
         }  
 
-        internal static string GetLicenseNumber(bool i_AllowNonRegistered, out bool o_IslicenseNumberRegistered)
+        internal static string GetLicenseNumber(bool i_AllowNonRegistered, out bool o_IsLicenseNumberRegistered)
         {
-            o_IslicenseNumberRegistered = false;
+            o_IsLicenseNumberRegistered = false;
             string licenseNumber = string.Empty;
             bool tryAgain = true;
             while (tryAgain)
@@ -30,7 +30,7 @@ namespace Ex03.ConsoleUI
                     licenseNumber = CheckInput.CheckIfValidString(input, false, false);
                     if (UserInterface.s_Garage.IsVehicleRegistered(licenseNumber))
                     {
-                        o_IslicenseNumberRegistered = true;
+                        o_IsLicenseNumberRegistered = true;
                         tryAgain = false;
                     }
                     else
@@ -41,7 +41,7 @@ namespace Ex03.ConsoleUI
                         }
                         else
                         {
-                            Console.WriteLine($"This license number is not registered. Try again or type 'EXIT' to go back to the menu");
+                            Console.WriteLine("This license number is not registered. Try again or type 'EXIT' to go back to the menu");
                         }
                     }
                 }
@@ -60,7 +60,7 @@ namespace Ex03.ConsoleUI
             eStatus vehicleStatus;
             while (int.TryParse(input, out _) || !Enum.TryParse(input, true, out vehicleStatus) || (i_IgnoreNone && vehicleStatus == eStatus.None))
             {
-                Console.WriteLine($"Please enter only one of the values from above");
+                Console.WriteLine("Please enter only one of the values from above");
                 input = readLineOrInterrupt();
             }
 
@@ -73,7 +73,7 @@ namespace Ex03.ConsoleUI
             eVehicleType vehicleType;
             while (int.TryParse(input, out _) || !Enum.TryParse(input, true, out vehicleType))
             {
-                Console.WriteLine($"Please enter only one of the values from above");
+                Console.WriteLine("Please enter only one of the values from above");
                 input = readLineOrInterrupt();
             }
 
@@ -83,14 +83,13 @@ namespace Ex03.ConsoleUI
         internal static bool GetIsElectricOrNot()
         {
             string input = readLineOrInterrupt();
-            bool isElectric;
             while (input == null || (input.ToLower() != "yes" && input.ToLower() != "no"))
             {
-                Console.WriteLine($"Please enter Yes or No");
+                Console.WriteLine("Please enter Yes or No");
                 input = readLineOrInterrupt();
             }
 
-            isElectric = input.ToLower() == "yes";
+            bool isElectric = input.ToLower() == "yes";
             return isElectric;
         }
 
@@ -117,11 +116,11 @@ namespace Ex03.ConsoleUI
 
         internal static object[] GetUniqueFeatures(string i_UniqueFeatureMsg, Vehicle i_Vehicle)
         {
-            object[] UniqueFeatures = null;
+            object[] uniqueFeatures = null;
             Tuple<string, string[]>[] uniqueFeatureDescriptions = i_Vehicle.GetUniqueFeatureDescription();
             if (uniqueFeatureDescriptions != null)
             {
-                UniqueFeatures = new object[uniqueFeatureDescriptions.Length];
+                uniqueFeatures = new object[uniqueFeatureDescriptions.Length];
                 int objectIndex = 0;
                 foreach (Tuple<string, string[]> uniqueFeatureDescription in uniqueFeatureDescriptions)
                 {
@@ -131,12 +130,12 @@ namespace Ex03.ConsoleUI
                         uniqueFeatureDescription.Item1,
                         descriptionOfValues);
                     Console.WriteLine(currentUniqueFeatureMsg);
-                    UniqueFeatures[objectIndex] = getUniqueFeature(uniqueFeatureDescription.Item1, i_Vehicle);
+                    uniqueFeatures[objectIndex] = getUniqueFeature(uniqueFeatureDescription.Item1, i_Vehicle);
                     objectIndex++;
                 }
             }
 
-            return UniqueFeatures;
+            return uniqueFeatures;
         }
 
         private static string getPossibleFeaturesToString(string[] i_PossibleFeatures)
@@ -186,14 +185,10 @@ namespace Ex03.ConsoleUI
                 }
                 catch (FormatException e)
                 {
-                    if (i_MaxValue == float.MaxValue)
-                    {
-                        Console.WriteLine($"Your input was '{e.Message}' but the amount must be bigger than {i_MinValue}. Try again or type 'EXIT' to go back to the menu");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Your input was '{e.Message}' but the amount must be between {i_MinValue} to {i_MaxValue}. Try again or type 'EXIT' to go back to the menu");
-                    }
+                    string msg = i_MaxValue < float.MaxValue
+                                     ? $"Your input was '{e.Message}' but the amount must be between {i_MinValue} to {i_MaxValue}. Try again or type 'EXIT' to go back to the menu"
+                                     : $"Your input was '{e.Message}' but the amount must be bigger than {i_MinValue}. Try again or type 'EXIT' to go back to the menu";
+                    Console.WriteLine(msg);
                 }
             }
 

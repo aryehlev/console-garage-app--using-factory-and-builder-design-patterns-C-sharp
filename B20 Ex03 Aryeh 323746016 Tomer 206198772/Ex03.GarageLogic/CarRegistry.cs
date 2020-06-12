@@ -1,6 +1,6 @@
 ﻿namespace Ex03.GarageLogic
 {
-    internal class CarRegistary
+    internal class CarRegistry
     { 
         internal static Vehicle RegisterCar(
             eVehicleType i_VehicleType,

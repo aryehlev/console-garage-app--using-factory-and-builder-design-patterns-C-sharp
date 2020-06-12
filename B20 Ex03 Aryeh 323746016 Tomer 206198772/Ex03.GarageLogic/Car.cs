@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
@@ -10,7 +9,7 @@ namespace Ex03.GarageLogic
         private const float k_MaxElectric = 2.1f;
         private const float k_MaxGas = 60;
         private const bool k_CanBeElectric = true;
-        private const int k_NumberOfUniquefeatures = 2;
+        private const int k_NumberOfUniqueFeatures = 2;
         private eColour m_Colour;
         private byte m_NumOfDoors;
 
@@ -18,8 +17,7 @@ namespace Ex03.GarageLogic
             string i_Model,
             string i_LicenseNumber,
             string i_NameOfOwner,
-            string i_PhoneNumOfOwner,
-            eStatus i_StatusOfvehicle = eStatus.InRepair)
+            string i_PhoneNumOfOwner)
             : base(i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner)
         {
             m_CanBeElectric = k_CanBeElectric;
@@ -31,9 +29,9 @@ namespace Ex03.GarageLogic
             m_NumOfDoors = (byte)i_UniqueFeatures[1];
         }
 
-        public override void SetWheels(string i_WheelManufactor, float i_CurrentAirPressure)
+        public override void SetWheels(string i_WheelManufacturer, float i_CurrentAirPressure)
         {
-            InitWheels(k_NumOfWheels, i_WheelManufactor, i_CurrentAirPressure, k_MaxAirPressure);
+            InitWheels(k_NumOfWheels, i_WheelManufacturer, i_CurrentAirPressure, k_MaxAirPressure);
         }
 
         public override void SetEnergy(bool i_IsElectric, float i_CurrentEnergyLevel)
@@ -46,7 +44,7 @@ namespace Ex03.GarageLogic
 
         public override Tuple<string, string[]>[] GetUniqueFeatureDescription()
         {
-            Tuple<string, string[]>[] definitionAndValues = new Tuple<string, string[]>[k_NumberOfUniquefeatures];
+            Tuple<string, string[]>[] definitionAndValues = new Tuple<string, string[]>[k_NumberOfUniqueFeatures];
             definitionAndValues[0] = new Tuple<string, string[]>("Colour", Enum.GetNames(typeof(eColour)));
             definitionAndValues[1] = new Tuple<string, string[]>("Number of doors", new[] { "2", "3", "4", "5" });
             return definitionAndValues;

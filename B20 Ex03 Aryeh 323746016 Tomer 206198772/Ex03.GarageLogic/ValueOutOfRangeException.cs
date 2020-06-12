@@ -8,7 +8,7 @@ namespace Ex03.GarageLogic
         private readonly float r_MinValue;
 
         public ValueOutOfRangeException(float i_MinValue, float i_MaxValue, string i_MessageUnique = "")
-            : base(string.Format("value {0} out of range", i_MessageUnique))
+            : base($"value {i_MessageUnique} out of range")
         {
             r_MaxValue = i_MaxValue;
             r_MinValue = i_MinValue;

@@ -57,7 +57,7 @@ It was a pleasure! hit enter to exit.
         {
             int modePicked = 0;
             string modePickerMsg = @"
-please pick an action from the folowing:
+please pick an action from the following:
 1 - Register a new vehicle to the garage
 2 - Show all license plate numbers (sortable)
 3 - Change a vehicle status
@@ -91,12 +91,12 @@ You can type 'EXIT' at any time to go back to the menu
             return modePicked;
         }
 
-        private static string buildMenuFromEnum(Type i_enumType, Enum i_valueToIgnore = null)
+        private static string buildMenuFromEnum(Type i_EnumType, Enum i_ValueToIgnore = null)
         {
             StringBuilder sb = new StringBuilder();
-            foreach (string enumValue in Enum.GetNames(i_enumType))
+            foreach (string enumValue in Enum.GetNames(i_EnumType))
             {
-                if (i_valueToIgnore == null || !enumValue.Equals(i_valueToIgnore.ToString()))
+                if (i_ValueToIgnore == null || !enumValue.Equals(i_ValueToIgnore.ToString()))
                 {
                     sb.Append($"{enumValue}");
                     sb.Append(Environment.NewLine);
@@ -113,8 +113,8 @@ You can type 'EXIT' at any time to go back to the menu
             string getLicenseNumberMsg = @"
 In order to add a new vehicle to the system, please enter its license number:";
             Console.WriteLine(getLicenseNumberMsg);
-            licenseNumber = GetInput.GetLicenseNumber(true, out bool islicenseNumberRegistered);
-            if (islicenseNumberRegistered)
+            licenseNumber = GetInput.GetLicenseNumber(true, out bool isLicenseNumberRegistered);
+            if (isLicenseNumberRegistered)
             {
                 Console.WriteLine($"You changed vehicle number {licenseNumber} to 'inRepair' status");
                 s_Garage.ChangeStatusOfVehicle(licenseNumber, eStatus.InRepair);
@@ -128,8 +128,8 @@ In order to add a new vehicle to the system, please enter its license number:";
 
                 bool isElectric = false;
                 float currentEnergyLevel = 0.0f;
-                float currentAirPreasure = 0.0f;
-                string wheelManufactor = string.Empty;
+                float currentAirPressure = 0.0f;
+                string wheelManufacturer = string.Empty;
                 object[] uniqueFeatures = null;
 
                 string getVehicleTypeMsg = @"
@@ -147,11 +147,11 @@ Please enter the owner's phone number (digits only):";
 Is the vehicle electric? (yes / no)";
                 string getCurrentEnergyLevelMsg = @"
 Please enter the current amount of {0}:";
-                string getCurrentAirPresureMsg = @"
-Please enter the current air presure:";
+                string getCurrentAirPressureMsg = @"
+Please enter the current air pressure:";
                 
-                string getWheelManufactorMsg = @"
-Please enter the wheels manufactor:";
+                string getWheelManufacturerMsg = @"
+Please enter the wheels manufacturer:";
                 string uniqueFeatureMsg = @"
 Please enter {0}, possible values are:
 {1}";
@@ -179,11 +179,11 @@ Registration complete!";
                 currentEnergyLevel = GetInput.GetValidFloat();
                 setEnergyUI(newVehicle, isElectric, currentEnergyLevel);
 
-                Console.WriteLine(getWheelManufactorMsg);
-                wheelManufactor = GetInput.GetValidString(false, false);
-                Console.WriteLine(getCurrentAirPresureMsg);
-                currentAirPreasure = GetInput.GetValidFloat();               
-                setWheelsUI(newVehicle, wheelManufactor, currentAirPreasure);
+                Console.WriteLine(getWheelManufacturerMsg);
+                wheelManufacturer = GetInput.GetValidString(false, false);
+                Console.WriteLine(getCurrentAirPressureMsg);
+                currentAirPressure = GetInput.GetValidFloat();               
+                setWheelsUI(newVehicle, wheelManufacturer, currentAirPressure);
 
                 uniqueFeatures = GetInput.GetUniqueFeatures(uniqueFeatureMsg, newVehicle);
                 
@@ -196,20 +196,20 @@ Registration complete!";
             }
         }
         
-        private static void setWheelsUI(Vehicle i_Vehicle, string i_WheelManufactor, float i_CurrentAirPreasure)
+        private static void setWheelsUI(Vehicle i_Vehicle, string i_WheelManufacturer, float i_CurrentAirPressure)
         {
             bool tryAgain = true;
             while (tryAgain)
             {
                 try
                 {
-                    i_Vehicle.SetWheels(i_WheelManufactor, i_CurrentAirPreasure);
+                    i_Vehicle.SetWheels(i_WheelManufacturer, i_CurrentAirPressure);
                     tryAgain = false;
                 }
                 catch (ValueOutOfRangeException e)
                 {
                     Console.WriteLine($"{e.Message}. The amount must be between {e.MinValue} to {e.MaxValue}. Try again");
-                    i_CurrentAirPreasure = GetInput.GetValidFloat(e.MinValue, e.MaxValue);
+                    i_CurrentAirPressure = GetInput.GetValidFloat(e.MinValue, e.MaxValue);
                 }
             }
         }
@@ -255,7 +255,7 @@ No license numbers found";
                 licenseNumbersStr.Append(Environment.NewLine);
             }
 
-            successMsg = string.Format(successMsg, licenseNumbersStr.ToString());
+            successMsg = string.Format(successMsg, licenseNumbersStr);
             Console.WriteLine(licenseNumbersStr.Length > 0 ? successMsg : failMsg);
         }
 
@@ -283,7 +283,7 @@ vehicle number {0} is now on {1} status";
         // mode 4
         public static void FillTiresToMax()
         {
-            string licenseNumber;
+            string licenseNumber = string.Empty;
             string fillTiresToMaxMsg = @"
 In order to fill the vehicle's tires to max, please enter its license number:";
             string successMsg = @"
@@ -309,14 +309,9 @@ Please enter the desired amount of {0} to fill ({1}):";
             string successMsg = @"
 {0} vehicle number {1} is complete";
 
-            if (i_IsElectric)
-            {
-                getLicenseNumberMsg = string.Format(getLicenseNumberMsg, "charge");
-            }
-            else
-            {
-                getLicenseNumberMsg = string.Format(getLicenseNumberMsg, "refuel");
-            }
+            getLicenseNumberMsg = i_IsElectric
+                                      ? string.Format(getLicenseNumberMsg, "charge")
+                                      : string.Format(getLicenseNumberMsg, "refuel");
 
             Console.WriteLine(getLicenseNumberMsg);
             licenseNumber = GetInput.GetLicenseNumber(false, out _);
@@ -332,15 +327,9 @@ Please enter the desired amount of {0} to fill ({1}):";
             }
             else
             {
-                if (i_IsElectric)
-                {
-                    getEnergyAmountMsg = string.Format(getEnergyAmountMsg, energyType, "minutes for charging");
-                }
-                else
-                {
-                    getEnergyAmountMsg = string.Format(getEnergyAmountMsg, energyType, "litres of gas");
-                }
-
+                getEnergyAmountMsg = i_IsElectric
+                                         ? string.Format(getEnergyAmountMsg, energyType, "minutes for charging")
+                                         : string.Format(getEnergyAmountMsg, energyType, "liters of gas");
                 Console.WriteLine(getEnergyAmountMsg);
                 energyToFill = GetInput.GetValidFloat();
                 fillEnergyUI(licenseNumber, energyToFill, energyType);
@@ -349,14 +338,14 @@ Please enter the desired amount of {0} to fill ({1}):";
             }
         }
 
-        private static void fillEnergyUI(string licenseNumber,  float i_AmountToFill, eEnergyType i_EnergyType)
+        private static void fillEnergyUI(string i_LicenseNumber,  float i_AmountToFill, eEnergyType i_EnergyType)
         {
             bool tryAgain = true;
             while (tryAgain)
             {
                 try
                 {
-                    s_Garage.FllEnergy(licenseNumber, i_AmountToFill, i_EnergyType);
+                    s_Garage.FllEnergy(i_LicenseNumber, i_AmountToFill, i_EnergyType);
                     tryAgain = false;
                 }
                 catch (ValueOutOfRangeException e)

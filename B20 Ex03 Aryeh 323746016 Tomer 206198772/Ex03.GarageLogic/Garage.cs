@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
@@ -20,7 +18,7 @@ namespace Ex03.GarageLogic
             string i_NameOfOwner,
             string i_PhoneNumOfOwner)
         {
-            Vehicle newVehicle = CarRegistary.RegisterCar(i_VehicleType, i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner);
+            Vehicle newVehicle = CarRegistry.RegisterCar(i_VehicleType, i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner);
             r_VehiclesDatabase.Add(i_LicenseNumber, newVehicle);
             return newVehicle;
         }
