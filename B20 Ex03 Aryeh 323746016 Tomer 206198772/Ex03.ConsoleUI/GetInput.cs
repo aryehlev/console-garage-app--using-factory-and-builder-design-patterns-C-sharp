@@ -6,6 +6,17 @@ namespace Ex03.ConsoleUI
 {
     class GetInput
     {
+        private static string readLineOrInterrupt()
+        {
+            string input = Console.ReadLine();
+            if (input.ToLower() == "exit")
+            {
+                throw new ModeInterruptException();
+            }
+            return input;
+        }
+    
+
         internal static string GetLicenseNumber(bool i_AllowNonRegistered, out bool o_IslicenseNumberRegistered)
         {
             o_IslicenseNumberRegistered = false;
@@ -15,7 +26,7 @@ namespace Ex03.ConsoleUI
             {
                 try
                 {
-                    string input = Console.ReadLine();
+                    string input = readLineOrInterrupt();
                     licenseNumber = CheckInput.CheckIfValidString(input, false, false);
                     if (UserInterface.s_Garage.IsVehicleRegistered(licenseNumber))
                     {
@@ -30,13 +41,13 @@ namespace Ex03.ConsoleUI
                         }
                         else
                         {
-                            Console.WriteLine($"This license number is not registered. Try again");
+                            Console.WriteLine($"This license number is not registered. Try again or type 'EXIT' to go back to the menu");
                         }
                     }
                 }
                 catch (FormatException e)
                 {
-                    Console.WriteLine($"Your input is {e.Message}. Try again");
+                    Console.WriteLine($"Your input is {e.Message}. Try again or type 'EXIT' to go back to the menu");
                 }
             }
 
@@ -45,12 +56,12 @@ namespace Ex03.ConsoleUI
 
         internal static eStatus GetVehicleStatus(bool i_IgnoreNone)
         {
-            string input = Console.ReadLine();
+            string input = readLineOrInterrupt();
             eStatus vehicleStatus;
             while (int.TryParse(input, out _) || !Enum.TryParse(input, true, out vehicleStatus) || (i_IgnoreNone && vehicleStatus == eStatus.None))
             {
                 Console.WriteLine($"Please enter only one of the values from above");
-                input = Console.ReadLine();
+                input = readLineOrInterrupt();
             }
 
             return vehicleStatus;
@@ -58,12 +69,12 @@ namespace Ex03.ConsoleUI
 
         internal static eVehicleType GetVehicleType()
         {
-            string input = Console.ReadLine();
+            string input = readLineOrInterrupt();
             eVehicleType vehicleType;
             while (int.TryParse(input, out _) || !Enum.TryParse(input, true, out vehicleType))
             {
                 Console.WriteLine($"Please enter only one of the values from above");
-                input = Console.ReadLine();
+                input = readLineOrInterrupt();
             }
 
             return vehicleType;
@@ -71,12 +82,12 @@ namespace Ex03.ConsoleUI
 
         internal static bool GetIsElectricOrNot()
         {
-            string input = Console.ReadLine();
+            string input = readLineOrInterrupt();
             bool isElectric;
             while (input == null || (input.ToLower() != "yes" && input.ToLower() != "no"))
             {
                 Console.WriteLine($"Please enter Yes or No");
-                input = Console.ReadLine();
+                input = readLineOrInterrupt();
             }
 
             isElectric = input.ToLower() == "yes";
@@ -91,13 +102,13 @@ namespace Ex03.ConsoleUI
             {
                 try
                 {
-                    string input = Console.ReadLine();
+                    string input = readLineOrInterrupt();
                     validString = CheckInput.CheckIfValidString(input, i_DigitsOnly, i_LettersOnly);
                     tryAgain = false;
                 }
                 catch (FormatException e)
                 {
-                    Console.WriteLine($"Your input is {e.Message}. Try again");
+                    Console.WriteLine($"Your input is {e.Message}. Try again or type 'EXIT' to go back to the menu");
                 }
             }
 
@@ -147,13 +158,13 @@ namespace Ex03.ConsoleUI
             {
                 try
                 {
-                    string input = Console.ReadLine();
+                    string input = readLineOrInterrupt();
                     uniqueFeature = i_Vehicle.ParseUniqueFeature(input, i_FeatureKey);
                     tryAgain = false;
                 }
                 catch (FormatException e)
                 {
-                    Console.WriteLine($"{e.Message}. Try again");
+                    Console.WriteLine($"{e.Message}. Try again or type 'EXIT' to go back to the menu");
                 }
             }
 
@@ -168,7 +179,7 @@ namespace Ex03.ConsoleUI
             {
                 try
                 {
-                    string input = Console.ReadLine();
+                    string input = readLineOrInterrupt();
                     validFloat = CheckInput.CheckIfValidFloat(input, i_MinValue, i_MaxValue);
                     tryAgain = false;
                 }
@@ -176,11 +187,11 @@ namespace Ex03.ConsoleUI
                 {
                     if (i_MaxValue == float.MaxValue)
                     {
-                        Console.WriteLine($"Your input was '{e.Message}' but the amount must be bigger than {i_MinValue}. Try again");
+                        Console.WriteLine($"Your input was '{e.Message}' but the amount must be bigger than {i_MinValue}. Try again or type 'EXIT' to go back to the menu");
                     }
                     else
                     {
-                        Console.WriteLine($"Your input was '{e.Message}' but the amount must be between {i_MinValue} to {i_MaxValue}. Try again");
+                        Console.WriteLine($"Your input was '{e.Message}' but the amount must be between {i_MinValue} to {i_MaxValue}. Try again or type 'EXIT' to go back to the menu");
                     }
                 }
             }

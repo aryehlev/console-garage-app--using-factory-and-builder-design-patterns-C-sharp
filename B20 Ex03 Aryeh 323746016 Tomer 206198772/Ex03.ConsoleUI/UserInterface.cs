@@ -31,7 +31,17 @@ namespace Ex03.ConsoleUI
 
         internal static void GoodbyeMsg()
         {
-            Console.WriteLine("It was a pleasure! hit enter to exit.");
+            Console.WriteLine(@"
+It was a pleasure! hit enter to exit.
+
+ ________  ________  ________  ________  ________      ___    ___ _______      
+|\   ____\|\   __  \|\   __  \|\   ___ \|\   __  \    |\  \  /  /|\  ___ \     
+\ \  \___|\ \  \|\  \ \  \|\  \ \  \_|\ \ \  \|\ /_   \ \  \/  / | \   __/|    
+ \ \  \  __\ \  \\\  \ \  \\\  \ \  \ \\ \ \   __  \   \ \    / / \ \  \_|/__  
+  \ \  \|\  \ \  \\\  \ \  \\\  \ \  \_\\ \ \  \|\  \   \/  /  /   \ \  \_|\ \ 
+   \ \_______\ \_______\ \_______\ \_______\ \_______\__/  / /      \ \_______\
+    \|_______|\|_______|\|_______|\|_______|\|_______|\___/ /        \|_______|
+                                                     \|___|/                   ");
             Console.ReadLine();
         }
 
@@ -54,7 +64,11 @@ please pick an action from the folowing:
 5 - Fuel a motor vehicle
 6 - charge an electric vehicle
 7 - Show the details of a registered vehicle
-0 - Exit the system";
+0 - Exit the system
+
+========================================================
+You can type 'EXIT' at any time to go back to the menu
+========================================================";
 
             Console.WriteLine(modePickerMsg);
             bool tryAgain = true;

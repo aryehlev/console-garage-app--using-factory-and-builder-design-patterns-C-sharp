@@ -48,6 +48,7 @@
     <Compile Include="eStatus.cs" />
     <Compile Include="eVehicleType.cs" />
     <Compile Include="Garage.cs" />
+    <Compile Include="ModeInterruptException.cs" />
     <Compile Include="MotorCycle.cs" />
     <Compile Include="Truck.cs" />
     <Compile Include="ValueOutOfRangeException.cs" />
