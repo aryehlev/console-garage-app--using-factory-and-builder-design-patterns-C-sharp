@@ -19,8 +19,7 @@ namespace Ex03.GarageLogic
             string i_Model,
             string i_LicenseNumber,
             string i_NameOfOwner,
-            string i_PhoneNumOfOwner
-            )
+            string i_PhoneNumOfOwner)
         {
             r_LicenseNumber = i_LicenseNumber;
             r_Model = i_Model;
@@ -37,11 +36,11 @@ namespace Ex03.GarageLogic
 
         public abstract void SetUniqueFeatures(params object[] i_UniqueFeatures);
 
-        public abstract void SetWheels(string i_WheelManufactor, float i_CurrentAirPressure);
+        public abstract void SetWheels(string i_WheelManufacturer, float i_CurrentAirPressure);
 
         public abstract void SetEnergy(bool i_IsElectric, float i_CurrentEnergyLevel);
                         
-        protected virtual void InitWheels(byte i_NumOfWheels, string i_WheelManufactor, float i_CurrentAirPressure, float i_MaxAirPressure)
+        protected virtual void InitWheels(byte i_NumOfWheels, string i_WheelManufacturer, float i_CurrentAirPressure, float i_MaxAirPressure)
         {
             if (m_Wheels.Count == 0)
             {
@@ -52,7 +51,7 @@ namespace Ex03.GarageLogic
 
                 for(int i = 0; i < i_NumOfWheels; i++)
                 {
-                    m_Wheels.Add(new Wheel(i_WheelManufactor, i_MaxAirPressure, i_CurrentAirPressure));
+                    m_Wheels.Add(new Wheel(i_WheelManufacturer, i_MaxAirPressure, i_CurrentAirPressure));
                 }
             }
         }
@@ -65,21 +64,28 @@ namespace Ex03.GarageLogic
             }
 
             m_Energy = new Energy(i_CurrentEnergyLevel, i_MaxEnergyCapacity, i_EnergyType);
-            
         }
 
         internal void FillTires(bool i_FillAll, float i_AirToFill = 0)
         {
+            if (m_Wheels.Count == 0)
+            {
+                throw new NullReferenceException("Wheels were not initialized. Use SetWheels() first");
+            }
             
             foreach(Wheel wheel in m_Wheels)
             { 
                 wheel.FillTire(i_FillAll, i_AirToFill);
             }
-            
         } 
         
         internal void FillEnergy(float i_Energy, eEnergyType i_EnergyType)
         {
+            if (m_Energy == null)
+            {
+                throw new NullReferenceException("energy was not initialized. Use SetEnergy() first");
+            }
+
             m_Energy.FillEnergy(i_Energy, i_EnergyType);  
         }
 
@@ -88,7 +94,8 @@ namespace Ex03.GarageLogic
             get
             {
                 return m_StatusOfVehicle;
-            }   
+            } 
+            
             set
             {
                 m_StatusOfVehicle = value;
@@ -97,6 +104,11 @@ namespace Ex03.GarageLogic
 
         internal eEnergyType GetEnergyType()
         {
+            if (m_Energy == null)
+            {
+                throw new NullReferenceException("energy was not initialized. Use SetEnergy() first");
+            }
+
             return m_Energy.EnergyType;
         }
 
@@ -107,18 +119,19 @@ namespace Ex03.GarageLogic
 
         public override string ToString()
         {
-            StringBuilder sbForWheels = new StringBuilder("");
+            StringBuilder sbForWheels = new StringBuilder(string.Empty);
             int i = 0;
             foreach (Wheel wheel in m_Wheels)
             {
-                sbForWheels.Append(string.Format("  wheel number {0}: {1}", i, wheel));
+                sbForWheels.Append($"  wheel number {i}: {wheel}");
                 sbForWheels.Append(Environment.NewLine);
                 i++;
             }
+
             sbForWheels.Remove(sbForWheels.Length - 1, 1);
 
             string strToReturn = @"
-# Licence Number: {0}
+# License Number: {0}
 # Model: {1}
 # Name of owner: {2}
 # Owner phone number: {3}
@@ -128,7 +141,8 @@ namespace Ex03.GarageLogic
 # Wheels info:
 {7}";
 
-            return string.Format(strToReturn,
+            return string.Format(
+                strToReturn,
                 r_LicenseNumber, 
                 r_Model,
                 r_NameOfOwner,

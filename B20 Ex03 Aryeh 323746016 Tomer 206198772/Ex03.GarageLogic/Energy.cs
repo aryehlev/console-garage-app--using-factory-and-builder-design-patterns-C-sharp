@@ -15,12 +15,12 @@ namespace Ex03.GarageLogic
             r_MaxCapacity = i_MaxCapacity;
         } 
         
-        internal void FillEnergy(float i_AmounOfEnergyToFill, eEnergyType i_EnergyType)
+        internal void FillEnergy(float i_AmountOfEnergyToFill, eEnergyType i_EnergyType)
         {
-            float newAmount = i_AmounOfEnergyToFill + m_CurrentFilled;
+            float newAmount = i_AmountOfEnergyToFill + m_CurrentFilled;
             if (newAmount > r_MaxCapacity)
             {
-                throw new ValueOutOfRangeException(0, r_MaxCapacity - m_CurrentFilled, i_AmounOfEnergyToFill.ToString());  
+                throw new ValueOutOfRangeException(0, r_MaxCapacity - m_CurrentFilled, $"{i_AmountOfEnergyToFill}");  
             }
 
             if(r_EnergyType != i_EnergyType)

@@ -2,13 +2,13 @@
 {
     public class Wheel
     {
-        private readonly string r_Manufactor;
+        private readonly string r_Manufacturer;
         private readonly float r_MaxPressure;
         private float m_CurrentPressure;
 
-        internal Wheel(string i_Manufactor,  float i_MaxPressure, float i_CurrentPressure)
+        internal Wheel(string i_Manufacturer,  float i_MaxPressure, float i_CurrentPressure)
         {
-            r_Manufactor = i_Manufactor;
+            r_Manufacturer = i_Manufacturer;
             r_MaxPressure = i_MaxPressure;
             m_CurrentPressure = i_CurrentPressure;
         }
@@ -33,7 +33,7 @@
 
         public override string ToString()
         {
-            return string.Format("manufactor of wheel: {0}, pressure of wheel: {1}", r_Manufactor, m_CurrentPressure);
+            return $"manufacturer of wheel: {r_Manufacturer}, pressure of wheel: {m_CurrentPressure}";
         }
     }
 }
