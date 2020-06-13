@@ -158,6 +158,9 @@ Please enter {0}, possible values are:
                 string successMsg = @"
 Registration complete!";
 
+                string failsMsg = @"
+Registration could not be completed missing data";
+
                 Console.WriteLine(getVehicleTypeMsg);
                 vehicleType = GetInput.GetVehicleType();
                 Console.WriteLine(getModel);
@@ -187,12 +190,16 @@ Registration complete!";
 
                 uniqueFeatures = GetInput.GetUniqueFeatures(uniqueFeatureMsg, newVehicle);
                 
-                if (uniqueFeatures != null)
-                {
-                    newVehicle.SetUniqueFeatures(uniqueFeatures);
-                }
+                newVehicle.SetUniqueFeatures(uniqueFeatures);
 
-                Console.WriteLine(successMsg);
+                if(s_Garage.TryAddVehicle(newVehicle, licenseNumber))
+                {
+                    Console.WriteLine(successMsg);
+                }
+                else
+                {
+                    Console.Out.WriteLine(failsMsg);
+                }
             }
         }
         

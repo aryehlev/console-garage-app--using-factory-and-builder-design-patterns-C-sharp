@@ -70,7 +70,7 @@ namespace Ex03.GarageLogic
                     }
 
                 case "Volume of cargo":
-                    if (byte.TryParse(i_UniqueFeature, out byte volumeOfCargo))
+                    if (int.TryParse(i_UniqueFeature, out int volumeOfCargo) && volumeOfCargo >= 0)
                     {
                         parsedUniqueFeature = volumeOfCargo;
                         break;

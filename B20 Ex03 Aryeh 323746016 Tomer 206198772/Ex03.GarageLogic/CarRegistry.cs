@@ -2,7 +2,7 @@
 {
     internal class CarRegistary
     { 
-        internal static VehicleBuilder RegisterCar(
+        internal static VehicleBuilder RegisterVehicle(
             eVehicleType i_VehicleType,
             string i_Model,
             string i_LicenseNumber,

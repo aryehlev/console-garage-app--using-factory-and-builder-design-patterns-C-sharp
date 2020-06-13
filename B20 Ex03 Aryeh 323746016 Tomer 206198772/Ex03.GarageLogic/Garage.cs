@@ -20,7 +20,7 @@ namespace Ex03.GarageLogic
             string i_NameOfOwner,
             string i_PhoneNumOfOwner)
         {
-            VehicleBuilder newVehicleBeingMade = CarRegistary.RegisterCar(i_VehicleType, i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner);
+            VehicleBuilder newVehicleBeingMade = CarRegistary.RegisterVehicle(i_VehicleType, i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner);
             return newVehicleBeingMade;
         }
 
