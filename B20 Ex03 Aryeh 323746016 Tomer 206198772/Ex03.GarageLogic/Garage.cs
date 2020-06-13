@@ -86,7 +86,7 @@ namespace Ex03.GarageLogic
         public string GetVehicleData(string i_LicenseNumber)
         {
             Vehicle vehicle = getVehicle(i_LicenseNumber);
-            return string.Format("type: {0}, \n {1}", vehicle.GetType().ToString() ,vehicle.ToString());
+            return string.Format("type: {0}, \n {1}", vehicle.GetType().Name ,vehicle.ToString());
         }
     }
 }
