@@ -38,7 +38,7 @@ namespace Ex03.GarageLogic
         public override void SetEnergy(bool i_IsElectric, float i_CurrentEnergyLevel)
         {
             float maxEnergyCapacity = i_IsElectric ? k_MaxElectric : k_MaxSolar;
-            eEnergyType energyType = !i_IsElectric ? eEnergyType.Octan96 : eEnergyType.Electric;
+            eEnergyType energyType = !i_IsElectric ? eEnergyType.Octan95 : eEnergyType.Electric;
 
             InitEnergy(i_CurrentEnergyLevel, maxEnergyCapacity, energyType);
         }
