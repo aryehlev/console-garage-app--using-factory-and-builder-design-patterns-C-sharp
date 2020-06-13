@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
@@ -20,13 +18,13 @@ namespace Ex03.GarageLogic
             string i_NameOfOwner,
             string i_PhoneNumOfOwner)
         {
-            VehicleBuilder newVehicleBeingMade = CarRegistary.RegisterVehicle(i_VehicleType, i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner);
+            VehicleBuilder newVehicleBeingMade = CarRegistry.RegisterVehicle(i_VehicleType, i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner);
             return newVehicleBeingMade;
         }
 
         public bool TryAddVehicle(VehicleBuilder i_VehicleBeingBuilt, string i_LicenseNumber)
         {
-            bool didSucceedToBuild = i_VehicleBeingBuilt.TryGetFinnishedVehicle(out Vehicle vehicleBuilt);
+            bool didSucceedToBuild = i_VehicleBeingBuilt.TryGetFinishedVehicle(out Vehicle vehicleBuilt);
             if(didSucceedToBuild)
             {
                 r_VehiclesDatabase.Add(i_LicenseNumber, vehicleBuilt);

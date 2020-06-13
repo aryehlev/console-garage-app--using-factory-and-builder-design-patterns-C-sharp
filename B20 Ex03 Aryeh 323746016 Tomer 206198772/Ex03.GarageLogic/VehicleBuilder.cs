@@ -4,7 +4,7 @@ namespace Ex03.GarageLogic
 {
     public class VehicleBuilder
     {
-        private const int k_NumOfMethodsThatMustBeCalledToFinnishVehicle = 3;
+        private const int k_NumOfSetMethodsNecessary = 3;
         private readonly Vehicle r_Vehicle;
         private int m_NumOfSetMethodsCalled;
 
@@ -30,10 +30,10 @@ namespace Ex03.GarageLogic
             r_Vehicle.SetUniqueFeatures(i_UniqueFeatures);
         }
 
-        public void SetWheels(string i_WheelManufactor, float i_CurrentAirPressure)
+        public void SetWheels(string i_WheelManufacturer, float i_CurrentAirPressure)
         {
             m_NumOfSetMethodsCalled++;
-            r_Vehicle.SetWheels(i_WheelManufactor, i_CurrentAirPressure);
+            r_Vehicle.SetWheels(i_WheelManufacturer, i_CurrentAirPressure);
         }
 
         public void SetEnergy(bool i_IsElectric, float i_CurrentEnergyLevel)
@@ -47,11 +47,11 @@ namespace Ex03.GarageLogic
             return r_Vehicle.CanBeElectric();
         }
 
-        public bool TryGetFinnishedVehicle(out Vehicle i_Vehicle)
+        public bool TryGetFinishedVehicle(out Vehicle i_Vehicle)
         {
             bool succeededBuildingCar = false;
             i_Vehicle = null;
-            if (m_NumOfSetMethodsCalled >= k_NumOfMethodsThatMustBeCalledToFinnishVehicle)
+            if (m_NumOfSetMethodsCalled >= k_NumOfSetMethodsNecessary)
             {
                 i_Vehicle = r_Vehicle;
                 succeededBuildingCar = true;

@@ -8,10 +8,6 @@ namespace Ex03.ConsoleUI
     {
         public static void Main()
         {
-            ////Vehicle newCar = UserInterface.s_Garage.AddVehicle(eVehicleType.Car, "FORD", "123", "TOMER", "050");
-            ////newCar.SetEnergy(false, 10);
-            ////newCar.SetWheels("MANUFACTOR", 20);
-            ////newCar.SetUniqueFeatures(eColour.Red, (byte)4);
             while (true)
             {
                 try
