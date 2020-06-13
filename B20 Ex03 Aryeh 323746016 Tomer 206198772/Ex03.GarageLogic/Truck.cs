@@ -10,7 +10,7 @@ namespace Ex03.GarageLogic
         private const int k_NumberOfUniqueFeatures = 2;
         private const bool k_CanBeElectric = false;
         private bool m_HasHazardousCargo;
-        private byte m_VolumeOfCargo;
+        private int m_VolumeOfCargo;
 
         public Truck(
             string i_Model,
@@ -25,7 +25,7 @@ namespace Ex03.GarageLogic
         public override void SetUniqueFeatures(params object[] i_UniqueFeatures)
         {
             m_HasHazardousCargo = (bool)i_UniqueFeatures[0];
-            m_VolumeOfCargo = (byte)i_UniqueFeatures[1];
+            m_VolumeOfCargo = (int)i_UniqueFeatures[1];
         }
        
         public override void SetWheels(string i_WheelManufacturer, float i_CurrentAirPressure)
