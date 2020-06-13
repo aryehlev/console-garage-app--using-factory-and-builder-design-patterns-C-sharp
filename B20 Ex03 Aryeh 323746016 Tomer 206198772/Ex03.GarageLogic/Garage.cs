@@ -13,16 +13,26 @@ namespace Ex03.GarageLogic
             r_VehiclesDatabase = new Dictionary<string, Vehicle>();
         }
 
-        public Vehicle AddVehicle(
+        public VehicleBuilder BuildVehicle(
             eVehicleType i_VehicleType,
             string i_Model,
             string i_LicenseNumber,
             string i_NameOfOwner,
             string i_PhoneNumOfOwner)
         {
-            Vehicle newVehicle = CarRegistary.RegisterCar(i_VehicleType, i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner);
-            r_VehiclesDatabase.Add(i_LicenseNumber, newVehicle);
-            return newVehicle;
+            VehicleBuilder newVehicleBeingMade = CarRegistary.RegisterCar(i_VehicleType, i_Model, i_LicenseNumber, i_NameOfOwner, i_PhoneNumOfOwner);
+            return newVehicleBeingMade;
+        }
+
+        public bool TryAddVehicle(VehicleBuilder i_VehicleBeingBuilt, string i_LicenseNumber)
+        {
+            bool didSucceedToBuild = i_VehicleBeingBuilt.TryGetFinnishedVehicle(out Vehicle vehicleBuilt);
+            if(didSucceedToBuild)
+            {
+                r_VehiclesDatabase.Add(i_LicenseNumber, vehicleBuilt);
+            }
+
+            return didSucceedToBuild;
         }
 
         private Vehicle getVehicle(string i_LicenseNumber)
@@ -46,7 +56,7 @@ namespace Ex03.GarageLogic
             return getVehicle(i_LicenseNumber).GetEnergyType();
         }
 
-        public List<string> GetAllLicenseNumbers(eStatus i_WantedStatus = eStatus.None)
+        public List<string> GetAllLicensePlates(eStatus i_WantedStatus = eStatus.None)
         {
             List<string> listToReturn = new List<string>();
 

@@ -58,7 +58,7 @@ It was a pleasure! hit enter to exit.
             string modePickerMsg = @"
 please pick an action from the folowing:
 1 - Register a new vehicle to the garage
-2 - Show all license plate numbers (sortable)
+2 - Show all license plates (sortable)
 3 - Change a vehicle status
 4 - Fill the tires of a registered vehicle
 5 - Fuel a motor vehicle
@@ -106,15 +106,15 @@ You can type 'EXIT' at any time to go back to the menu
         // mode 1
         internal static void AddVehicle()
         {
-            string licenseNumber = "";
-            string getLicenseNumberMsg = @"
-In order to add a new vehicle to the system, please enter its license number:";
-            Console.WriteLine(getLicenseNumberMsg);
-            licenseNumber = GetInput.GetLicenseNumber(true, out bool islicenseNumberRegistered);
+            string licensePlate = "";
+            string getLicensePlateMsg = @"
+In order to add a new vehicle to the system, please enter its license plate:";
+            Console.WriteLine(getLicensePlateMsg);
+            licensePlate = GetInput.GetLicensePlate(true, out bool islicenseNumberRegistered);
             if (islicenseNumberRegistered)
             {
-                Console.WriteLine($"You changed vehicle number {licenseNumber} to 'inRepair' status");
-                s_Garage.ChangeStatusOfVehicle(licenseNumber, eStatus.InRepair);
+                Console.WriteLine($"You changed vehicle  {licensePlate} to 'inRepair' status");
+                s_Garage.ChangeStatusOfVehicle(licensePlate, eStatus.InRepair);
             }
             else
             {
@@ -155,6 +155,9 @@ Please enter {0}, possible values are:
                 string successMsg = @"
 Registration complete!";
 
+                string failMsg = @"
+Could not register vehicle, missing data";
+
                 Console.WriteLine(getVehicleTypeMsg);
                 vehicleType = GetInput.GetVehicleType();
                 Console.WriteLine(getModel);
@@ -163,7 +166,7 @@ Registration complete!";
                 nameOfOwner = GetInput.GetValidString(false, true);
                 Console.WriteLine(getPhoneNumOfOwnerMsg);
                 phoneNumOfOwner = GetInput.GetValidString(true, false);
-                Vehicle newVehicle = s_Garage.AddVehicle(vehicleType, model, licenseNumber, nameOfOwner, phoneNumOfOwner);
+                VehicleBuilder newVehicle = s_Garage.BuildVehicle(vehicleType, model, licensePlate, nameOfOwner, phoneNumOfOwner);
                 
                 if (newVehicle.CanBeElectric())
                 {
@@ -183,17 +186,21 @@ Registration complete!";
                 setWheelsUI(newVehicle, wheelManufactor, currentAirPreasure);
 
                 uniqueFeatures = GetInput.GetUniqueFeatures(uniqueFeatureMsg, newVehicle);
-                
-                if (uniqueFeatures != null)
-                {
-                    newVehicle.SetUniqueFeatures(uniqueFeatures);
-                }
 
-                Console.WriteLine(successMsg);
+                newVehicle.SetUniqueFeatures(uniqueFeatures);
+
+                if(s_Garage.TryAddVehicle(newVehicle, licensePlate))
+                {
+                    Console.WriteLine(successMsg);
+                }
+                else
+                {
+                    Console.WriteLine(failMsg);
+                }
             }
         }
         
-        private static void setWheelsUI(Vehicle i_Vehicle, string i_WheelManufactor, float i_CurrentAirPreasure)
+        private static void setWheelsUI(VehicleBuilder i_VehicleBeingBuilt, string i_WheelManufactor, float i_CurrentAirPreasure)
         {
 
             bool tryAgain = true;
@@ -201,7 +208,7 @@ Registration complete!";
             {
                 try
                 {
-                    i_Vehicle.SetWheels(i_WheelManufactor, i_CurrentAirPreasure);
+                    i_VehicleBeingBuilt.SetWheels(i_WheelManufactor, i_CurrentAirPreasure);
                     tryAgain = false;
                 }
                 catch (ValueOutOfRangeException e)
@@ -212,7 +219,7 @@ Registration complete!";
             }
         }
 
-        private static void setEnergyUI(Vehicle i_Vehicle, bool i_IsElectric, float i_CurrentEnergyLevel)
+        private static void setEnergyUI(VehicleBuilder i_VehicleBeingBuilt, bool i_IsElectric, float i_CurrentEnergyLevel)
         {
 
             bool tryAgain = true;
@@ -220,7 +227,7 @@ Registration complete!";
             {
                 try
                 {
-                    i_Vehicle.SetEnergy(i_IsElectric, i_CurrentEnergyLevel);
+                    i_VehicleBeingBuilt.SetEnergy(i_IsElectric, i_CurrentEnergyLevel);
                     tryAgain = false;
                 }
                 catch (ValueOutOfRangeException e)
@@ -233,12 +240,12 @@ Registration complete!";
 
 
         // mode 2
-        internal static void AllLicenseNumbersMode()
+        internal static void AllLicensePlateMode()
         {
             eStatus sortBy = eStatus.None;
-            StringBuilder licenseNumbersStr = new StringBuilder();
+            StringBuilder licensePlatesStr = new StringBuilder();
             string getLicensePlatesMsg = @"
-please pick a status mode to sort the license plate numbers by:
+please pick a status mode to sort the license plates by:
 {0}";
             string successMsg = @"
 The license numbers requested are:
@@ -248,61 +255,61 @@ No license numbers found";
             getLicensePlatesMsg = string.Format(getLicensePlatesMsg, buildMenuFromEnum(typeof(eStatus)));
             Console.WriteLine(getLicensePlatesMsg);
             sortBy = GetInput.GetVehicleStatus(false);
-            List<string> licenseNumbersList = s_Garage.GetAllLicenseNumbers(sortBy);
-            foreach (string licenseNumber in licenseNumbersList)
+            List<string> licenseNumbersList = s_Garage.GetAllLicensePlates(sortBy);
+            foreach (string licensePlate in licenseNumbersList)
             {
-                licenseNumbersStr.Append(licenseNumber);
-                licenseNumbersStr.Append(Environment.NewLine);
+                licensePlatesStr.Append(licensePlate);
+                licensePlatesStr.Append(Environment.NewLine);
             }
-            successMsg = string.Format(successMsg, licenseNumbersStr.ToString());
-            Console.WriteLine(licenseNumbersStr.Length > 0 ? successMsg : failMsg);
+            successMsg = string.Format(successMsg, licensePlatesStr.ToString());
+            Console.WriteLine(licensePlatesStr.Length > 0 ? successMsg : failMsg);
         }
 
         // mode 3
         internal static void ChangeStatusOfVehicleMode()
         {
-            string licenseNumber = "";
-            string getLicenseNumberMsg = @"
-In order to change the status of a vehicle, please enter its license number:";
+            string licensePlate = "";
+            string getLicensePlateMsg = @"
+In order to change the status of a vehicle, please enter its license plate:";
             string getStatusMsg = @"
-please pick a status mode to set for license number {0}:
+please pick a status mode to set for license plate {0}:
 {1}";
             string successMsg = @"
-vehicle number {0} is now on {1} status";
-            Console.WriteLine(getLicenseNumberMsg);
-            licenseNumber = GetInput.GetLicenseNumber(false, out _);
-            getStatusMsg = string.Format(getStatusMsg, licenseNumber, buildMenuFromEnum(typeof(eStatus), eStatus.None));
+vehicle {0} is now on {1} status";
+            Console.WriteLine(getLicensePlateMsg);
+            licensePlate = GetInput.GetLicensePlate(false, out _);
+            getStatusMsg = string.Format(getStatusMsg, licensePlate, buildMenuFromEnum(typeof(eStatus), eStatus.None));
             Console.WriteLine(getStatusMsg);
             eStatus statusToSet = GetInput.GetVehicleStatus(false);
-            s_Garage.ChangeStatusOfVehicle(licenseNumber, statusToSet);
-            successMsg = string.Format(successMsg, licenseNumber, statusToSet);
+            s_Garage.ChangeStatusOfVehicle(licensePlate, statusToSet);
+            successMsg = string.Format(successMsg, licensePlate, statusToSet);
             Console.WriteLine(successMsg);
         }
 
         // mode 4
         public static void FillTiresToMax()
         {
-            string licenseNumber;
+            string licensePlate;
             string fillTiresToMaxMsg = @"
-In order to fill the vehicle's tires to max, please enter its license number:";
+In order to fill the vehicle's tires to max, please enter its license plate:";
             string successMsg = @"
 The tires of vehicle number {0} is now full";
 
             Console.WriteLine(fillTiresToMaxMsg);
-            licenseNumber = GetInput.GetLicenseNumber(false, out _);
-            s_Garage.FillTiresToMax(licenseNumber);
-            successMsg = string.Format(successMsg, licenseNumber);
+            licensePlate = GetInput.GetLicensePlate(false, out _);
+            s_Garage.FillTiresToMax(licensePlate);
+            successMsg = string.Format(successMsg, licensePlate);
             Console.WriteLine(successMsg);
         }
 
         // modes 5 and 6
         public static void FillEnergy(bool i_IsElectric)
         {
-            string licenseNumber = "";
+            string licensePlate = "";
             eEnergyType energyType = eEnergyType.Electric;
             float energyToFill = 0.0f;
-            string getLicenseNumberMsg = @"
-In order to {0} the vehicle, please enter its license number:";
+            string getLicensePlateMsg = @"
+In order to {0} the vehicle, please enter its license plate:";
             string getEnergyAmountMsg = @"
 Please enter the desired amount of {0} to fill ({1}):";
             string successMsg = @"
@@ -310,25 +317,25 @@ Please enter the desired amount of {0} to fill ({1}):";
 
             if (i_IsElectric)
             {
-                getLicenseNumberMsg = string.Format(getLicenseNumberMsg, "charge");
+                getLicensePlateMsg = string.Format(getLicensePlateMsg, "charge");
             }
             else
             {
-                getLicenseNumberMsg = string.Format(getLicenseNumberMsg, "refuel");
+                getLicensePlateMsg = string.Format(getLicensePlateMsg, "refuel");
             }
 
-            Console.WriteLine(getLicenseNumberMsg);
-            licenseNumber = GetInput.GetLicenseNumber(false, out _);
-            energyType = s_Garage.GetEnergyType(licenseNumber);
+            Console.WriteLine(getLicensePlateMsg);
+            licensePlate = GetInput.GetLicensePlate(false, out _);
+            energyType = s_Garage.GetEnergyType(licensePlate);
 
             if (i_IsElectric && energyType != eEnergyType.Electric)
             {
-                Console.WriteLine($"vehicle no. {licenseNumber} can not be charged (is not electric)");
+                Console.WriteLine($"vehicle no. {licensePlate} can not be charged (is not electric)");
             }
 
             else if (!i_IsElectric && energyType == eEnergyType.Electric)
             {
-                Console.WriteLine($"vehicle no. {licenseNumber} can not be refueled (is electric)");
+                Console.WriteLine($"vehicle no. {licensePlate} can not be refueled (is electric)");
             }
 
             else
@@ -343,13 +350,13 @@ Please enter the desired amount of {0} to fill ({1}):";
                 }
                 Console.WriteLine(getEnergyAmountMsg);
                 energyToFill = GetInput.GetValidFloat();
-                fillEnergyUI(licenseNumber, energyToFill, energyType);
-                successMsg = string.Format(successMsg, energyType == eEnergyType.Electric ? "charging" : "refueling" ,licenseNumber);
+                fillEnergyUI(licensePlate, energyToFill, energyType);
+                successMsg = string.Format(successMsg, energyType == eEnergyType.Electric ? "charging" : "refueling" ,licensePlate);
                 Console.WriteLine(successMsg);
             }
         }
 
-        private static void fillEnergyUI(string licenseNumber,  float i_AmountToFill, eEnergyType i_EnergyType)
+        private static void fillEnergyUI(string licensePlate,  float i_AmountToFill, eEnergyType i_EnergyType)
         {
 
             bool tryAgain = true;
@@ -357,7 +364,7 @@ Please enter the desired amount of {0} to fill ({1}):";
             {
                 try
                 {
-                    s_Garage.FllEnergy(licenseNumber, i_AmountToFill, i_EnergyType);
+                    s_Garage.FllEnergy(licensePlate, i_AmountToFill, i_EnergyType);
                     tryAgain = false;
                 }
                 catch (ValueOutOfRangeException e)
@@ -371,13 +378,13 @@ Please enter the desired amount of {0} to fill ({1}):";
         // mode 7
         public static void VehicleDataMode()
         {
-            string licenseNumber = "";
+            string licensePlate = "";
             string getVehicleDataMsg = @"
 In order to get the vehicle's data, please enter its license number:";
 
             Console.WriteLine(getVehicleDataMsg);
-            licenseNumber = GetInput.GetLicenseNumber(false, out _);
-            Console.WriteLine(s_Garage.GetVehicleData(licenseNumber));
+            licensePlate = GetInput.GetLicensePlate(false, out _);
+            Console.WriteLine(s_Garage.GetVehicleData(licensePlate));
         }
     }
 }

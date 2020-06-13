@@ -23,7 +23,7 @@ namespace Ex03.ConsoleUI
                             UserInterface.AddVehicle();
                             break;
                         case 2:
-                            UserInterface.AllLicenseNumbersMode();
+                            UserInterface.AllLicensePlateMode();
                             break;
                         case 3:
                             UserInterface.ChangeStatusOfVehicleMode();

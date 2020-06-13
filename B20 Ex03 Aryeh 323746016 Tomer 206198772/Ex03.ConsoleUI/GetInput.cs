@@ -9,7 +9,7 @@ namespace Ex03.ConsoleUI
         private static string readLineOrInterrupt()
         {
             string input = Console.ReadLine();
-            if (input.ToLower() == "exit")
+            if (input != null && input.ToLower() == "exit")
             {
                 throw new ModeInterruptException();
             }
@@ -17,7 +17,7 @@ namespace Ex03.ConsoleUI
         }
     
 
-        internal static string GetLicenseNumber(bool i_AllowNonRegistered, out bool o_IslicenseNumberRegistered)
+        internal static string GetLicensePlate(bool i_AllowNonRegistered, out bool o_IslicenseNumberRegistered)
         {
             o_IslicenseNumberRegistered = false;
             string licenseNumber = "";
@@ -115,10 +115,10 @@ namespace Ex03.ConsoleUI
             return validString;
         }
 
-        internal static object[] GetUniqueFeatures(string i_UniqueFeatureMsg, Vehicle i_Vehicle)
+        internal static object[] GetUniqueFeatures(string i_UniqueFeatureMsg, VehicleBuilder i_VehicleBeingBuilt)
         {
             Object[] UniqueFeatures = null;
-            Tuple<string, string[]>[] uniqueFeatureDescriptions = i_Vehicle.GetUniqueFeatureDescription();
+            Tuple<string, string[]>[] uniqueFeatureDescriptions = i_VehicleBeingBuilt.GetUniqueFeatureDescription();
             if (uniqueFeatureDescriptions != null)
             {
                 UniqueFeatures = new object[uniqueFeatureDescriptions.Length];
@@ -131,7 +131,7 @@ namespace Ex03.ConsoleUI
                         uniqueFeatureDescription.Item1,
                         descriptionOfValues);
                     Console.WriteLine(currentUniqueFeatureMsg);
-                    UniqueFeatures[objectIndex] = getUniqueFeature(uniqueFeatureDescription.Item1, i_Vehicle);
+                    UniqueFeatures[objectIndex] = getUniqueFeature(uniqueFeatureDescription.Item1, i_VehicleBeingBuilt);
                     objectIndex++;
                 }
             }
@@ -150,7 +150,7 @@ namespace Ex03.ConsoleUI
 
             return sb.ToString();
         }
-        private static object getUniqueFeature(string i_FeatureKey, Vehicle i_Vehicle)
+        private static object getUniqueFeature(string i_FeatureKey, VehicleBuilder i_VehicleBeingBuilt)
         {
             object uniqueFeature = null;
             bool tryAgain = true;
@@ -159,7 +159,7 @@ namespace Ex03.ConsoleUI
                 try
                 {
                     string input = readLineOrInterrupt();
-                    uniqueFeature = i_Vehicle.ParseUniqueFeature(input, i_FeatureKey);
+                    uniqueFeature = i_VehicleBeingBuilt.ParseUniqueFeature(input, i_FeatureKey);
                     tryAgain = false;
                 }
                 catch (FormatException e)
