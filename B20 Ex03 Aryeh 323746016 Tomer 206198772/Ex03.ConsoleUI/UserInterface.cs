@@ -166,7 +166,7 @@ Registration complete!";
                 nameOfOwner = GetInput.GetValidString(false, true);
                 Console.WriteLine(getPhoneNumOfOwnerMsg);
                 phoneNumOfOwner = GetInput.GetValidString(true, false);
-                Vehicle newVehicle = s_Garage.AddVehicle(vehicleType, model, licenseNumber, nameOfOwner, phoneNumOfOwner);
+                VehicleBuilder newVehicle = s_Garage.BuildVehicle(vehicleType, model, licenseNumber, nameOfOwner, phoneNumOfOwner);
                 
                 if (newVehicle.CanBeElectric())
                 {
@@ -196,14 +196,14 @@ Registration complete!";
             }
         }
         
-        private static void setWheelsUI(Vehicle i_Vehicle, string i_WheelManufacturer, float i_CurrentAirPressure)
+        private static void setWheelsUI(VehicleBuilder i_VehicleBeingBuilt, string i_WheelManufacturer, float i_CurrentAirPressure)
         {
             bool tryAgain = true;
             while (tryAgain)
             {
                 try
                 {
-                    i_Vehicle.SetWheels(i_WheelManufacturer, i_CurrentAirPressure);
+                    i_VehicleBeingBuilt.SetWheels(i_WheelManufacturer, i_CurrentAirPressure);
                     tryAgain = false;
                 }
                 catch (ValueOutOfRangeException e)
@@ -214,14 +214,14 @@ Registration complete!";
             }
         }
 
-        private static void setEnergyUI(Vehicle i_Vehicle, bool i_IsElectric, float i_CurrentEnergyLevel)
+        private static void setEnergyUI(VehicleBuilder i_VehicleBeingBuilt, bool i_IsElectric, float i_CurrentEnergyLevel)
         {
             bool tryAgain = true;
             while (tryAgain)
             {
                 try
                 {
-                    i_Vehicle.SetEnergy(i_IsElectric, i_CurrentEnergyLevel);
+                    i_VehicleBeingBuilt.SetEnergy(i_IsElectric, i_CurrentEnergyLevel);
                     tryAgain = false;
                 }
                 catch (ValueOutOfRangeException e)
@@ -233,7 +233,7 @@ Registration complete!";
         }
 
         // mode 2
-        internal static void AllLicenseNumbersMode()
+        internal static void AllLicensePlateMode()
         {
             eStatus sortBy = eStatus.None;
             StringBuilder licenseNumbersStr = new StringBuilder();
@@ -248,7 +248,7 @@ No license numbers found";
             getLicensePlatesMsg = string.Format(getLicensePlatesMsg, buildMenuFromEnum(typeof(eStatus)));
             Console.WriteLine(getLicensePlatesMsg);
             sortBy = GetInput.GetVehicleStatus(false);
-            List<string> licenseNumbersList = s_Garage.GetAllLicenseNumbers(sortBy);
+            List<string> licenseNumbersList = s_Garage.GetAllLicensePlates(sortBy);
             foreach (string licenseNumber in licenseNumbersList)
             {
                 licenseNumbersStr.Append(licenseNumber);

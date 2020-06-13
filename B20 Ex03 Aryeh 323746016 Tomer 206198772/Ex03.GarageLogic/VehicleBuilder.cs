@@ -4,9 +4,9 @@ namespace Ex03.GarageLogic
 {
     public class VehicleBuilder
     {
+        private const int k_NumOfMethodsThatMustBeCalledToFinnishVehicle = 3;
         private readonly Vehicle r_Vehicle;
         private int m_NumOfSetMethodsCalled;
-        private const int k_NumOfMethodsThatMustBeCalledToFinnishVehicle = 3;
 
         internal VehicleBuilder(Vehicle i_Vehicle)
         {

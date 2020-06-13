@@ -7,7 +7,7 @@ namespace Ex03.GarageLogic
         private const float k_MaxAirPressure = 30;
         private const byte k_NumOfWheels = 2;
         private const float k_MaxElectric = 1.2f;
-        private const float k_MaxSolar = 7;
+        private const float k_MaxGas = 7;
         private const int k_NumberOfUniqueFeatures = 2;
         private const bool k_CanBeElectric = true;
         private eLicenseType m_TypeOfLicense;
@@ -36,7 +36,7 @@ namespace Ex03.GarageLogic
 
         public override void SetEnergy(bool i_IsElectric, float i_CurrentEnergyLevel)
         {
-            float maxEnergyCapacity = i_IsElectric ? k_MaxElectric : k_MaxSolar;
+            float maxEnergyCapacity = i_IsElectric ? k_MaxElectric : k_MaxGas;
             eEnergyType energyType = !i_IsElectric ? eEnergyType.Octan95 : eEnergyType.Electric;
 
             InitEnergy(i_CurrentEnergyLevel, maxEnergyCapacity, energyType);

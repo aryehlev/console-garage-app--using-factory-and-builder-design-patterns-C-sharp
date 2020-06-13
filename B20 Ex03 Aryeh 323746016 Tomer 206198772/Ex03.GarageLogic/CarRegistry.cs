@@ -7,8 +7,7 @@
             string i_Model,
             string i_LicenseNumber,
             string i_NameOfOwner,
-            string i_PhoneNumOfOwner
-            )
+            string i_PhoneNumOfOwner)
         {
             VehicleBuilder vehicleBuilder = null;
             switch(i_VehicleType)

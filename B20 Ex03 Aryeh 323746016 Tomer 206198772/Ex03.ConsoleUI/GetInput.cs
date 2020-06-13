@@ -114,10 +114,10 @@ namespace Ex03.ConsoleUI
             return validString;
         }
 
-        internal static object[] GetUniqueFeatures(string i_UniqueFeatureMsg, Vehicle i_Vehicle)
+        internal static object[] GetUniqueFeatures(string i_UniqueFeatureMsg, VehicleBuilder i_VehicleBeingBuilt)
         {
             object[] uniqueFeatures = null;
-            Tuple<string, string[]>[] uniqueFeatureDescriptions = i_Vehicle.GetUniqueFeatureDescription();
+            Tuple<string, string[]>[] uniqueFeatureDescriptions = i_VehicleBeingBuilt.GetUniqueFeatureDescription();
             if (uniqueFeatureDescriptions != null)
             {
                 uniqueFeatures = new object[uniqueFeatureDescriptions.Length];
@@ -130,7 +130,7 @@ namespace Ex03.ConsoleUI
                         uniqueFeatureDescription.Item1,
                         descriptionOfValues);
                     Console.WriteLine(currentUniqueFeatureMsg);
-                    uniqueFeatures[objectIndex] = getUniqueFeature(uniqueFeatureDescription.Item1, i_Vehicle);
+                    uniqueFeatures[objectIndex] = getUniqueFeature(uniqueFeatureDescription.Item1, i_VehicleBeingBuilt);
                     objectIndex++;
                 }
             }
@@ -150,7 +150,7 @@ namespace Ex03.ConsoleUI
             return sb.ToString();
         }
 
-        private static object getUniqueFeature(string i_FeatureKey, Vehicle i_Vehicle)
+        private static object getUniqueFeature(string i_FeatureKey, VehicleBuilder i_VehicleBeingBuilt)
         {
             object uniqueFeature = null;
             bool tryAgain = true;
@@ -159,7 +159,7 @@ namespace Ex03.ConsoleUI
                 try
                 {
                     string input = readLineOrInterrupt();
-                    uniqueFeature = i_Vehicle.ParseUniqueFeature(input, i_FeatureKey);
+                    uniqueFeature = i_VehicleBeingBuilt.ParseUniqueFeature(input, i_FeatureKey);
                     tryAgain = false;
                 }
                 catch (FormatException e)

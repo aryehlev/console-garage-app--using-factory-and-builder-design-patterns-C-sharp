@@ -40,7 +40,7 @@ namespace Ex03.GarageLogic
                 throw new ArgumentException("a truck cannot be electric(yet?)");
             }
             
-            eEnergyType energyType = eEnergyType.Octan96;
+            eEnergyType energyType = eEnergyType.Soler;
 
             InitEnergy(i_CurrentEnergyLevel, k_MaxEnergyCapacity, energyType);
         }
